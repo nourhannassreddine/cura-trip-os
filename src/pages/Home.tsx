@@ -116,13 +116,13 @@ const Home = () => {
       <section className="mt-12">
         <div className="px-5 flex items-baseline justify-between">
           <h2 className="font-serif text-xl">A small list of <span className="italic-serif">elsewhere</span></h2>
-          <Link to="/discover" className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground inline-flex items-center gap-1">
+          <Link to="/dream" className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground inline-flex items-center gap-1">
             All <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} />
           </Link>
         </div>
         <div className="mt-4 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
           {destinations.map((d) => (
-            <Link key={d.id} to="/discover" className="shrink-0 w-[180px] group">
+            <Link key={d.id} to="/dream" className="shrink-0 w-[180px] group">
               <div className="relative h-[230px] overflow-hidden">
                 <img src={d.cover} alt={d.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute top-2 left-2"><Tag variant="ink">{d.flightHrs}</Tag></div>
