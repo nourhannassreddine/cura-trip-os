@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { TopBar } from "@/components/cura/TopBar";
 import { BottomNav } from "@/components/cura/BottomNav";
+import { TripTabs } from "@/components/cura/TripTabs";
 import { CuraWhisper } from "@/components/cura/CuraWhisper";
 import { Tag } from "@/components/cura/Tag";
 import { packing } from "@/data/cura";
@@ -19,8 +21,9 @@ const Pack = () => {
   return (
     <main className="app-shell pb-20">
       <TopBar back="/trip/puglia-25" eyebrow="Pack" title="Puglia · 10 days" />
+      <TripTabs tripId="puglia-25" />
 
-      <section className="px-5 pt-2 cura-rise">
+      <section className="px-5 pt-4 cura-rise">
         <div className="flex items-end justify-between">
           <h1 className="display-md max-w-[14ch]">
             Pack like you <span className="italic-serif">live</span> there.
@@ -38,9 +41,12 @@ const Pack = () => {
         </CuraWhisper>
       </section>
 
-      {/* Outfit moments — editorial */}
+      {/* Outfit moments — editorial preview, links to full Outfits engine */}
       <section className="mt-7 px-5">
-        <div className="editorial-eyebrow text-muted-foreground mb-3">Outfit moments</div>
+        <div className="flex items-baseline justify-between mb-3">
+          <div className="editorial-eyebrow text-muted-foreground">Outfit moments</div>
+          <Link to="/outfits" className="text-[11px] tracking-[0.18em] uppercase text-primary">Open outfits →</Link>
+        </div>
         <div className="grid grid-cols-2 gap-2">
           {[
             { tag: "airport", look: "Linen set + slip-ons" },
