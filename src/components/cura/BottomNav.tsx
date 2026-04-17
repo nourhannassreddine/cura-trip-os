@@ -3,11 +3,11 @@ import { Compass, Home as HomeIcon, Plane, BookOpen, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const items = [
-  { to: "/home", label: "Home", icon: HomeIcon },
-  { to: "/discover", label: "Discover", icon: Compass },
-  { to: "/trip/puglia-25", label: "Trip", icon: Plane },
-  { to: "/journal", label: "Journal", icon: BookOpen },
-  { to: "/profile", label: "You", icon: User },
+  { to: "/home", label: "Home", icon: HomeIcon, match: (p: string) => p === "/" || p.startsWith("/home") },
+  { to: "/dream", label: "Dream", icon: Compass, match: (p: string) => p.startsWith("/dream") || p.startsWith("/discover") || p.startsWith("/compare") },
+  { to: "/trips", label: "Trips", icon: Plane, match: (p: string) => p.startsWith("/trips") || p.startsWith("/trip/") },
+  { to: "/journal", label: "Journal", icon: BookOpen, match: (p: string) => p.startsWith("/journal") },
+  { to: "/profile", label: "You", icon: User, match: (p: string) => p.startsWith("/profile") },
 ];
 
 export const BottomNav = () => {
@@ -15,8 +15,8 @@ export const BottomNav = () => {
   return (
     <nav className="sticky bottom-0 left-0 right-0 z-40 border-t border-foreground/15 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <ul className="grid grid-cols-5">
-        {items.map(({ to, label, icon: Icon }) => {
-          const active = to === "/home" ? pathname === "/" || pathname.startsWith("/home") : pathname.startsWith(to);
+        {items.map(({ to, label, icon: Icon, match }) => {
+          const active = match(pathname);
           return (
             <li key={to}>
               <Link
