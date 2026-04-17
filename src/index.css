@@ -2,95 +2,110 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* ============================================
+   CURA Design System
+   Editorial · Sun-faded · Jacquemus × diary
+   All colors are HSL.
+   ============================================ */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* --- Surfaces --- warm sand & off-white, never sterile --- */
+    --background: 38 35% 94%;            /* warm off-white sand */
+    --foreground: 25 30% 12%;            /* deep brown-black */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --paper: 36 30% 90%;                 /* tinted paper */
+    --paper-deep: 32 22% 84%;            /* deeper sand */
+    --bone: 40 38% 97%;                  /* almost-white bone */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --card: 38 35% 94%;
+    --card-foreground: 25 30% 12%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --popover: 40 38% 97%;
+    --popover-foreground: 25 30% 12%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* --- Brand accents --- */
+    --primary: 18 65% 52%;               /* sun-faded orange */
+    --primary-foreground: 40 38% 97%;
+    --primary-soft: 22 55% 88%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --olive: 70 22% 38%;                 /* olive green */
+    --olive-foreground: 40 38% 97%;
+    --olive-soft: 70 18% 82%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --sky: 205 55% 70%;                  /* faded sky blue */
+    --sky-foreground: 25 30% 12%;
+    --sky-soft: 205 50% 90%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --ink: 25 35% 14%;                   /* deep brown ink */
+    --ink-foreground: 40 38% 97%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --secondary: 36 30% 90%;
+    --secondary-foreground: 25 30% 12%;
 
-    --radius: 0.5rem;
+    --muted: 36 22% 86%;
+    --muted-foreground: 25 12% 38%;
 
-    --sidebar-background: 0 0% 98%;
+    --accent: 22 55% 88%;
+    --accent-foreground: 25 30% 12%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --destructive: 0 60% 48%;
+    --destructive-foreground: 40 38% 97%;
 
-    --sidebar-primary: 240 5.9% 10%;
+    --border: 30 18% 78%;
+    --input: 30 18% 82%;
+    --ring: 18 65% 52%;
 
-    --sidebar-primary-foreground: 0 0% 98%;
+    /* Hard edges — almost no radius. */
+    --radius: 0px;
+    --radius-soft: 2px;
 
-    --sidebar-accent: 240 4.8% 95.9%;
+    /* Editorial type */
+    --font-serif: 'Playfair Display', 'Times New Roman', serif;
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 38 35% 94%;
+    --sidebar-foreground: 25 30% 12%;
+    --sidebar-primary: 18 65% 52%;
+    --sidebar-primary-foreground: 40 38% 97%;
+    --sidebar-accent: 36 22% 86%;
+    --sidebar-accent-foreground: 25 30% 12%;
+    --sidebar-border: 30 18% 78%;
+    --sidebar-ring: 18 65% 52%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --background: 25 20% 10%;
+    --foreground: 38 30% 92%;
+    --paper: 25 18% 14%;
+    --paper-deep: 25 16% 18%;
+    --bone: 25 20% 8%;
+    --card: 25 18% 14%;
+    --card-foreground: 38 30% 92%;
+    --popover: 25 18% 14%;
+    --popover-foreground: 38 30% 92%;
+    --primary: 18 70% 58%;
+    --primary-foreground: 25 20% 10%;
+    --primary-soft: 22 35% 28%;
+    --olive: 70 25% 55%;
+    --olive-foreground: 25 20% 10%;
+    --olive-soft: 70 15% 24%;
+    --sky: 205 50% 70%;
+    --sky-foreground: 25 20% 10%;
+    --sky-soft: 205 30% 24%;
+    --ink: 38 30% 92%;
+    --ink-foreground: 25 20% 10%;
+    --secondary: 25 18% 18%;
+    --secondary-foreground: 38 30% 92%;
+    --muted: 25 14% 22%;
+    --muted-foreground: 38 15% 65%;
+    --accent: 22 35% 24%;
+    --accent-foreground: 38 30% 92%;
+    --destructive: 0 60% 48%;
+    --destructive-foreground: 38 30% 92%;
+    --border: 25 12% 24%;
+    --input: 25 12% 24%;
+    --ring: 18 70% 58%;
   }
 }
 
@@ -99,7 +114,125 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
-  body {
+  html, body, #root {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
 }
+
+/* ============================================
+   Utility classes — editorial helpers
+   ============================================ */
+@layer utilities {
+  .font-serif { font-family: var(--font-serif); }
+  .font-sans  { font-family: var(--font-sans); }
+
+  .editorial-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .display-xl {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(3rem, 14vw, 5.5rem);
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+  }
+
+  .display-lg {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(2.25rem, 9vw, 3.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+
+  .display-md {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(1.75rem, 6vw, 2.25rem);
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+
+  .italic-serif {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .hairline {
+    @apply border-t border-foreground/15;
+  }
+
+  .frame-edge {
+    @apply border border-foreground/15;
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.55'/></svg>");
+  }
+
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+/* Mobile-first — keep everything inside a centered phone frame on desktop. */
+.app-shell {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  background: hsl(var(--background));
+  position: relative;
+  overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+  body {
+    background:
+      radial-gradient(circle at 30% 20%, hsl(22 30% 88%), transparent 60%),
+      radial-gradient(circle at 70% 80%, hsl(70 18% 84%), transparent 60%),
+      hsl(36 22% 86%);
+  }
+  .app-shell {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 30px 80px -30px hsl(25 30% 12% / 0.35);
+  }
+}
+
+/* slow editorial fade */
+@keyframes cura-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.cura-rise { animation: cura-rise 0.6s ease-out both; }
+
+@keyframes cura-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+.cura-pulse { animation: cura-pulse 2.4s ease-in-out infinite; }
