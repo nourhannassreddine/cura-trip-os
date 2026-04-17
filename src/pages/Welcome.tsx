@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import hands from "@/assets/onboarding-hands.jpg";
+import surreal from "@/assets/welcome-surreal.jpg";
 import { ArrowRight } from "lucide-react";
 
 const Welcome = () => {
@@ -8,28 +8,36 @@ const Welcome = () => {
       {/* image — asymmetric, bleeds off the edge */}
       <div className="relative h-[58dvh] w-[112%] -ml-[6%] overflow-hidden">
         <img
-          src={hands}
-          alt="Hands holding a paper map and small camera on warm sand"
+          src={surreal}
+          alt="A surreal oversized orange resting on warm sand, a small figure walking past in white linen"
           className="h-full w-full object-cover"
           width={1024}
           height={1280}
         />
-        <div className="absolute top-5 right-7 text-right">
+        <div className="absolute top-5 right-7 text-right mix-blend-multiply">
           <div className="editorial-eyebrow text-foreground/80">Est. now</div>
           <div className="font-serif text-3xl leading-none">CURA</div>
+        </div>
+        {/* unexpected element: a hand-set caption pinned to the image */}
+        <div className="absolute bottom-5 left-5 max-w-[60%]">
+          <div className="editorial-eyebrow text-foreground/70 mb-1">Plate I</div>
+          <div className="italic-serif text-[13px] leading-tight text-foreground/80">
+            "Scale, reconsidered."
+          </div>
         </div>
       </div>
 
       <section className="px-6 -mt-10 relative cura-rise">
         <div className="editorial-eyebrow text-primary mb-3">A travel operating system</div>
         <h1 className="display-xl">
-          Travel,<br />
-          <span className="italic-serif">remembered</span><br />
-          well.
+          Not where<br />
+          you <span className="italic-serif">plan</span>.<br />
+          Where better<br />
+          decisions happen.
         </h1>
         <p className="mt-5 text-[15px] leading-relaxed text-foreground/70 max-w-[34ch]">
-          One workspace for the whole trip — from the first daydream
-          to the last photo. Use everything, or just the part you need.
+          CURA reads how you travel and quietly steers you toward
+          the trip you'd actually love — not the one you'd default to.
         </p>
       </section>
 
