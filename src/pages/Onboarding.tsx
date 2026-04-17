@@ -98,8 +98,8 @@ const Onboarding = () => {
       : isSlow
         ? "You travel to slow your own clock down."
         : isWild
-          ? "You travel to feel less careful.";
-        : "You travel to be slightly different when you come home.";
+          ? "You travel to feel less careful."
+          : "You travel to be slightly different when you come home.";
 
     const challenge =
       pace === "planner"
