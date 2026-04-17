@@ -1,5 +1,6 @@
 import { TopBar } from "@/components/cura/TopBar";
 import { BottomNav } from "@/components/cura/BottomNav";
+import { TripTabs } from "@/components/cura/TripTabs";
 import { Tag } from "@/components/cura/Tag";
 import { CuraWhisper } from "@/components/cura/CuraWhisper";
 import { spend } from "@/data/cura";
@@ -12,8 +13,9 @@ const Spend = () => {
   return (
     <main className="app-shell pb-20">
       <TopBar back="/trip/puglia-25" eyebrow="Spend" title="Puglia · split with Maya" />
+      <TripTabs tripId="puglia-25" />
 
-      <section className="px-5 pt-2 cura-rise">
+      <section className="px-5 pt-4 cura-rise">
         <div className="editorial-eyebrow text-muted-foreground">Trip budget</div>
         <h1 className="display-xl leading-[0.85] mt-1">€{total.toLocaleString()}</h1>
         <div className="mt-2 text-sm text-muted-foreground">of €{budget.toLocaleString()} planned · {pct}%</div>

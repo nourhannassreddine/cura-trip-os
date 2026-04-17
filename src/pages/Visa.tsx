@@ -1,5 +1,6 @@
 import { TopBar } from "@/components/cura/TopBar";
 import { BottomNav } from "@/components/cura/BottomNav";
+import { TripTabs } from "@/components/cura/TripTabs";
 import { Tag } from "@/components/cura/Tag";
 import { CuraWhisper } from "@/components/cura/CuraWhisper";
 import { Check, FileText, ShieldCheck } from "lucide-react";
@@ -22,8 +23,9 @@ const Visa = () => {
   return (
     <main className="app-shell pb-20">
       <TopBar back="/trip/puglia-25" eyebrow="Visa & Prep" title="Italy · EU" />
+      <TripTabs tripId="puglia-25" />
 
-      <section className="px-5 pt-2 cura-rise">
+      <section className="px-5 pt-4 cura-rise">
         <div className="editorial-eyebrow text-olive flex items-center gap-2"><ShieldCheck className="h-3.5 w-3.5" /> Cleared</div>
         <h1 className="display-md mt-1 max-w-[16ch]">
           No visa needed for this passport.

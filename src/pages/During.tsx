@@ -1,5 +1,6 @@
 import { TopBar } from "@/components/cura/TopBar";
 import { BottomNav } from "@/components/cura/BottomNav";
+import { TripTabs } from "@/components/cura/TripTabs";
 import { Tag } from "@/components/cura/Tag";
 import { CuraWhisper } from "@/components/cura/CuraWhisper";
 import { MapPin, Phone, MessageCircle, Wifi, Navigation, Car } from "lucide-react";
@@ -8,9 +9,10 @@ const During = () => {
   return (
     <main className="app-shell pb-20">
       <TopBar back="/trip/puglia-25" eyebrow="Live · Day 02" title="Ostuni" right={<Tag variant="olive">on track</Tag>} />
+      <TripTabs tripId="puglia-25" />
 
       {/* Now card */}
-      <section className="px-5 pt-2 cura-rise">
+      <section className="px-5 pt-4 cura-rise">
         <div className="editorial-eyebrow text-primary cura-pulse">Right now · 13:42</div>
         <h1 className="display-lg leading-[0.9] mt-2 max-w-[14ch]">
           Polignano <span className="italic-serif">lunch</span> in 18 min.
