@@ -13,7 +13,7 @@ import ItineraryView from "./pages/ItineraryView";
 import Pack from "./pages/Pack";
 import Spend from "./pages/Spend";
 import Visa from "./pages/Visa";
-import Route as RouteScreen from "./pages/Route";
+import RouteScreen from "./pages/Route";
 import During from "./pages/During";
 import Journal from "./pages/Journal";
 import Profile from "./pages/Profile";
