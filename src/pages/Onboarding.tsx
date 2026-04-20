@@ -1,44 +1,51 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Minus, Plus } from "lucide-react";
 import { TopBar } from "@/components/cura/TopBar";
 import { CuraWhisper } from "@/components/cura/CuraWhisper";
+import { SearchableSelect } from "@/components/cura/SearchableSelect";
+import { CityInput } from "@/components/cura/CityInput";
+import { passportNationalities } from "@/data/locations";
 import { cn } from "@/lib/utils";
-import { saveProfile, type CuraPath } from "@/lib/profile";
+import {
+  saveProfile,
+  type CuraPath,
+  type Companion,
+  type FamilyComposition,
+} from "@/lib/profile";
 
 /* ----------------------------------------------------------
    CURA Onboarding — calibration, not a quiz.
    Path-aware:
      full  → 5 steps (Feel · Decide · Context+Departure · Dealbreakers · Reading)
-     short → 3 steps (Feel · Decide · Context condensed) → /trip/new
+     short → 4 steps (Feel · Decide · Destination · Context condensed) → /trip/new
 ---------------------------------------------------------- */
 
 const moods = [
-  { id: "slow",        label: "Slow & sun-faded",            note: "long lunches, no schedule",       react: "Noted. We'll guard your mornings." },
-  { id: "design",      label: "Design-forward",              note: "neighborhoods, not landmarks",    react: "Good. Landmarks are mostly other people's photos." },
-  { id: "wild",        label: "A little wild",               note: "say yes more often",              react: "I'll leave more room for accidents." },
-  { id: "refined",     label: "Refined & quiet",             note: "fewer, better choices",           react: "Then I'll cut three things from every day." },
-  { id: "creative",    label: "For making things",           note: "shoot, write, walk",              react: "I'll plan around light, not opening hours." },
-  { id: "social",      label: "Loud, with people",           note: "music, late dinners",             react: "Dinners after 9, then. No museums at 9am." },
-  { id: "solo",        label: "Alone, on purpose",           note: "I came here to think",            react: "Then I'll plan tables for one without flinching." },
-  { id: "luxury",      label: "Quiet luxury, no logos",      note: "soft sheets, hard to find",       react: "Understood. The good places don't have signs." },
-  { id: "spontaneous", label: "Plans are suggestions",       note: "I want room to drift",            react: "I'll pencil things, not ink them." },
-  { id: "structured",  label: "A clean schedule is a kindness", note: "I rest better with a plan",  react: "Then I'll book everything before you ask." },
+  { id: "slow",        label: "Slow & sun-faded",                 note: "long lunches, no schedule",      react: "Noted. We'll guard your mornings." },
+  { id: "design",      label: "Design-forward",                   note: "neighborhoods, not landmarks",   react: "Good. Landmarks are mostly other people's photos." },
+  { id: "wild",        label: "A little wild",                    note: "say yes more often",             react: "I'll leave more room for accidents." },
+  { id: "refined",     label: "Refined & quiet",                  note: "fewer, better choices",          react: "Then I'll cut three things from every day." },
+  { id: "creative",    label: "For making things",                note: "shoot, write, walk",             react: "I'll plan around light, not opening hours." },
+  { id: "social",      label: "Loud, with people",                note: "music, late dinners",            react: "Dinners after 9, then. No museums at 9am." },
+  { id: "solo",        label: "Alone, on purpose",                note: "I came here to think",           react: "Then I'll plan tables for one without flinching." },
+  { id: "luxury",      label: "Quiet luxury, no logos",           note: "soft sheets, hard to find",      react: "Understood. The good places don't have signs." },
+  { id: "spontaneous", label: "Plans are suggestions",            note: "I want room to drift",           react: "I'll pencil things, not ink them." },
+  { id: "structured",  label: "A clean schedule is a kindness",   note: "I rest better with a plan",      react: "Then I'll book everything before you ask." },
+  { id: "wellness",    label: "Bodies before agendas",            note: "sleep, water, sun, repeat",      react: "Then nothing starts before 10. Including me." },
+  { id: "spiritual",   label: "Something larger than me",         note: "ritual, silence, distance",      react: "I'll find the places that don't perform." },
+  { id: "adventure",   label: "Slightly past my comfort",         note: "altitude, salt, small fear",     react: "I'll pick the route that earns the dinner." },
+  { id: "nostalgic",   label: "Somewhere I've been told about",   note: "a story, a name, a memory",      react: "Then we travel toward someone else's love." },
+  { id: "culinary",    label: "I came for the table",             note: "every meal is the plan",         react: "Then the trip rotates around lunch. As it should." },
+  { id: "off-grid",    label: "Hard to reach me",                 note: "no signal, no calendar",         react: "Good. I'll surface only what matters." },
+  { id: "family-led",  label: "It's not about me",                note: "kids, parents, the group",       react: "Then I'll plan around their stamina, not yours." },
+  { id: "romantic",    label: "Just the two of us",               note: "small tables, longer evenings",  react: "Then I'll find rooms with doors that close properly." },
 ];
 
 const pacing = [
   { id: "auto",    label: "Plan it for me",      note: "I trust your taste",        react: "Then I'll be opinionated. You can overrule me." },
   { id: "mixed",   label: "A bit of both",       note: "I suggest, you confirm",    react: "Most travelers say this. The good ones mean it." },
   { id: "planner", label: "Let me design it",    note: "I want the controls",       react: "Fine. I'll provide structure, not decisions." },
-];
-
-const passports = ["Italian", "American", "British", "French", "German", "Brazilian", "Indian", "Nigerian", "Other"];
-
-const departureCities = [
-  "Lagos", "New York", "London", "Lisbon", "Dubai", "Mumbai", "São Paulo",
-  "Paris", "Berlin", "Rome", "Milan", "Madrid", "Barcelona", "Amsterdam",
-  "Istanbul", "Cairo", "Nairobi", "Cape Town", "Singapore", "Hong Kong",
-  "Tokyo", "Seoul", "Sydney", "Toronto", "Mexico City",
 ];
 
 const company = [
@@ -49,10 +56,16 @@ const company = [
 ];
 
 const spending = [
-  { id: "luxury-first",  label: "Luxury-first",   note: "I start at the top and work down" },
-  { id: "balanced",      label: "Balanced",       note: "I spend where it shows" },
-  { id: "budget-aware",  label: "Budget-aware",   note: "I want range, not stretch" },
-  { id: "impulsive",     label: "Impulsive",      note: "I decide at the table" },
+  { id: "top-down",      label: "I start at the top and work down",     note: "the best room, then everything else fits" },
+  { id: "where-it-shows",label: "I spend where it shows",                note: "great hotel, average lunch — fine" },
+  { id: "where-no-one-sees", label: "I spend where no one sees",         note: "modest room, extraordinary dinner" },
+  { id: "ranged",        label: "I want range, not stretch",             note: "comfortable across, never strained" },
+  { id: "table-decider", label: "I decide at the table",                 note: "no plan survives the menu" },
+  { id: "experience-only", label: "Money for experiences, not objects",  note: "I'll pay for the boat, not the bag" },
+  { id: "thrift-flex",   label: "Thrifty, then occasionally absurd",     note: "weeks of restraint, one extravagant night" },
+  { id: "points-pilgrim",label: "I optimize before I arrive",            note: "miles, lounges, the long game" },
+  { id: "principle",     label: "Cheap on principle",                    note: "luxury makes me uncomfortable" },
+  { id: "guilt-free",    label: "I want to not think about it",          note: "tell me the total, then disappear" },
 ];
 
 const dealbreakers = [
@@ -61,14 +74,44 @@ const dealbreakers = [
   { id: "transit",       label: "Long transfers" },
   { id: "tourist",       label: "Tourist traps" },
   { id: "noise",         label: "Hotel noise" },
-  { id: "rushing",       label: "Rushing" },
+  { id: "rushing",       label: "Rushing between things" },
   { id: "bad-coffee",    label: "Bad coffee" },
   { id: "fees",          label: "Hidden fees" },
   { id: "chains",        label: "Chain restaurants" },
   { id: "overplanned",   label: "Over-planned days" },
   { id: "dead-night",    label: "Dead nightlife" },
   { id: "wifi",          label: "Slow wifi" },
+  { id: "tipping-stress",label: "Confusing tipping culture" },
+  { id: "language",      label: "Nowhere any English at all" },
+  { id: "instagram",     label: "Places that perform for cameras" },
+  { id: "small-rooms",   label: "Tiny hotel rooms" },
+  { id: "no-bath",       label: "Showers only, never a bath" },
+  { id: "thin-pillows",  label: "Thin, foam pillows" },
+  { id: "bad-air",       label: "No working air-con in summer" },
+  { id: "scams",         label: "Petty scams & taxi haggling" },
+  { id: "harassment",    label: "Street harassment" },
+  { id: "unsafe-water",  label: "Tap water I can't trust" },
+  { id: "dress-code",    label: "Heavy dress codes" },
+  { id: "smoking",       label: "Smoking indoors" },
+  { id: "loud-music",    label: "Loud music at dinner" },
+  { id: "shared-bath",   label: "Shared bathrooms" },
+  { id: "no-laundry",    label: "Nowhere to do laundry" },
+  { id: "kids-noise",    label: "Kids' clubs, water parks, mascots" },
+  { id: "no-pets",       label: "Anywhere I can't bring my dog" },
+  { id: "weather",       label: "Rain on the only beach day" },
+  { id: "altitude",      label: "Altitude" },
+  { id: "long-flights",  label: "Anything over 8 hours flying" },
+  { id: "jet-lag",       label: "Crossing more than 4 time zones" },
+  { id: "expensive-data",label: "No cheap local SIM" },
+  { id: "no-vegan",      label: "No vegetarian or vegan options" },
+  { id: "all-inclusive", label: "All-inclusive resorts" },
+  { id: "cruises",       label: "Anything cruise-adjacent" },
+  { id: "no-kitchen",    label: "No kitchen in the room" },
+  { id: "loud-ac",       label: "Loud air-con or street noise at night" },
 ];
+
+/* utility — clean a number for friend count */
+const clamp = (n: number, min = 1, max = 12) => Math.max(min, Math.min(max, n));
 
 const Onboarding = () => {
   const [params] = useSearchParams();
@@ -78,18 +121,62 @@ const Onboarding = () => {
   const [step, setStep] = useState(0);
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [pace, setPace] = useState<string | null>(null);
-  const [passport, setPassport] = useState<string>("Italian");
+  const [destination, setDestination] = useState<string>(""); // short path only
+  const [passport, setPassport] = useState<string | null>(null);
   const [departure, setDeparture] = useState<string>("");
   const [companyChoice, setCompanyChoice] = useState<string | null>(null);
+  // Partner extras
+  const [partnerPassport, setPartnerPassport] = useState<string | null>(null);
+  const [partnerSameDeparture, setPartnerSameDeparture] = useState<boolean | null>(null);
+  const [partnerDeparture, setPartnerDeparture] = useState<string>("");
+  const [partnerEmail, setPartnerEmail] = useState<string>("");
+  // Friends extras
+  const [friendsCount, setFriendsCount] = useState<number>(2);
+  const [friendsData, setFriendsData] = useState<Companion[]>([]);
+  // Family extras
+  const [family, setFamily] = useState<FamilyComposition>({ adults: 1, teens: 0, children: 0 });
+  const [familyPassports, setFamilyPassports] = useState<(string | null)[]>([]);
+  const [familyEmails, setFamilyEmails] = useState<string[]>([]);
+  const [familySameDeparture, setFamilySameDeparture] = useState<boolean>(true);
+
   const [spend, setSpend] = useState<string | null>(null);
   const [breakers, setBreakers] = useState<Set<string>>(new Set());
+  const [breakerOther, setBreakerOther] = useState<string>("");
   const [lastMood, setLastMood] = useState<string | null>(null);
 
   const nav = useNavigate();
-  const stepCount = isShort ? 3 : 5;
+  const stepCount = isShort ? 4 : 5;
 
   // reset step if path changes mid-flow
   useEffect(() => { setStep(0); }, [path]);
+
+  // keep friends array length in sync with count
+  useEffect(() => {
+    setFriendsData((prev) => {
+      const n = clamp(friendsCount);
+      const next = [...prev];
+      while (next.length < n) next.push({ passport: null, email: null, sameDeparture: true, departure: "" });
+      while (next.length > n) next.pop();
+      return next;
+    });
+  }, [friendsCount]);
+
+  // keep family member arrays sized to total members
+  useEffect(() => {
+    const total = family.adults + family.teens + family.children;
+    setFamilyPassports((prev) => {
+      const next = [...prev];
+      while (next.length < total) next.push(null);
+      while (next.length > total) next.pop();
+      return next;
+    });
+    setFamilyEmails((prev) => {
+      const next = [...prev];
+      while (next.length < family.adults) next.push("");
+      while (next.length > family.adults) next.pop();
+      return next;
+    });
+  }, [family.adults, family.teens, family.children]);
 
   const toggle = (id: string) => {
     const next = new Set(picked);
@@ -107,9 +194,9 @@ const Onboarding = () => {
   /* ----- CURA's reading of the user (full path, step 5) ----- */
   const reading = useMemo(() => {
     const m = picked;
-    const isSlow = m.has("slow") || m.has("refined") || m.has("luxury");
+    const isSlow = m.has("slow") || m.has("refined") || m.has("luxury") || m.has("wellness");
     const isDesign = m.has("design") || m.has("creative");
-    const isWild = m.has("wild") || m.has("social") || m.has("spontaneous");
+    const isWild = m.has("wild") || m.has("social") || m.has("spontaneous") || m.has("adventure");
 
     const headline = isDesign
       ? "You don't travel for landmarks."
@@ -143,15 +230,59 @@ const Onboarding = () => {
   const moodReaction = lastMood ? moods.find((m) => m.id === lastMood)?.react : null;
   const paceReaction = pace ? pacing.find((p) => p.id === pace)?.react : null;
 
-  const isContextStep = step === 2;
-  const contextValid = isShort
-    ? departure.trim().length >= 2 && companyChoice !== null && spend !== null
-    : departure.trim().length >= 2 && companyChoice !== null && spend !== null;
+  /* ----- branching validation for "Usually with" ----- */
+  const partnerValid =
+    companyChoice !== "partner"
+      ? true
+      : !!(passport && partnerPassport && partnerSameDeparture !== null &&
+          (partnerSameDeparture || partnerDeparture.trim().length >= 2));
+
+  const friendsValid =
+    companyChoice !== "friends"
+      ? true
+      : !!(passport && friendsData.length === clamp(friendsCount) &&
+          friendsData.every((f) => f.passport &&
+            (f.sameDeparture || (f.departure ?? "").trim().length >= 2)));
+
+  const familyValid =
+    companyChoice !== "family"
+      ? true
+      : (() => {
+          const total = family.adults + family.teens + family.children;
+          if (total < 1) return false;
+          if (familyPassports.length !== total) return false;
+          return familyPassports.every((p) => !!p) && !!passport;
+        })();
+
+  /* full path: step 2 = context (with passport+with), step 3 = dealbreakers, step 4 = reading
+     short path: step 2 = destination, step 3 = context condensed */
+
+  const isFullContext = !isShort && step === 2;
+  const isShortDestination = isShort && step === 2;
+  const isShortContext = isShort && step === 3;
+
+  const fullContextValid =
+    isFullContext &&
+    departure.trim().length >= 2 &&
+    !!passport &&
+    companyChoice !== null &&
+    spend !== null &&
+    partnerValid && friendsValid && familyValid;
+
+  const shortContextValid =
+    isShortContext &&
+    departure.trim().length >= 2 &&
+    !!passport &&
+    companyChoice !== null &&
+    spend !== null &&
+    partnerValid && friendsValid && familyValid;
 
   const canContinue =
     (step === 0 && picked.size >= 1) ||
     (step === 1 && pace !== null) ||
-    (isContextStep && contextValid) ||
+    (isShortDestination && destination.trim().length >= 2) ||
+    fullContextValid ||
+    shortContextValid ||
     (!isShort && step === 3) ||
     (!isShort && step === 4);
 
@@ -160,22 +291,30 @@ const Onboarding = () => {
       path,
       moods: Array.from(picked),
       pace,
+      destination: isShort ? (destination.trim() || null) : null,
       departure: departure.trim() || null,
-      passport: isShort ? null : passport,
+      passport,
       company: companyChoice,
+      partner: companyChoice === "partner" ? {
+        passport: partnerPassport,
+        sameDeparture: partnerSameDeparture ?? true,
+        departure: partnerSameDeparture ? departure.trim() : partnerDeparture.trim(),
+        email: partnerEmail.trim() || null,
+      } : null,
+      friends: companyChoice === "friends" ? friendsData : [],
+      family: companyChoice === "family" ? family : null,
       spend,
       dealbreakers: isShort ? [] : Array.from(breakers),
+      dealbreakerOther: isShort ? null : (breakerOther.trim() || null),
     });
   };
 
   const handleContinue = () => {
     if (step < stepCount - 1) {
-      // persist progressively at every step
       persist();
       setStep(step + 1);
       return;
     }
-    // final step
     persist();
     if (isShort) {
       nav("/trip/new");
@@ -184,8 +323,13 @@ const Onboarding = () => {
     }
   };
 
+  // Button label rules:
+  // - short path: only LAST step says "Build my trip", everything else "Next"
+  // - full path: last step shows "Take me to {pick}"
   const finalLabel = isShort
-    ? "Build my trip"
+    ? step < stepCount - 1
+      ? "Next"
+      : "Build my trip"
     : step < stepCount - 1
       ? "Continue"
       : `Take me to ${reading.pick}`;
@@ -203,14 +347,14 @@ const Onboarding = () => {
       />
 
       <div className="px-5">
-        <div className={cn("grid gap-1.5", isShort ? "grid-cols-3" : "grid-cols-5")}>
+        <div className={cn("grid gap-1.5", isShort ? "grid-cols-4" : "grid-cols-5")}>
           {Array.from({ length: stepCount }).map((_, i) => (
             <div key={i} className={cn("h-px", i <= step ? "bg-primary" : "bg-foreground/20")} />
           ))}
         </div>
       </div>
 
-      <section className="flex-1 px-6 pt-8 pb-6 cura-rise">
+      <section className="flex-1 px-5 pt-7 pb-6 cura-rise">
         {/* ---------- STEP 0 — FEEL ---------- */}
         {step === 0 && (
           <>
@@ -289,61 +433,53 @@ const Onboarding = () => {
           </>
         )}
 
-        {/* ---------- STEP 2 — CONTEXT ---------- */}
-        {step === 2 && (
+        {/* ---------- SHORT PATH STEP 2 — DESTINATION ---------- */}
+        {isShortDestination && (
           <>
-            <div className="editorial-eyebrow text-muted-foreground mb-3">iii. Context</div>
+            <div className="editorial-eyebrow text-muted-foreground mb-3">iii. Destination</div>
+            <h2 className="display-lg max-w-[14ch]">
+              Where are you <span className="italic-serif">thinking?</span>
+            </h2>
+            <p className="mt-3 text-sm text-muted-foreground max-w-[34ch]">
+              A city, a region, a country. Anywhere. I'll work with whatever you give me.
+            </p>
+
+            <div className="mt-7">
+              <div className="editorial-eyebrow text-muted-foreground mb-2">Where</div>
+              <CityInput value={destination} onChange={setDestination} placeholder="Type a place — anywhere" />
+              <div className="mt-1 text-[11px] text-muted-foreground">
+                Hints are world cities. I accept anything you type. Mapped against Google.
+              </div>
+            </div>
+
+            <div className="mt-8">
+              <CuraWhisper variant="inline">
+                Good. I won't try to talk you out of it. But I might suggest you go in a different month.
+              </CuraWhisper>
+            </div>
+          </>
+        )}
+
+        {/* ---------- CONTEXT (full step 2  ·  short step 3) ---------- */}
+        {(isFullContext || isShortContext) && (
+          <>
+            <div className="editorial-eyebrow text-muted-foreground mb-3">
+              {isShort ? "iv." : "iii."} Context
+            </div>
             <h2 className="display-lg max-w-[14ch]">
               The <span className="italic-serif">facts</span> of how you move.
             </h2>
 
-            {/* Departure — required, datalist-backed free text */}
+            {/* Departure */}
             <div className="mt-7">
               <div className="editorial-eyebrow text-muted-foreground mb-2">Departure</div>
-              <label className="block">
-                <span className="sr-only">Where do you usually leave from?</span>
-                <input
-                  type="text"
-                  list="cura-cities"
-                  value={departure}
-                  onChange={(e) => setDeparture(e.target.value)}
-                  placeholder="Where do you usually leave from?"
-                  className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-lg py-2 placeholder:text-muted-foreground/60"
-                />
-                <datalist id="cura-cities">
-                  {departureCities.map((c) => <option key={c} value={c} />)}
-                </datalist>
-              </label>
+              <CityInput value={departure} onChange={setDeparture} placeholder="Where do you usually leave from?" />
               <div className="mt-1 text-[11px] text-muted-foreground">
-                Anywhere in the world. I use this for routes, not marketing.
+                Anywhere in the world. Trains count. I use this for routes, not marketing.
               </div>
             </div>
 
-            {/* Passport — only on full path */}
-            {!isShort && (
-              <div className="mt-7">
-                <div className="editorial-eyebrow text-muted-foreground mb-2">Passport</div>
-                <div className="flex flex-wrap gap-1.5">
-                  {passports.map((p) => {
-                    const on = passport === p;
-                    return (
-                      <button
-                        key={p}
-                        onClick={() => setPassport(p)}
-                        className={cn(
-                          "px-3 py-1.5 border text-xs tracking-wide transition-colors",
-                          on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/25 text-foreground/70 hover:border-foreground/60"
-                        )}
-                      >
-                        {p}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* Who you travel with */}
+            {/* Usually with — moved BEFORE passport so partner/friends/family branch can drive passport flow */}
             <div className="mt-7">
               <div className="editorial-eyebrow text-muted-foreground mb-2">Usually with</div>
               <div className="grid grid-cols-2 gap-1.5">
@@ -366,9 +502,291 @@ const Onboarding = () => {
               </div>
             </div>
 
+            {/* PASSPORT — required after company choice */}
+            {companyChoice && (
+              <div className="mt-7">
+                <div className="editorial-eyebrow text-muted-foreground mb-2">Your passport</div>
+                <SearchableSelect
+                  options={passportNationalities}
+                  value={passport}
+                  onChange={setPassport}
+                  placeholder="Search nationalities…"
+                  label="Select your passport"
+                />
+              </div>
+            )}
+
+            {/* PARTNER BRANCH */}
+            {companyChoice === "partner" && passport && (
+              <div className="mt-7 border-l border-foreground/20 pl-4 space-y-6">
+                <div>
+                  <div className="editorial-eyebrow text-muted-foreground mb-2">Partner's passport</div>
+                  <SearchableSelect
+                    options={passportNationalities}
+                    value={partnerPassport}
+                    onChange={setPartnerPassport}
+                    placeholder="Search nationalities…"
+                    label="Select their passport"
+                  />
+                </div>
+
+                {partnerPassport && (
+                  <div>
+                    <div className="editorial-eyebrow text-muted-foreground mb-2">Leaving from the same city?</div>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {[
+                        { v: true, label: "Yes" },
+                        { v: false, label: "No" },
+                      ].map((o) => {
+                        const on = partnerSameDeparture === o.v;
+                        return (
+                          <button
+                            key={String(o.v)}
+                            onClick={() => setPartnerSameDeparture(o.v)}
+                            className={cn(
+                              "border px-3 py-2.5 text-sm transition-colors",
+                              on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                            )}
+                          >
+                            {o.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {partnerSameDeparture === false && (
+                  <div>
+                    <div className="editorial-eyebrow text-muted-foreground mb-2">Where do they leave from?</div>
+                    <CityInput value={partnerDeparture} onChange={setPartnerDeparture} placeholder="Their departure city" />
+                  </div>
+                )}
+
+                {partnerSameDeparture !== null && (
+                  <div>
+                    <div className="editorial-eyebrow text-muted-foreground mb-2">Invite them to this trip</div>
+                    <input
+                      type="email"
+                      value={partnerEmail}
+                      onChange={(e) => setPartnerEmail(e.target.value)}
+                      placeholder="their@email.com"
+                      className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-base py-2 placeholder:text-muted-foreground/60"
+                    />
+                    <div className="mt-1 text-[11px] text-muted-foreground">Optional. They'll get the workspace, not a marketing email.</div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* FRIENDS BRANCH */}
+            {companyChoice === "friends" && passport && (
+              <div className="mt-7 border-l border-foreground/20 pl-4 space-y-6">
+                <div>
+                  <div className="editorial-eyebrow text-muted-foreground mb-2">How many friends?</div>
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => setFriendsCount((n) => clamp(n - 1))}
+                      className="border border-foreground/30 hover:border-foreground p-2"
+                      aria-label="Fewer friends"
+                    >
+                      <Minus className="h-3.5 w-3.5" strokeWidth={1.5} />
+                    </button>
+                    <input
+                      type="range"
+                      min={1}
+                      max={12}
+                      value={friendsCount}
+                      onChange={(e) => setFriendsCount(clamp(parseInt(e.target.value, 10)))}
+                      className="flex-1 accent-foreground"
+                    />
+                    <button
+                      onClick={() => setFriendsCount((n) => clamp(n + 1))}
+                      className="border border-foreground/30 hover:border-foreground p-2"
+                      aria-label="More friends"
+                    >
+                      <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />
+                    </button>
+                    <span className="font-serif text-2xl w-8 text-right">{friendsCount}</span>
+                  </div>
+                </div>
+
+                {friendsData.map((f, i) => (
+                  <div key={i} className="space-y-3 pb-4 border-b border-foreground/10 last:border-0">
+                    <div className="editorial-eyebrow text-muted-foreground">Friend {i + 1}</div>
+                    <div>
+                      <div className="text-[11px] text-muted-foreground mb-1.5">Their passport</div>
+                      <SearchableSelect
+                        options={passportNationalities}
+                        value={f.passport}
+                        onChange={(v) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, passport: v } : x))}
+                        placeholder="Search nationalities…"
+                        label="Select passport"
+                      />
+                    </div>
+                    <div>
+                      <div className="text-[11px] text-muted-foreground mb-1.5">Leaving from the same city as you?</div>
+                      <div className="grid grid-cols-2 gap-1.5">
+                        {[
+                          { v: true, label: "Yes" },
+                          { v: false, label: "No" },
+                        ].map((o) => {
+                          const on = f.sameDeparture === o.v;
+                          return (
+                            <button
+                              key={String(o.v)}
+                              onClick={() => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, sameDeparture: o.v } : x))}
+                              className={cn(
+                                "border px-3 py-2 text-sm transition-colors",
+                                on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                              )}
+                            >
+                              {o.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    {f.sameDeparture === false && (
+                      <div>
+                        <div className="text-[11px] text-muted-foreground mb-1.5">Where they leave from</div>
+                        <CityInput
+                          value={f.departure ?? ""}
+                          onChange={(v) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, departure: v } : x))}
+                          placeholder="Their departure city"
+                        />
+                      </div>
+                    )}
+                    <div>
+                      <div className="text-[11px] text-muted-foreground mb-1.5">Their email (optional)</div>
+                      <input
+                        type="email"
+                        value={f.email ?? ""}
+                        onChange={(e) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, email: e.target.value } : x))}
+                        placeholder="friend@email.com"
+                        className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-sm py-1.5 placeholder:text-muted-foreground/60"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* FAMILY BRANCH */}
+            {companyChoice === "family" && passport && (
+              <div className="mt-7 border-l border-foreground/20 pl-4 space-y-6">
+                <div>
+                  <div className="editorial-eyebrow text-muted-foreground mb-2">Who's in the family?</div>
+                  <div className="space-y-2">
+                    {([
+                      { key: "adults",   label: "Adults",    note: "18 and over" },
+                      { key: "teens",    label: "Teenagers", note: "13 to 18" },
+                      { key: "children", label: "Children",  note: "under 13" },
+                    ] as const).map((g) => (
+                      <div key={g.key} className="flex items-center justify-between border border-foreground/20 px-3 py-2.5">
+                        <div>
+                          <div className="font-serif text-sm">{g.label}</div>
+                          <div className="text-[10px] text-muted-foreground">{g.note}</div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => setFamily((f) => ({ ...f, [g.key]: Math.max(g.key === "adults" ? 1 : 0, f[g.key] - 1) }))}
+                            className="border border-foreground/30 hover:border-foreground p-1.5"
+                            aria-label={`Fewer ${g.label}`}
+                          >
+                            <Minus className="h-3 w-3" strokeWidth={1.5} />
+                          </button>
+                          <span className="font-serif text-lg w-6 text-center">{family[g.key]}</span>
+                          <button
+                            onClick={() => setFamily((f) => ({ ...f, [g.key]: Math.min(12, f[g.key] + 1) }))}
+                            className="border border-foreground/30 hover:border-foreground p-1.5"
+                            aria-label={`More ${g.label}`}
+                          >
+                            <Plus className="h-3 w-3" strokeWidth={1.5} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* passport per family member */}
+                <div>
+                  <div className="editorial-eyebrow text-muted-foreground mb-2">Passports</div>
+                  <div className="space-y-3">
+                    {familyPassports.map((p, i) => {
+                      let role = "Adult";
+                      if (i >= family.adults && i < family.adults + family.teens) role = "Teen";
+                      else if (i >= family.adults + family.teens) role = "Child";
+                      const num = i + 1;
+                      return (
+                        <div key={i}>
+                          <div className="text-[11px] text-muted-foreground mb-1.5">{role} {num}</div>
+                          <SearchableSelect
+                            options={passportNationalities}
+                            value={p}
+                            onChange={(v) => setFamilyPassports((prev) => prev.map((x, idx) => idx === i ? v : x))}
+                            placeholder="Search nationalities…"
+                            label="Select passport"
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="editorial-eyebrow text-muted-foreground mb-2">All leaving from {departure || "the same city"}?</div>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {[
+                      { v: true,  label: "Yes" },
+                      { v: false, label: "No, mixed" },
+                    ].map((o) => {
+                      const on = familySameDeparture === o.v;
+                      return (
+                        <button
+                          key={String(o.v)}
+                          onClick={() => setFamilySameDeparture(o.v)}
+                          className={cn(
+                            "border px-3 py-2.5 text-sm transition-colors",
+                            on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                          )}
+                        >
+                          {o.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {familySameDeparture === false && (
+                    <div className="mt-2 text-[11px] text-muted-foreground">
+                      I'll ask each adult separately once the workspace opens.
+                    </div>
+                  )}
+                </div>
+
+                {family.adults > 0 && (
+                  <div>
+                    <div className="editorial-eyebrow text-muted-foreground mb-2">Invite the adults to this trip</div>
+                    <div className="space-y-2">
+                      {familyEmails.map((em, i) => (
+                        <input
+                          key={i}
+                          type="email"
+                          value={em}
+                          onChange={(e) => setFamilyEmails((prev) => prev.map((x, idx) => idx === i ? e.target.value : x))}
+                          placeholder={`Adult ${i + 1} email (optional)`}
+                          className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-sm py-1.5 placeholder:text-muted-foreground/60"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Spending mindset */}
             <div className="mt-7">
-              <div className="editorial-eyebrow text-muted-foreground mb-2">Money, honestly</div>
+              <div className="editorial-eyebrow text-muted-foreground mb-2">Money, honestly — how you spend, not how much</div>
               <ul className="space-y-1.5">
                 {spending.map((s) => {
                   const on = spend === s.id;
@@ -411,7 +829,7 @@ const Onboarding = () => {
               What <span className="italic-serif">ruins</span> a trip for you?
             </h2>
             <p className="mt-3 text-sm text-muted-foreground">
-              I'd rather know what to remove than what to add.
+              I'd rather know what to remove than what to add. Pick as many as ring true.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-1.5">
@@ -435,10 +853,22 @@ const Onboarding = () => {
               })}
             </div>
 
-            <div className="mt-10 ml-auto max-w-[22ch] text-right">
+            {/* "Other" free-text — sits inline like one more chip */}
+            <div className="mt-4">
+              <div className="editorial-eyebrow text-muted-foreground mb-2">Something I missed</div>
+              <input
+                type="text"
+                value={breakerOther}
+                onChange={(e) => setBreakerOther(e.target.value)}
+                placeholder="Tell me your specific dealbreaker"
+                className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-base py-2 placeholder:text-muted-foreground/60"
+              />
+            </div>
+
+            <div className="mt-10 ml-auto max-w-[24ch] text-right">
               <div className="editorial-eyebrow text-primary mb-2">Cura · note</div>
-              <p className="italic-serif text-[17px] leading-snug text-foreground/85">
-                "What you say no to <br/>defines the trip more than what you say yes to."
+              <p className="italic-serif text-[16px] leading-snug text-foreground/85">
+                "What you say no to defines the trip more than what you say yes to."
               </p>
             </div>
           </>
@@ -469,8 +899,7 @@ const Onboarding = () => {
               <div className="font-serif text-4xl leading-none mt-2">{reading.pick}.</div>
               <div className="mt-3 text-[13px] text-ink-foreground/80 leading-relaxed">
                 You would have picked {reading.wouldHavePicked}. You'd come back saying it was
-                <span className="italic-serif"> "fine"</span>. {reading.pick} is not fine.
-                {reading.pick} stays with you.
+                <span className="italic-serif"> "fine"</span>. {reading.pick} is not fine. {reading.pick} stays with you.
               </div>
               <div className="mt-4 editorial-eyebrow text-ink-foreground/60">
                 Cura · would-bet
