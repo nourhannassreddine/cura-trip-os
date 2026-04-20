@@ -26,6 +26,8 @@ export interface CuraProfile {
   path: CuraPath | null;
   moods: string[];
   pace: string | null;
+  purpose: string | null;
+  purposeNote?: string | null;
   destination?: string | null; // short path: where they're thinking
   departure: string | null;
   passport?: string | null;
@@ -34,6 +36,7 @@ export interface CuraProfile {
   partner?: Companion | null;
   friends?: Companion[];
   family?: FamilyComposition | null;
+  familyDepartures?: string[];
   spend: string | null;
   dealbreakers: string[];
   dealbreakerOther?: string | null;
@@ -46,6 +49,8 @@ const empty: CuraProfile = {
   path: null,
   moods: [],
   pace: null,
+  purpose: null,
+  purposeNote: null,
   destination: null,
   departure: null,
   passport: null,
@@ -53,6 +58,7 @@ const empty: CuraProfile = {
   partner: null,
   friends: [],
   family: null,
+  familyDepartures: [],
   spend: null,
   dealbreakers: [],
   dealbreakerOther: null,

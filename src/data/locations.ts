@@ -16,7 +16,7 @@ export const worldCities: string[] = [
   "Durban", "Luanda", "Maputo", "Khartoum",
   // Middle East
   "Dubai", "Abu Dhabi", "Doha", "Riyadh", "Jeddah", "Kuwait City", "Muscat",
-  "Manama", "Tel Aviv", "Jerusalem", "Amman", "Beirut", "Istanbul", "Ankara",
+  "Manama", "Amman", "Beirut", "Istanbul", "Ankara",
   "Tehran",
   // Europe
   "London", "Manchester", "Edinburgh", "Dublin", "Paris", "Lyon", "Marseille",
@@ -65,7 +65,7 @@ export const passportNationalities: string[] = [
   "Fijian", "Finnish", "French", "Gabonese", "Gambian", "Georgian", "German",
   "Ghanaian", "Greek", "Grenadian", "Guatemalan", "Guinean", "Guinea-Bissauan",
   "Guyanese", "Haitian", "Honduran", "Hungarian", "Icelandic", "Indian",
-  "Indonesian", "Iranian", "Iraqi", "Irish", "Israeli", "Italian", "Ivorian",
+  "Indonesian", "Iranian", "Iraqi", "Irish", "Italian", "Ivorian",
   "Jamaican", "Japanese", "Jordanian", "Kazakhstani", "Kenyan", "Kiribati",
   "Kosovar", "Kuwaiti", "Kyrgyz", "Laotian", "Latvian", "Lebanese", "Basotho",
   "Liberian", "Libyan", "Liechtensteiner", "Lithuanian", "Luxembourgish",

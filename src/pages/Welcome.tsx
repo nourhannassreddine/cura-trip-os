@@ -16,18 +16,18 @@ import surreal5 from "@/assets/welcome-surreal-5.jpg";
 ------------------------------------------------------------------ */
 
 const frames = [
-  { src: surreal1, alt: "An oversized white scallop shell on wet pastel sand at the edge of a calm sea, a small figure in white linen walking the shoreline at golden hour" },
-  { src: surreal2, alt: "A giant sun-bleached lemon resting on wet pink sand by a turquoise sea, a tiny figure in white linen walking past for scale" },
-  { src: surreal3, alt: "A colossal straw hat floating on a still milky-blue sea, a small figure in cream linen swimming toward it" },
-  { src: surreal4, alt: "A towering terracotta jug standing alone on warm ochre sand at golden hour, a barefoot figure in white linen walking past" },
-  { src: surreal5, alt: "An enormous ripe peach resting on cool morning sand by a pale blue sea, a small figure in pink linen sitting beside it" },
+  { src: surreal1, alt: "An enormous ripe peach the size of a small house in a field of pale lavender at golden hour, a tiny figure in pink linen walking toward it" },
+  { src: surreal2, alt: "A colossal sun-bleached terracotta vase standing impossibly tall on warm ochre desert sand at golden hour, a tiny barefoot figure in cream linen walking past for scale" },
+  { src: surreal3, alt: "An oversized ripe orange resting in a quiet pastel olive grove, a small woman in a flowing yellow dress walking past for scale" },
+  { src: surreal4, alt: "A giant pastel pink suitcase abandoned on a vast empty salt flat, a tiny figure in a wide straw hat sitting on top" },
+  { src: surreal5, alt: "An enormous white linen sheet draped over an invisible form on a warm pink stucco rooftop overlooking a sleepy Mediterranean village at dusk" },
 ];
 
 const Welcome = () => {
   const [i, setI] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(() => setI((n) => (n + 1) % frames.length), 5000);
+    const id = setInterval(() => setI((n) => (n + 1) % frames.length), 6000);
     return () => clearInterval(id);
   }, []);
 
@@ -43,7 +43,7 @@ const Welcome = () => {
             loading={idx === 0 ? "eager" : "lazy"}
             width={832}
             height={1216}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1400ms] ease-in-out ${
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[2400ms] ease-in-out ${
               idx === i ? "opacity-100" : "opacity-0"
             }`}
           />
@@ -63,21 +63,21 @@ const Welcome = () => {
           <div className="editorial-eyebrow text-muted-foreground">Plate I · A note before you begin</div>
           <div className="h-px w-8 bg-foreground/40 my-1.5" />
           <p className="italic-serif text-[13px] leading-tight text-foreground/75">
-            "The trip starts long before the airport."
+            "Travel, with judgment."
           </p>
         </div>
 
         <section className="pt-5">
           <div className="editorial-eyebrow text-primary mb-2">A travel operating system</div>
           <h1 className="display-md leading-[0.95]">
-            Other apps build<br />
-            <span className="italic-serif">itineraries.</span><br />
-            I build the version<br />
-            of you that<br />
-            <span className="italic-serif">comes home.</span>
+            For travelers<br />
+            with <span className="italic-serif">taste,</span><br />
+            and the patience<br />
+            for a system<br />
+            that has <span className="italic-serif">opinions.</span>
           </h1>
           <p className="mt-3 text-[13px] leading-relaxed text-foreground/70 max-w-[34ch]">
-            CURA studies how you move and quietly steers you toward the trip you didn't know you wanted.
+            Cura learns how you actually move and proposes the trip the obvious one was hiding.
           </p>
         </section>
 

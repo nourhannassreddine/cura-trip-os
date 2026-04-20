@@ -68,6 +68,22 @@ const spending = [
   { id: "guilt-free",    label: "I want to not think about it",          note: "tell me the total, then disappear" },
 ];
 
+const purposes = [
+  { id: "reset",         label: "A reset",                    note: "I need the noise turned down" },
+  { id: "celebration",   label: "A celebration",              note: "birthday, anniversary, a milestone" },
+  { id: "honeymoon",     label: "A honeymoon",                note: "the first trip as us" },
+  { id: "babymoon",      label: "A last quiet trip",          note: "before the baby, before the change" },
+  { id: "work",          label: "Work, with edges",           note: "the meeting is real, the rest is mine" },
+  { id: "creative",      label: "A creative project",         note: "shoot, write, research, make" },
+  { id: "reunion",       label: "A reunion",                  note: "people I don't see enough" },
+  { id: "wedding",       label: "Someone's wedding",          note: "I'm a guest, not the planner" },
+  { id: "grief",         label: "Quiet, after something hard", note: "I want a place to be still" },
+  { id: "milestone",     label: "A solo milestone",            note: "the trip I promised myself" },
+  { id: "family",        label: "Family time, the good kind", note: "everyone, in one place, slowly" },
+  { id: "scout",         label: "Scouting somewhere",         note: "could I live here?" },
+  { id: "none",          label: "No reason. I just want to go", note: "the urge is the reason" },
+];
+
 const dealbreakers = [
   { id: "crowds",        label: "Crowds & queues" },
   { id: "early",         label: "Early starts" },
@@ -113,19 +129,9 @@ const dealbreakers = [
   { id: "visa-interview",label: "In-person visa interviews" },
   { id: "visa-onarrival",label: "Visa-on-arrival queues" },
   { id: "passport-stamps", label: "Politically sensitive passport stamps" },
-  { id: "border-questions", label: "Aggressive border questioning" },
-  { id: "biometrics",    label: "Heavy biometric or fingerprint controls" },
   { id: "cash-only",     label: "Cash-only economies" },
   { id: "no-uber",       label: "No ride-share apps, only street taxis" },
-  { id: "currency-fees", label: "Awful currency exchange rates" },
-  { id: "long-immigration", label: "Two-hour immigration lines" },
-  { id: "slow-checkin",  label: "3pm hotel check-in, no exceptions" },
-  { id: "single-supplement", label: "Single-supplement penalties" },
-  { id: "tipping-mandatory", label: "Mandatory service charges on top of tips" },
   { id: "no-direct-flight", label: "No direct flight from my city" },
-  { id: "early-checkout", label: "11am hotel checkouts" },
-  { id: "buffet-breakfast", label: "Buffet-only breakfasts" },
-  { id: "shared-driver", label: "Group tours with a shared driver" },
 ];
 
 /* utility — clean a number for friend count */
@@ -139,6 +145,8 @@ const Onboarding = () => {
   const [step, setStep] = useState(0);
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [pace, setPace] = useState<string | null>(null);
+  const [purpose, setPurpose] = useState<string | null>(null);
+  const [purposeNote, setPurposeNote] = useState<string>("");
   const [destination, setDestination] = useState<string>(""); // short path only
   const [passport, setPassport] = useState<string | null>(null);
   const [departure, setDeparture] = useState<string>("");
@@ -150,12 +158,14 @@ const Onboarding = () => {
   const [partnerEmail, setPartnerEmail] = useState<string>("");
   // Friends extras
   const [friendsCount, setFriendsCount] = useState<number>(2);
+  const [friendsCountSet, setFriendsCountSet] = useState<boolean>(false);
   const [friendsData, setFriendsData] = useState<Companion[]>([]);
   // Family extras
   const [family, setFamily] = useState<FamilyComposition>({ adults: 1, teens: 0, children: 0 });
   const [familyPassports, setFamilyPassports] = useState<(string | null)[]>([]);
   const [familyEmails, setFamilyEmails] = useState<string[]>([]);
-  const [familySameDeparture, setFamilySameDeparture] = useState<boolean>(true);
+  const [familySameDeparture, setFamilySameDeparture] = useState<boolean | null>(null);
+  const [familyDepartures, setFamilyDepartures] = useState<string[]>([]);
 
   const [spend, setSpend] = useState<string | null>(null);
   const [breakers, setBreakers] = useState<Set<string>>(new Set());
@@ -163,7 +173,7 @@ const Onboarding = () => {
   const [lastMood, setLastMood] = useState<string | null>(null);
 
   const nav = useNavigate();
-  const stepCount = isShort ? 4 : 5;
+  const stepCount = isShort ? 5 : 6;
 
   // reset step if path changes mid-flow
   useEffect(() => { setStep(0); }, [path]);
@@ -192,6 +202,12 @@ const Onboarding = () => {
       const next = [...prev];
       while (next.length < family.adults) next.push("");
       while (next.length > family.adults) next.pop();
+      return next;
+    });
+    setFamilyDepartures((prev) => {
+      const next = [...prev];
+      while (next.length < total) next.push("");
+      while (next.length > total) next.pop();
       return next;
     });
   }, [family.adults, family.teens, family.children]);
@@ -258,7 +274,7 @@ const Onboarding = () => {
   const friendsValid =
     companyChoice !== "friends"
       ? true
-      : !!(passport && friendsData.length === clamp(friendsCount) &&
+      : !!(passport && friendsCountSet && friendsData.length === clamp(friendsCount) &&
           friendsData.every((f) => f.passport &&
             (f.sameDeparture || (f.departure ?? "").trim().length >= 2)));
 
@@ -269,15 +285,22 @@ const Onboarding = () => {
           const total = family.adults + family.teens + family.children;
           if (total < 1) return false;
           if (familyPassports.length !== total) return false;
+          if (familySameDeparture === null) return false;
+          if (familySameDeparture === false) {
+            if (familyDepartures.length !== total) return false;
+            if (!familyDepartures.every((d) => d.trim().length >= 2)) return false;
+          }
           return familyPassports.every((p) => !!p) && !!passport;
         })();
 
-  /* full path: step 2 = context (with passport+with), step 3 = dealbreakers, step 4 = reading
-     short path: step 2 = destination, step 3 = context condensed */
+  /* Step routing
+     full  : 0 Feel · 1 Decide · 2 Purpose · 3 Context · 4 Dealbreakers · 5 Reading
+     short : 0 Feel · 1 Decide · 2 Purpose · 3 Destination · 4 Context           */
 
-  const isFullContext = !isShort && step === 2;
-  const isShortDestination = isShort && step === 2;
-  const isShortContext = isShort && step === 3;
+  const isPurpose = step === 2;
+  const isFullContext = !isShort && step === 3;
+  const isShortDestination = isShort && step === 3;
+  const isShortContext = isShort && step === 4;
 
   const fullContextValid =
     isFullContext &&
@@ -298,17 +321,20 @@ const Onboarding = () => {
   const canContinue =
     (step === 0 && picked.size >= 1) ||
     (step === 1 && pace !== null) ||
+    (isPurpose && purpose !== null) ||
     (isShortDestination && destination.trim().length >= 2) ||
     fullContextValid ||
     shortContextValid ||
-    (!isShort && step === 3) ||
-    (!isShort && step === 4);
+    (!isShort && step === 4) ||
+    (!isShort && step === 5);
 
   const persist = () => {
     saveProfile({
       path,
       moods: Array.from(picked),
       pace,
+      purpose,
+      purposeNote: purposeNote.trim() || null,
       destination: isShort ? (destination.trim() || null) : null,
       departure: departure.trim() || null,
       passport,
@@ -321,6 +347,9 @@ const Onboarding = () => {
       } : null,
       friends: companyChoice === "friends" ? friendsData : [],
       family: companyChoice === "family" ? family : null,
+      familyDepartures: companyChoice === "family"
+        ? (familySameDeparture === false ? familyDepartures : [])
+        : [],
       spend,
       dealbreakers: isShort ? [] : Array.from(breakers),
       dealbreakerOther: isShort ? null : (breakerOther.trim() || null),
@@ -355,7 +384,7 @@ const Onboarding = () => {
   return (
     <main className="app-shell flex flex-col">
       <TopBar
-        eyebrow={`Movement ${step + 1} of ${stepCount}${isShort ? " · short" : ""}`}
+        eyebrow={`Movement ${step + 1} of ${stepCount}`}
         title="Calibration"
         right={
           <Link to="/home" className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground">
@@ -365,7 +394,7 @@ const Onboarding = () => {
       />
 
       <div className="px-5">
-        <div className={cn("grid gap-1.5", isShort ? "grid-cols-4" : "grid-cols-5")}>
+        <div className={cn("grid gap-1.5", isShort ? "grid-cols-5" : "grid-cols-6")}>
           {Array.from({ length: stepCount }).map((_, i) => (
             <div key={i} className={cn("h-px", i <= step ? "bg-primary" : "bg-foreground/20")} />
           ))}
@@ -451,10 +480,67 @@ const Onboarding = () => {
           </>
         )}
 
-        {/* ---------- SHORT PATH STEP 2 — DESTINATION ---------- */}
+        {/* ---------- STEP 2 — PURPOSE (both paths) ---------- */}
+        {isPurpose && (
+          <>
+            <div className="editorial-eyebrow text-muted-foreground mb-3">iii. Purpose</div>
+            <h2 className="display-lg max-w-[14ch]">
+              What's the <span className="italic-serif">point</span> of this trip?
+            </h2>
+            <p className="mt-3 text-sm text-muted-foreground max-w-[34ch]">
+              If there's one. Pick the closest. The truth, not the polite version.
+            </p>
+
+            <ul className="mt-7 space-y-2">
+              {purposes.map((p) => {
+                const on = purpose === p.id;
+                return (
+                  <li key={p.id}>
+                    <button
+                      onClick={() => setPurpose(p.id)}
+                      className={cn(
+                        "w-full flex items-center justify-between border px-4 py-3 text-left transition-colors",
+                        on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                      )}
+                    >
+                      <div>
+                        <div className="font-serif text-[15px] leading-tight">{p.label}</div>
+                        <div className={cn("text-[11px] mt-0.5", on ? "text-ink-foreground/70" : "text-muted-foreground")}>{p.note}</div>
+                      </div>
+                      {on && <Check className="h-4 w-4" strokeWidth={1.5} />}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {purpose && (
+              <div className="mt-6">
+                <div className="editorial-eyebrow text-muted-foreground mb-2">Anything I should know?</div>
+                <input
+                  type="text"
+                  value={purposeNote}
+                  onChange={(e) => setPurposeNote(e.target.value)}
+                  placeholder="A name, a date, a quiet detail. Skip if not."
+                  className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-base py-2 placeholder:text-muted-foreground/60"
+                />
+              </div>
+            )}
+
+            {purpose && (
+              <div className="mt-7">
+                <CuraWhisper variant="inline">
+                  Noted. The reason quietly changes everything: pace, table sizes, what I'd never suggest.
+                </CuraWhisper>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ---------- SHORT PATH STEP 3 — DESTINATION ---------- */}
         {isShortDestination && (
           <>
-            <div className="editorial-eyebrow text-muted-foreground mb-3">iii. Destination</div>
+            <div className="editorial-eyebrow text-muted-foreground mb-3">iv. Destination</div>
             <h2 className="display-lg max-w-[14ch]">
               Where are you <span className="italic-serif">thinking?</span>
             </h2>
@@ -463,26 +549,24 @@ const Onboarding = () => {
             </p>
 
             <div className="mt-7">
-              <div className="editorial-eyebrow text-muted-foreground mb-2">Where</div>
               <CityInput value={destination} onChange={setDestination} placeholder="Type a place. Anywhere in the world." />
-              <div className="mt-1 text-[11px] text-muted-foreground">
-                No list, no limits. Tell me where you're thinking and I'll meet you there.
-              </div>
             </div>
 
-            <div className="mt-8">
-              <CuraWhisper variant="inline">
-                Good. I won't try to talk you out of it. But I might suggest you go in a different month.
-              </CuraWhisper>
-            </div>
+            {destination.trim().length >= 2 && (
+              <div className="mt-8">
+                <CuraWhisper variant="inline">
+                  Good. I won't try to talk you out of it. I might suggest you go in a different month.
+                </CuraWhisper>
+              </div>
+            )}
           </>
         )}
 
-        {/* ---------- CONTEXT (full step 2  ·  short step 3) ---------- */}
+        {/* ---------- CONTEXT (full step 3  ·  short step 4) ---------- */}
         {(isFullContext || isShortContext) && (
           <>
             <div className="editorial-eyebrow text-muted-foreground mb-3">
-              {isShort ? "iv." : "iii."} Context
+              {isShort ? "v." : "iv."} Context
             </div>
             <h2 className="display-lg max-w-[14ch]">
               The <span className="italic-serif">facts</span> of how you move.
@@ -581,7 +665,8 @@ const Onboarding = () => {
                   </div>
                 )}
 
-                {partnerSameDeparture !== null && (
+                {(partnerSameDeparture === true ||
+                  (partnerSameDeparture === false && partnerDeparture.trim().length >= 2)) && (
                   <div>
                     <div className="editorial-eyebrow text-muted-foreground mb-2">Invite them to this trip</div>
                     <input
@@ -591,7 +676,7 @@ const Onboarding = () => {
                       placeholder="their@email.com"
                       className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-base py-2 placeholder:text-muted-foreground/60"
                     />
-                    <div className="mt-1 text-[11px] text-muted-foreground">Optional. They'll get the workspace, not a marketing email.</div>
+                    <div className="mt-1 text-[11px] text-muted-foreground">They'll get the workspace, not a marketing email.</div>
                   </div>
                 )}
               </div>
@@ -604,7 +689,7 @@ const Onboarding = () => {
                   <div className="editorial-eyebrow text-muted-foreground mb-2">How many friends?</div>
                   <div className="flex items-center gap-4">
                     <button
-                      onClick={() => setFriendsCount((n) => clamp(n - 1))}
+                      onClick={() => { setFriendsCount((n) => clamp(n - 1)); setFriendsCountSet(true); }}
                       className="border border-foreground/30 hover:border-foreground p-2"
                       aria-label="Fewer friends"
                     >
@@ -615,11 +700,11 @@ const Onboarding = () => {
                       min={1}
                       max={12}
                       value={friendsCount}
-                      onChange={(e) => setFriendsCount(clamp(parseInt(e.target.value, 10)))}
+                      onChange={(e) => { setFriendsCount(clamp(parseInt(e.target.value, 10))); setFriendsCountSet(true); }}
                       className="flex-1 accent-foreground"
                     />
                     <button
-                      onClick={() => setFriendsCount((n) => clamp(n + 1))}
+                      onClick={() => { setFriendsCount((n) => clamp(n + 1)); setFriendsCountSet(true); }}
                       className="border border-foreground/30 hover:border-foreground p-2"
                       aria-label="More friends"
                     >
@@ -627,21 +712,37 @@ const Onboarding = () => {
                     </button>
                     <span className="font-serif text-2xl w-8 text-right">{friendsCount}</span>
                   </div>
+                  {!friendsCountSet && (
+                    <button
+                      onClick={() => setFriendsCountSet(true)}
+                      className="mt-3 text-[11px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground"
+                    >
+                      Confirm count →
+                    </button>
+                  )}
                 </div>
 
-                {friendsData.map((f, i) => (
-                  <div key={i} className="space-y-4 pb-5 border-b border-foreground/10 last:border-0">
+                {friendsCountSet && (
+                  <div className="space-y-5">
+                    <div className="editorial-eyebrow text-muted-foreground">Passports</div>
+                    {friendsData.map((f, i) => (
+                      <div key={`p-${i}`}>
+                        <div className="editorial-eyebrow text-muted-foreground mb-2">Friend {i + 1} passport</div>
+                        <SearchableSelect
+                          options={passportNationalities}
+                          value={f.passport}
+                          onChange={(v) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, passport: v } : x))}
+                          placeholder="Search nationalities…"
+                          label="Select their passport"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {friendsCountSet && friendsData.every((f) => !!f.passport) && friendsData.map((f, i) => (
+                  <div key={`d-${i}`} className="space-y-4 pb-5 border-b border-foreground/10 last:border-0">
                     <div className="editorial-eyebrow text-muted-foreground">Friend {i + 1}</div>
-                    <div>
-                      <div className="editorial-eyebrow text-muted-foreground mb-2">Friend {i + 1} passport</div>
-                      <SearchableSelect
-                        options={passportNationalities}
-                        value={f.passport}
-                        onChange={(v) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, passport: v } : x))}
-                        placeholder="Search nationalities…"
-                        label="Select their passport"
-                      />
-                    </div>
                     <div>
                       <div className="editorial-eyebrow text-muted-foreground mb-2">Leaving from the same city?</div>
                       <div className="grid grid-cols-2 gap-1.5">
@@ -675,17 +776,20 @@ const Onboarding = () => {
                         />
                       </div>
                     )}
-                    <div>
-                      <div className="editorial-eyebrow text-muted-foreground mb-2">Invite them to this trip</div>
-                      <input
-                        type="email"
-                        value={f.email ?? ""}
-                        onChange={(e) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, email: e.target.value } : x))}
-                        placeholder="their@email.com"
-                        className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-base py-2 placeholder:text-muted-foreground/60"
-                      />
-                      <div className="mt-1 text-[11px] text-muted-foreground">Optional. They'll get the workspace, not a marketing email.</div>
-                    </div>
+                    {(f.sameDeparture === true ||
+                      (f.sameDeparture === false && (f.departure ?? "").trim().length >= 2)) && (
+                      <div>
+                        <div className="editorial-eyebrow text-muted-foreground mb-2">Invite them to this trip</div>
+                        <input
+                          type="email"
+                          value={f.email ?? ""}
+                          onChange={(e) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, email: e.target.value } : x))}
+                          placeholder="their@email.com"
+                          className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-base py-2 placeholder:text-muted-foreground/60"
+                        />
+                        <div className="mt-1 text-[11px] text-muted-foreground">They'll get the workspace, not a marketing email.</div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -801,7 +905,10 @@ const Onboarding = () => {
                             <div className="text-[11px] text-muted-foreground mb-1.5">{role} {num} departure</div>
                             <input
                               type="text"
+                              value={familyDepartures[i] ?? ""}
+                              onChange={(e) => setFamilyDepartures((prev) => prev.map((x, idx) => idx === i ? e.target.value : x))}
                               placeholder="Their departure city"
+                              autoComplete="off"
                               className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-sm py-1.5 placeholder:text-muted-foreground/60"
                             />
                           </div>
@@ -821,11 +928,12 @@ const Onboarding = () => {
                           type="email"
                           value={em}
                           onChange={(e) => setFamilyEmails((prev) => prev.map((x, idx) => idx === i ? e.target.value : x))}
-                          placeholder={`Adult ${i + 1} email (optional)`}
+                          placeholder={`Adult ${i + 1} email`}
                           className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-sm py-1.5 placeholder:text-muted-foreground/60"
                         />
                       ))}
                     </div>
+                    <div className="mt-1 text-[11px] text-muted-foreground">They'll get the workspace, not a marketing email.</div>
                   </div>
                 )}
               </div>
@@ -869,10 +977,10 @@ const Onboarding = () => {
           </>
         )}
 
-        {/* ---------- STEP 3 — DEALBREAKERS (full only) ---------- */}
-        {!isShort && step === 3 && (
+        {/* ---------- STEP 4 — DEALBREAKERS (full only) ---------- */}
+        {!isShort && step === 4 && (
           <>
-            <div className="editorial-eyebrow text-muted-foreground mb-3">iv. Dealbreakers</div>
+            <div className="editorial-eyebrow text-muted-foreground mb-3">v. Dealbreakers</div>
             <h2 className="display-lg max-w-[14ch]">
               What <span className="italic-serif">ruins</span> a trip for you?
             </h2>
@@ -922,10 +1030,10 @@ const Onboarding = () => {
           </>
         )}
 
-        {/* ---------- STEP 4 — CURA READS YOU (full only) ---------- */}
-        {!isShort && step === 4 && (
+        {/* ---------- STEP 5 — CURA READS YOU (full only) ---------- */}
+        {!isShort && step === 5 && (
           <>
-            <div className="editorial-eyebrow text-primary mb-3">v. Reading</div>
+            <div className="editorial-eyebrow text-primary mb-3">vi. Reading</div>
             <h2 className="display-lg max-w-[16ch]">
               {reading.headline}
             </h2>
