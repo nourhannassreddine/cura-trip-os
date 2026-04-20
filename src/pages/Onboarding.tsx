@@ -689,7 +689,7 @@ const Onboarding = () => {
                   <div className="editorial-eyebrow text-muted-foreground mb-2">How many friends?</div>
                   <div className="flex items-center gap-4">
                     <button
-                      onClick={() => setFriendsCount((n) => clamp(n - 1))}
+                      onClick={() => { setFriendsCount((n) => clamp(n - 1)); setFriendsCountSet(true); }}
                       className="border border-foreground/30 hover:border-foreground p-2"
                       aria-label="Fewer friends"
                     >
@@ -700,11 +700,11 @@ const Onboarding = () => {
                       min={1}
                       max={12}
                       value={friendsCount}
-                      onChange={(e) => setFriendsCount(clamp(parseInt(e.target.value, 10)))}
+                      onChange={(e) => { setFriendsCount(clamp(parseInt(e.target.value, 10))); setFriendsCountSet(true); }}
                       className="flex-1 accent-foreground"
                     />
                     <button
-                      onClick={() => setFriendsCount((n) => clamp(n + 1))}
+                      onClick={() => { setFriendsCount((n) => clamp(n + 1)); setFriendsCountSet(true); }}
                       className="border border-foreground/30 hover:border-foreground p-2"
                       aria-label="More friends"
                     >
@@ -712,21 +712,37 @@ const Onboarding = () => {
                     </button>
                     <span className="font-serif text-2xl w-8 text-right">{friendsCount}</span>
                   </div>
+                  {!friendsCountSet && (
+                    <button
+                      onClick={() => setFriendsCountSet(true)}
+                      className="mt-3 text-[11px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground"
+                    >
+                      Confirm count →
+                    </button>
+                  )}
                 </div>
 
-                {friendsData.map((f, i) => (
-                  <div key={i} className="space-y-4 pb-5 border-b border-foreground/10 last:border-0">
+                {friendsCountSet && (
+                  <div className="space-y-5">
+                    <div className="editorial-eyebrow text-muted-foreground">Passports</div>
+                    {friendsData.map((f, i) => (
+                      <div key={`p-${i}`}>
+                        <div className="editorial-eyebrow text-muted-foreground mb-2">Friend {i + 1} passport</div>
+                        <SearchableSelect
+                          options={passportNationalities}
+                          value={f.passport}
+                          onChange={(v) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, passport: v } : x))}
+                          placeholder="Search nationalities…"
+                          label="Select their passport"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {friendsCountSet && friendsData.every((f) => !!f.passport) && friendsData.map((f, i) => (
+                  <div key={`d-${i}`} className="space-y-4 pb-5 border-b border-foreground/10 last:border-0">
                     <div className="editorial-eyebrow text-muted-foreground">Friend {i + 1}</div>
-                    <div>
-                      <div className="editorial-eyebrow text-muted-foreground mb-2">Friend {i + 1} passport</div>
-                      <SearchableSelect
-                        options={passportNationalities}
-                        value={f.passport}
-                        onChange={(v) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, passport: v } : x))}
-                        placeholder="Search nationalities…"
-                        label="Select their passport"
-                      />
-                    </div>
                     <div>
                       <div className="editorial-eyebrow text-muted-foreground mb-2">Leaving from the same city?</div>
                       <div className="grid grid-cols-2 gap-1.5">
@@ -760,17 +776,20 @@ const Onboarding = () => {
                         />
                       </div>
                     )}
-                    <div>
-                      <div className="editorial-eyebrow text-muted-foreground mb-2">Invite them to this trip</div>
-                      <input
-                        type="email"
-                        value={f.email ?? ""}
-                        onChange={(e) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, email: e.target.value } : x))}
-                        placeholder="their@email.com"
-                        className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-base py-2 placeholder:text-muted-foreground/60"
-                      />
-                      <div className="mt-1 text-[11px] text-muted-foreground">Optional. They'll get the workspace, not a marketing email.</div>
-                    </div>
+                    {(f.sameDeparture === true ||
+                      (f.sameDeparture === false && (f.departure ?? "").trim().length >= 2)) && (
+                      <div>
+                        <div className="editorial-eyebrow text-muted-foreground mb-2">Invite them to this trip</div>
+                        <input
+                          type="email"
+                          value={f.email ?? ""}
+                          onChange={(e) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, email: e.target.value } : x))}
+                          placeholder="their@email.com"
+                          className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-base py-2 placeholder:text-muted-foreground/60"
+                        />
+                        <div className="mt-1 text-[11px] text-muted-foreground">They'll get the workspace, not a marketing email.</div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
