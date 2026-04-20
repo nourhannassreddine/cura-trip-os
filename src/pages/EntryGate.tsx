@@ -47,7 +47,7 @@ const EntryGate = () => {
           Where are you <span className="italic-serif">right now?</span>
         </h1>
         <p className="mt-3 text-sm text-muted-foreground max-w-[34ch]">
-          Forget the map. Tell me where your head is.
+          Not on a map. Inside the trip.
         </p>
       </section>
 
