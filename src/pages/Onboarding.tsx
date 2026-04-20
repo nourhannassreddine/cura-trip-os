@@ -905,7 +905,10 @@ const Onboarding = () => {
                             <div className="text-[11px] text-muted-foreground mb-1.5">{role} {num} departure</div>
                             <input
                               type="text"
+                              value={familyDepartures[i] ?? ""}
+                              onChange={(e) => setFamilyDepartures((prev) => prev.map((x, idx) => idx === i ? e.target.value : x))}
                               placeholder="Their departure city"
+                              autoComplete="off"
                               className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-sm py-1.5 placeholder:text-muted-foreground/60"
                             />
                           </div>
@@ -925,11 +928,12 @@ const Onboarding = () => {
                           type="email"
                           value={em}
                           onChange={(e) => setFamilyEmails((prev) => prev.map((x, idx) => idx === i ? e.target.value : x))}
-                          placeholder={`Adult ${i + 1} email (optional)`}
+                          placeholder={`Adult ${i + 1} email`}
                           className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-sm py-1.5 placeholder:text-muted-foreground/60"
                         />
                       ))}
                     </div>
+                    <div className="mt-1 text-[11px] text-muted-foreground">They'll get the workspace, not a marketing email.</div>
                   </div>
                 )}
               </div>
@@ -973,10 +977,10 @@ const Onboarding = () => {
           </>
         )}
 
-        {/* ---------- STEP 3 — DEALBREAKERS (full only) ---------- */}
-        {!isShort && step === 3 && (
+        {/* ---------- STEP 4 — DEALBREAKERS (full only) ---------- */}
+        {!isShort && step === 4 && (
           <>
-            <div className="editorial-eyebrow text-muted-foreground mb-3">iv. Dealbreakers</div>
+            <div className="editorial-eyebrow text-muted-foreground mb-3">v. Dealbreakers</div>
             <h2 className="display-lg max-w-[14ch]">
               What <span className="italic-serif">ruins</span> a trip for you?
             </h2>
