@@ -1,22 +1,33 @@
 import { Link } from "react-router-dom";
-import { Plus, Bell, ArrowUpRight } from "lucide-react";
+import { Plus, Bell, ArrowRight, Sparkles, AlertCircle } from "lucide-react";
 import { BottomNav } from "@/components/cura/BottomNav";
 import { CuraWhisper } from "@/components/cura/CuraWhisper";
 import { Tag } from "@/components/cura/Tag";
-import { trips, destinations, curaWhispers } from "@/data/cura";
-import still from "@/assets/still-objects.jpg";
+import { trips, curaWhispers, packing } from "@/data/cura";
+import fieldnote from "@/assets/home-fieldnote.jpg";
 
 const Home = () => {
-  const upcoming = trips.filter((t) => t.status !== "memory");
-  const memory = trips.find((t) => t.status === "memory");
+  // Active trips, sorted by closest first.
+  const active = trips
+    .filter((t) => t.status !== "memory")
+    .sort((a, b) => a.daysOut - b.daysOut);
+
+  // The one trip the user is actually working on.
+  const primary = active[0];
+  const secondary = active.slice(1);
+
+  // What's missing: packing items not yet packed (drives "See what's missing")
+  const missingCount = packing.filter((p) => !p.packed).length;
 
   return (
     <main className="app-shell pb-20">
-      {/* Header — editorial masthead */}
-      <header className="px-5 pt-5 pb-3 flex items-center justify-between">
+      {/* Header — editorial masthead, locked white-on-paper logo treatment */}
+      <header className="px-5 pt-5 pb-2 flex items-center justify-between">
         <div>
           <div className="editorial-eyebrow text-muted-foreground">Tuesday · 4:12 pm</div>
-          <div className="font-serif text-2xl leading-none mt-0.5">CURA</div>
+          <div className="font-serif lowercase text-2xl leading-none tracking-tight mt-0.5">
+            cura
+          </div>
         </div>
         <div className="flex items-center gap-1">
           <button aria-label="Notifications" className="p-2 hover:opacity-70">
@@ -28,138 +39,176 @@ const Home = () => {
         </div>
       </header>
 
-      {/* Greeting — slightly oversized, asymmetric */}
-      <section className="px-5 pt-2 pb-6 cura-rise">
+      {/* Hero — tightened: greeting + whisper, kept as entry not focus */}
+      <section className="px-5 pt-1 pb-4 cura-rise">
         <div className="flex items-end justify-between">
-          <h1 className="display-lg max-w-[10ch]">
-            Good <br />
-            afternoon, <span className="italic-serif">Lia</span>.
+          <h1 className="font-serif text-[40px] leading-[0.95] max-w-[10ch]">
+            Good afternoon, <span className="italic-serif">Lia</span>.
           </h1>
-          <div className="text-right text-xs text-muted-foreground pb-2">
-            <div>38 days</div>
-            <div>to Puglia</div>
-          </div>
+          {primary && (
+            <div className="text-right text-xs text-muted-foreground pb-1.5">
+              <div>{primary.daysOut} days</div>
+              <div>to {primary.city}</div>
+            </div>
+          )}
+        </div>
+        <div className="mt-4">
+          <CuraWhisper variant="inline">{curaWhispers[0]}</CuraWhisper>
         </div>
       </section>
 
-      {/* CURA whisper — today's note */}
-      <section className="px-5">
-        <CuraWhisper>{curaWhispers[0]}</CuraWhisper>
-      </section>
+      {/* PRIMARY TRIP — control center focal point */}
+      {primary && (
+        <section className="mt-2 px-5">
+          <div className="editorial-eyebrow text-muted-foreground mb-2">Your trip</div>
 
-      {/* Active trips */}
-      <section className="mt-8">
-        <div className="px-5 flex items-baseline justify-between">
-          <h2 className="font-serif text-xl">Your trips</h2>
-          <Link to="/trip/new" className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground">
-            + New
-          </Link>
-        </div>
-
-        <div className="mt-4 space-y-4 px-5">
-          {upcoming.map((t, i) => (
-            <Link
-              key={t.id}
-              to={`/trip/${t.id}`}
-              className="group block border border-foreground/15 hover:border-foreground transition-colors"
-            >
-              <div className="grid grid-cols-[140px_1fr] gap-0">
-                <div className="relative h-[170px] overflow-hidden">
-                  <img
-                    src={t.cover}
-                    alt={`${t.city}, ${t.country}`}
-                    loading="lazy"
-                    width={1024}
-                    height={1280}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-4 flex flex-col justify-between">
-                  <div>
-                    <div className="editorial-eyebrow text-muted-foreground">{t.country}</div>
-                    <div className="font-serif text-2xl leading-tight mt-1">{t.city}</div>
-                    <div className="text-xs text-muted-foreground mt-0.5">{t.dates}</div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <Tag variant={i === 0 ? "default" : "outline"}>{t.status}</Tag>
-                    <div className="text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
-                      {t.readiness}% ready
-                    </div>
-                  </div>
-                </div>
+          <div className="border border-foreground bg-background">
+            {/* Cover */}
+            <Link to={`/trip/${primary.id}`} className="group block relative h-[220px] overflow-hidden">
+              <img
+                src={primary.cover}
+                alt={`${primary.city}, ${primary.country}`}
+                loading="eager"
+                width={1024}
+                height={1280}
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute top-3 left-3">
+                <Tag variant="ink">{primary.status}</Tag>
               </div>
-              <div className="px-4 pb-3">
-                <div className="h-px bg-foreground/10 relative">
-                  <div className="absolute left-0 top-0 h-px bg-primary" style={{ width: `${t.readiness}%` }} />
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                <div className="editorial-eyebrow text-white/80">{primary.country}</div>
+                <div className="font-serif text-white text-[34px] leading-none mt-1">
+                  {primary.city}
                 </div>
+                <div className="text-[11px] text-white/85 mt-1">{primary.dates}</div>
               </div>
             </Link>
-          ))}
-        </div>
-      </section>
 
-      {/* Editorial split — still life + quote */}
+            {/* Readiness bar */}
+            <div className="px-4 pt-4">
+              <div className="flex items-center justify-between text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
+                <span>Readiness</span>
+                <span>{primary.readiness}%</span>
+              </div>
+              <div className="mt-2 h-px bg-foreground/15 relative">
+                <div
+                  className="absolute left-0 top-0 h-px bg-primary"
+                  style={{ width: `${primary.readiness}%` }}
+                />
+              </div>
+            </div>
+
+            {/* ACTION LAYER — what to do next */}
+            <div className="p-4 pt-3">
+              <Link
+                to={`/trip/${primary.id}`}
+                className="group flex items-center justify-between border border-foreground bg-ink text-ink-foreground px-4 py-3"
+              >
+                <span className="font-sans text-sm tracking-wide">Continue planning</span>
+                <ArrowRight
+                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                  strokeWidth={1.5}
+                />
+              </Link>
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                <Link
+                  to={`/trip/${primary.id}/itinerary`}
+                  className="flex items-center justify-center gap-1.5 border border-foreground/25 hover:border-foreground px-3 py-2.5 text-[12px] tracking-wide"
+                >
+                  <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
+                  View itinerary
+                </Link>
+                <Link
+                  to="/pack"
+                  className="flex items-center justify-center gap-1.5 border border-foreground/25 hover:border-foreground px-3 py-2.5 text-[12px] tracking-wide"
+                >
+                  <AlertCircle className="h-3.5 w-3.5" strokeWidth={1.5} />
+                  See what's missing
+                  {missingCount > 0 && (
+                    <span className="text-muted-foreground">· {missingCount}</span>
+                  )}
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* SECONDARY TRIPS — compact list */}
+      {secondary.length > 0 && (
+        <section className="mt-8 px-5">
+          <div className="flex items-baseline justify-between mb-3">
+            <div className="editorial-eyebrow text-muted-foreground">Also in motion</div>
+            <Link
+              to="/trips"
+              className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground"
+            >
+              All trips
+            </Link>
+          </div>
+          <ul className="space-y-2">
+            {secondary.map((t) => (
+              <li key={t.id}>
+                <Link
+                  to={`/trip/${t.id}`}
+                  className="grid grid-cols-[72px_1fr_auto] items-center gap-3 border border-foreground/15 hover:border-foreground transition-colors"
+                >
+                  <div className="relative h-[72px] overflow-hidden">
+                    <img
+                      src={t.cover}
+                      alt={t.city}
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div className="py-2">
+                    <div className="font-serif text-base leading-none">{t.city}</div>
+                    <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground mt-1">
+                      {t.dates}
+                    </div>
+                  </div>
+                  <div className="pr-3 text-right">
+                    <Tag variant="outline">{t.status}</Tag>
+                    <div className="text-[10px] text-muted-foreground mt-1">
+                      {t.readiness}%
+                    </div>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Field note — editorial breathing room, no brand mention */}
       <section className="mt-12 grid grid-cols-5 gap-0 items-stretch">
         <div className="col-span-3 relative h-[200px]">
-          <img src={still} alt="Linen, hat, espresso, gold earrings on warm beige" loading="lazy" className="h-full w-full object-cover" />
+          <img
+            src={fieldnote}
+            alt="Linen, straw hat, leather sandals and a gold hoop on warm beige stone"
+            loading="lazy"
+            className="h-full w-full object-cover"
+          />
         </div>
         <div className="col-span-2 bg-paper-deep p-4 flex flex-col justify-between">
           <div className="editorial-eyebrow text-muted-foreground">Field note</div>
           <p className="italic-serif text-[15px] leading-tight">
             "Pack like you live there, not like you visit."
           </p>
-          <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground">— CURA, on packing</div>
+          <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
+            — Cura, on packing
+          </div>
         </div>
       </section>
 
-      {/* Discover strip */}
-      <section className="mt-12">
-        <div className="px-5 flex items-baseline justify-between">
-          <h2 className="font-serif text-xl">A small list of <span className="italic-serif">elsewhere</span></h2>
-          <Link to="/dream" className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground inline-flex items-center gap-1">
-            All <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} />
-          </Link>
-        </div>
-        <div className="mt-4 flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
-          {destinations.map((d) => (
-            <Link key={d.id} to="/dream" className="shrink-0 w-[180px] group">
-              <div className="relative h-[230px] overflow-hidden">
-                <img src={d.cover} alt={d.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute top-2 left-2"><Tag variant="ink">{d.flightHrs}</Tag></div>
-              </div>
-              <div className="pt-2">
-                <div className="font-serif text-lg leading-none">{d.name}</div>
-                <div className="text-[11px] text-muted-foreground mt-1 italic-serif">{d.tagline}</div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Memory */}
-      {memory && (
-        <section className="mt-12 px-5">
-          <h2 className="font-serif text-xl">From the archive</h2>
-          <Link to="/journal" className="mt-3 group block border border-foreground/15 hover:border-foreground">
-            <div className="grid grid-cols-[1fr_120px]">
-              <div className="p-4">
-                <div className="editorial-eyebrow text-muted-foreground">{memory.dates}</div>
-                <div className="font-serif text-2xl leading-tight mt-1">{memory.city}</div>
-                <p className="italic-serif text-sm text-foreground/70 mt-2 max-w-[28ch]">
-                  "Yellow afternoons. The pasteis were better the second day."
-                </p>
-              </div>
-              <div className="relative">
-                <img src={memory.cover} alt={memory.city} loading="lazy" className="h-full w-full object-cover" />
-              </div>
-            </div>
-          </Link>
-        </section>
-      )}
-
-      <footer className="px-5 mt-14 mb-6 flex justify-between text-[10px] tracking-[0.22em] uppercase text-muted-foreground">
-        <span>CURA · № 001</span>
-        <span>Made slowly</span>
+      {/* Editorial imprint — consistent with Welcome */}
+      <footer
+        aria-label="Edition imprint"
+        className="px-5 pt-6 pb-4 flex justify-between text-[10px] tracking-[0.22em] uppercase text-foreground/35 select-none"
+      >
+        <span>No. 001</span>
+        <span>Vol. I · Spring</span>
       </footer>
 
       <BottomNav />
