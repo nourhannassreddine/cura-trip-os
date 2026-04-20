@@ -63,7 +63,7 @@ export function SearchableSelect({ options, value, onChange, placeholder = "Sear
           </div>
           <ul className="max-h-56 overflow-y-auto">
             {filtered.length === 0 && (
-              <li className="px-3 py-3 text-xs text-muted-foreground italic">No match. Type your own — I'll trust it.</li>
+              <li className="px-3 py-3 text-xs text-muted-foreground italic">No match. Type your own. I'll trust it.</li>
             )}
             {filtered.map((o) => {
               const on = o === value;

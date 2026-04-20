@@ -57,7 +57,7 @@ const company = [
 
 const spending = [
   { id: "top-down",      label: "I start at the top and work down",     note: "the best room, then everything else fits" },
-  { id: "where-it-shows",label: "I spend where it shows",                note: "great hotel, average lunch — fine" },
+  { id: "where-it-shows",label: "I spend where it shows",                note: "great hotel, average lunch is fine" },
   { id: "where-no-one-sees", label: "I spend where no one sees",         note: "modest room, extraordinary dinner" },
   { id: "ranged",        label: "I want range, not stretch",             note: "comfortable across, never strained" },
   { id: "table-decider", label: "I decide at the table",                 note: "no plan survives the menu" },
@@ -82,7 +82,7 @@ const dealbreakers = [
   { id: "dead-night",    label: "Dead nightlife" },
   { id: "wifi",          label: "Slow wifi" },
   { id: "tipping-stress",label: "Confusing tipping culture" },
-  { id: "language",      label: "Nowhere any English at all" },
+  { id: "language",      label: "Places where almost no one speaks English" },
   { id: "instagram",     label: "Places that perform for cameras" },
   { id: "small-rooms",   label: "Tiny hotel rooms" },
   { id: "no-bath",       label: "Showers only, never a bath" },
@@ -100,7 +100,7 @@ const dealbreakers = [
   { id: "no-pets",       label: "Anywhere I can't bring my dog" },
   { id: "weather",       label: "Rain on the only beach day" },
   { id: "altitude",      label: "Altitude" },
-  { id: "long-flights",  label: "Anything over 8 hours flying" },
+  { id: "long-flights",  label: "Anywhere with over 8 hours of flying" },
   { id: "jet-lag",       label: "Crossing more than 4 time zones" },
   { id: "expensive-data",label: "No cheap local SIM" },
   { id: "no-vegan",      label: "No vegetarian or vegan options" },
@@ -108,6 +108,24 @@ const dealbreakers = [
   { id: "cruises",       label: "Anything cruise-adjacent" },
   { id: "no-kitchen",    label: "No kitchen in the room" },
   { id: "loud-ac",       label: "Loud air-con or street noise at night" },
+  { id: "visa-hard",     label: "Hard-to-get visas" },
+  { id: "visa-expensive",label: "Expensive visa fees" },
+  { id: "visa-interview",label: "In-person visa interviews" },
+  { id: "visa-onarrival",label: "Visa-on-arrival queues" },
+  { id: "passport-stamps", label: "Politically sensitive passport stamps" },
+  { id: "border-questions", label: "Aggressive border questioning" },
+  { id: "biometrics",    label: "Heavy biometric or fingerprint controls" },
+  { id: "cash-only",     label: "Cash-only economies" },
+  { id: "no-uber",       label: "No ride-share apps, only street taxis" },
+  { id: "currency-fees", label: "Awful currency exchange rates" },
+  { id: "long-immigration", label: "Two-hour immigration lines" },
+  { id: "slow-checkin",  label: "3pm hotel check-in, no exceptions" },
+  { id: "single-supplement", label: "Single-supplement penalties" },
+  { id: "tipping-mandatory", label: "Mandatory service charges on top of tips" },
+  { id: "no-direct-flight", label: "No direct flight from my city" },
+  { id: "early-checkout", label: "11am hotel checkouts" },
+  { id: "buffet-breakfast", label: "Buffet-only breakfasts" },
+  { id: "shared-driver", label: "Group tours with a shared driver" },
 ];
 
 /* utility — clean a number for friend count */
@@ -362,7 +380,7 @@ const Onboarding = () => {
             <h2 className="display-lg max-w-[12ch]">
               How do you like to <span className="italic-serif">feel</span> on a trip?
             </h2>
-            <p className="mt-3 text-sm text-muted-foreground">Pick two or three. Don't overthink it — I'm watching the pattern, not the labels.</p>
+            <p className="mt-3 text-sm text-muted-foreground">Pick two or three. Don't overthink it. I'm watching the pattern, not the labels.</p>
 
             <ul className="mt-7 space-y-2">
               {moods.map((m) => {
@@ -446,9 +464,9 @@ const Onboarding = () => {
 
             <div className="mt-7">
               <div className="editorial-eyebrow text-muted-foreground mb-2">Where</div>
-              <CityInput value={destination} onChange={setDestination} placeholder="Type a place — anywhere" />
+              <CityInput value={destination} onChange={setDestination} placeholder="Type a place. Anywhere in the world." />
               <div className="mt-1 text-[11px] text-muted-foreground">
-                Hints are world cities. I accept anything you type. Mapped against Google.
+                No list, no limits. Tell me where you're thinking and I'll meet you there.
               </div>
             </div>
 
@@ -612,20 +630,20 @@ const Onboarding = () => {
                 </div>
 
                 {friendsData.map((f, i) => (
-                  <div key={i} className="space-y-3 pb-4 border-b border-foreground/10 last:border-0">
+                  <div key={i} className="space-y-4 pb-5 border-b border-foreground/10 last:border-0">
                     <div className="editorial-eyebrow text-muted-foreground">Friend {i + 1}</div>
                     <div>
-                      <div className="text-[11px] text-muted-foreground mb-1.5">Their passport</div>
+                      <div className="editorial-eyebrow text-muted-foreground mb-2">Friend {i + 1} passport</div>
                       <SearchableSelect
                         options={passportNationalities}
                         value={f.passport}
                         onChange={(v) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, passport: v } : x))}
                         placeholder="Search nationalities…"
-                        label="Select passport"
+                        label="Select their passport"
                       />
                     </div>
                     <div>
-                      <div className="text-[11px] text-muted-foreground mb-1.5">Leaving from the same city as you?</div>
+                      <div className="editorial-eyebrow text-muted-foreground mb-2">Leaving from the same city?</div>
                       <div className="grid grid-cols-2 gap-1.5">
                         {[
                           { v: true, label: "Yes" },
@@ -637,7 +655,7 @@ const Onboarding = () => {
                               key={String(o.v)}
                               onClick={() => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, sameDeparture: o.v } : x))}
                               className={cn(
-                                "border px-3 py-2 text-sm transition-colors",
+                                "border px-3 py-2.5 text-sm transition-colors",
                                 on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
                               )}
                             >
@@ -649,7 +667,7 @@ const Onboarding = () => {
                     </div>
                     {f.sameDeparture === false && (
                       <div>
-                        <div className="text-[11px] text-muted-foreground mb-1.5">Where they leave from</div>
+                        <div className="editorial-eyebrow text-muted-foreground mb-2">Where do they leave from?</div>
                         <CityInput
                           value={f.departure ?? ""}
                           onChange={(v) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, departure: v } : x))}
@@ -658,14 +676,15 @@ const Onboarding = () => {
                       </div>
                     )}
                     <div>
-                      <div className="text-[11px] text-muted-foreground mb-1.5">Their email (optional)</div>
+                      <div className="editorial-eyebrow text-muted-foreground mb-2">Invite them to this trip</div>
                       <input
                         type="email"
                         value={f.email ?? ""}
                         onChange={(e) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, email: e.target.value } : x))}
-                        placeholder="friend@email.com"
-                        className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-sm py-1.5 placeholder:text-muted-foreground/60"
+                        placeholder="their@email.com"
+                        className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-base py-2 placeholder:text-muted-foreground/60"
                       />
+                      <div className="mt-1 text-[11px] text-muted-foreground">Optional. They'll get the workspace, not a marketing email.</div>
                     </div>
                   </div>
                 ))}
@@ -710,18 +729,23 @@ const Onboarding = () => {
                   </div>
                 </div>
 
-                {/* passport per family member */}
+                {/* passport per family member - explicit Adult/Teen/Child numbering */}
                 <div>
                   <div className="editorial-eyebrow text-muted-foreground mb-2">Passports</div>
                   <div className="space-y-3">
                     {familyPassports.map((p, i) => {
                       let role = "Adult";
-                      if (i >= family.adults && i < family.adults + family.teens) role = "Teen";
-                      else if (i >= family.adults + family.teens) role = "Child";
-                      const num = i + 1;
+                      let num = i + 1;
+                      if (i >= family.adults && i < family.adults + family.teens) {
+                        role = "Teenager";
+                        num = i - family.adults + 1;
+                      } else if (i >= family.adults + family.teens) {
+                        role = "Child";
+                        num = i - family.adults - family.teens + 1;
+                      }
                       return (
                         <div key={i}>
-                          <div className="text-[11px] text-muted-foreground mb-1.5">{role} {num}</div>
+                          <div className="editorial-eyebrow text-muted-foreground mb-2">{role} {num} passport</div>
                           <SearchableSelect
                             options={passportNationalities}
                             value={p}
@@ -736,7 +760,7 @@ const Onboarding = () => {
                 </div>
 
                 <div>
-                  <div className="editorial-eyebrow text-muted-foreground mb-2">All leaving from {departure || "the same city"}?</div>
+                  <div className="editorial-eyebrow text-muted-foreground mb-2">All leaving from the same city?</div>
                   <div className="grid grid-cols-2 gap-1.5">
                     {[
                       { v: true,  label: "Yes" },
@@ -758,8 +782,31 @@ const Onboarding = () => {
                     })}
                   </div>
                   {familySameDeparture === false && (
-                    <div className="mt-2 text-[11px] text-muted-foreground">
-                      I'll ask each adult separately once the workspace opens.
+                    <div className="mt-4 space-y-3">
+                      <div className="text-[11px] text-muted-foreground">
+                        Tell me where each one leaves from. This shapes the itinerary later.
+                      </div>
+                      {Array.from({ length: family.adults + family.teens + family.children }).map((_, i) => {
+                        let role = "Adult";
+                        let num = i + 1;
+                        if (i >= family.adults && i < family.adults + family.teens) {
+                          role = "Teenager";
+                          num = i - family.adults + 1;
+                        } else if (i >= family.adults + family.teens) {
+                          role = "Child";
+                          num = i - family.adults - family.teens + 1;
+                        }
+                        return (
+                          <div key={i}>
+                            <div className="text-[11px] text-muted-foreground mb-1.5">{role} {num} departure</div>
+                            <input
+                              type="text"
+                              placeholder="Their departure city"
+                              className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-sm py-1.5 placeholder:text-muted-foreground/60"
+                            />
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -786,7 +833,8 @@ const Onboarding = () => {
 
             {/* Spending mindset */}
             <div className="mt-7">
-              <div className="editorial-eyebrow text-muted-foreground mb-2">Money, honestly — how you spend, not how much</div>
+              <div className="editorial-eyebrow text-muted-foreground">Money, honestly</div>
+              <div className="text-[11px] text-muted-foreground/80 italic mt-0.5 mb-2">how you spend, not how much</div>
               <ul className="space-y-1.5">
                 {spending.map((s) => {
                   const on = spend === s.id;
@@ -853,9 +901,9 @@ const Onboarding = () => {
               })}
             </div>
 
-            {/* "Other" free-text — sits inline like one more chip */}
+            {/* "Other" free-text. Sits inline like one more chip. */}
             <div className="mt-4">
-              <div className="editorial-eyebrow text-muted-foreground mb-2">Something I missed</div>
+              <div className="editorial-eyebrow text-muted-foreground mb-2">Is there something I missed?</div>
               <input
                 type="text"
                 value={breakerOther}
