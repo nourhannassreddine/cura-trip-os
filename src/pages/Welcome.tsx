@@ -6,21 +6,33 @@ import surreal2 from "@/assets/welcome-surreal-2.jpg";
 import surreal3 from "@/assets/welcome-surreal-3.jpg";
 import surreal4 from "@/assets/welcome-surreal-4.jpg";
 import surreal5 from "@/assets/welcome-surreal-5.jpg";
+import surreal6 from "@/assets/welcome-surreal-6.jpg";
+import surreal7 from "@/assets/welcome-surreal-7.jpg";
+import surreal8 from "@/assets/welcome-surreal-8.jpg";
+import surreal9 from "@/assets/welcome-surreal-9.jpg";
+import surreal10 from "@/assets/welcome-surreal-10.jpg";
 
 /* ------------------------------------------------------------------
    Welcome - Plate I.
-   Hero is now a slow Jacquemus-style carousel of 5 surreal frames.
-   Crossfades every ~5s. The first frame is eager-loaded for LCP.
-   Everything below the image shares the same px-5 rhythm so logo,
-   caption, headline, CTAs and footer all line up to one column.
+   Hero: 10-frame surreal carousel, slow crossfade, story-like rhythm.
+   Logo flips white over light/warm frames where black would lose
+   legibility (the orange + pink lady frame in particular).
+   Footer is treated as an editorial imprint, not a UI element.
 ------------------------------------------------------------------ */
 
-const frames = [
-  { src: surreal1, alt: "An enormous ripe peach the size of a small house in a field of pale lavender at golden hour, a tiny figure in pink linen walking toward it" },
-  { src: surreal2, alt: "A colossal sun-bleached terracotta vase standing impossibly tall on warm ochre desert sand at golden hour, a tiny barefoot figure in cream linen walking past for scale" },
-  { src: surreal3, alt: "An oversized ripe orange resting in a quiet pastel olive grove, a small woman in a flowing yellow dress walking past for scale" },
-  { src: surreal4, alt: "A giant pastel pink suitcase abandoned on a vast empty salt flat, a tiny figure in a wide straw hat sitting on top" },
-  { src: surreal5, alt: "An enormous white linen sheet draped over an invisible form on a warm pink stucco rooftop overlooking a sleepy Mediterranean village at dusk" },
+type Frame = { src: string; alt: string; logoTone: "dark" | "light" };
+
+const frames: Frame[] = [
+  { src: surreal1, alt: "An enormous ripe peach the size of a small house in a field of pale lavender at golden hour, a tiny figure in pink linen walking toward it", logoTone: "dark" },
+  { src: surreal2, alt: "A colossal sun-bleached terracotta vase standing impossibly tall on warm ochre desert sand at golden hour, a tiny barefoot figure in cream linen walking past for scale", logoTone: "dark" },
+  { src: surreal3, alt: "An oversized ripe orange resting in a quiet pastel olive grove, a small woman in a flowing yellow dress walking past for scale", logoTone: "light" },
+  { src: surreal4, alt: "A giant pastel pink suitcase abandoned on a vast empty salt flat, a tiny figure in a wide straw hat sitting on top", logoTone: "dark" },
+  { src: surreal5, alt: "An enormous white linen sheet draped over an invisible form on a warm pink stucco rooftop overlooking a sleepy Mediterranean village at dusk", logoTone: "dark" },
+  { src: surreal6, alt: "A colossal pearlescent shellfish on wet reflective sand at a quiet pale-blue beach at dawn, a tiny figure in cream linen standing beside it", logoTone: "dark" },
+  { src: surreal7, alt: "An enormous straw sun hat casting a perfect circular shadow on a sun-bleached pink stucco plaza, a tiny figure in a red dress standing inside the shadow", logoTone: "light" },
+  { src: surreal8, alt: "A giant single lemon sitting on a narrow cobblestone Italian village street at golden hour, a tiny old woman in black walking past", logoTone: "light" },
+  { src: surreal9, alt: "An oversized antique brass key the length of a bus laying flat on cracked white salt flats under a pale lavender sky", logoTone: "dark" },
+  { src: surreal10, alt: "A massive blank folded paper map standing upright like a sail on a calm green hillside at dusk, a tiny figure in a white shirt looking up at it", logoTone: "dark" },
 ];
 
 const Welcome = () => {
@@ -30,6 +42,8 @@ const Welcome = () => {
     const id = setInterval(() => setI((n) => (n + 1) % frames.length), 6000);
     return () => clearInterval(id);
   }, []);
+
+  const currentTone = frames[i].logoTone;
 
   return (
     <main className="app-shell relative grain overflow-hidden flex flex-col">
@@ -43,14 +57,20 @@ const Welcome = () => {
             loading={idx === 0 ? "eager" : "lazy"}
             width={832}
             height={1216}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[2400ms] ease-in-out ${
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[3200ms] ease-in-out ${
               idx === i ? "opacity-100" : "opacity-0"
             }`}
           />
         ))}
-        {/* Logo - 8px from the safe edge, lowercase Playfair */}
+        {/* Logo - 8px from the safe edge, lowercase Playfair, tone flips per frame */}
         <div className="absolute top-2 left-2 p-2">
-          <div className="font-serif lowercase text-2xl leading-none tracking-tight text-foreground/85 mix-blend-multiply">
+          <div
+            className={`font-serif lowercase text-2xl leading-none tracking-tight transition-colors duration-[1600ms] ${
+              currentTone === "light"
+                ? "text-white/95 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]"
+                : "text-foreground/85 mix-blend-multiply"
+            }`}
+          >
             cura
           </div>
         </div>
@@ -70,14 +90,11 @@ const Welcome = () => {
         <section className="pt-5">
           <div className="editorial-eyebrow text-primary mb-2">A travel operating system</div>
           <h1 className="display-md leading-[0.95]">
-            For travelers<br />
-            with <span className="italic-serif">taste,</span><br />
-            and the patience<br />
-            for a system<br />
-            that has <span className="italic-serif">opinions.</span>
+            Built for <span className="italic-serif">taste.</span><br />
+            Designed with <span className="italic-serif">opinions.</span>
           </h1>
           <p className="mt-3 text-[13px] leading-relaxed text-foreground/70 max-w-[34ch]">
-            Cura learns how you actually move and proposes the trip the obvious one was hiding.
+            A quieter way to plan. Cura watches how you move, then proposes the trip you would have arrived at on your own, eventually.
           </p>
         </section>
 
@@ -99,8 +116,12 @@ const Welcome = () => {
           </div>
         </section>
 
-        <footer className="pt-3 pb-3 flex justify-between text-[10px] tracking-[0.22em] uppercase text-muted-foreground">
-          <span>№ 001</span>
+        {/* Editorial imprint - printed, not interactive. A whisper at the foot of the page. */}
+        <footer
+          aria-label="Edition imprint"
+          className="pt-3 pb-3 flex justify-between text-[10px] tracking-[0.22em] uppercase text-foreground/35 select-none"
+        >
+          <span>No. 001</span>
           <span>Vol. I · Spring</span>
         </footer>
       </div>
