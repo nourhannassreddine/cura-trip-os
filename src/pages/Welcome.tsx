@@ -30,7 +30,7 @@ const frames: Frame[] = [
   { src: surreal4, alt: "A house-sized woven straw sun hat casting a circular shadow on a sunlit plaza, a tiny figure standing in the shade" },
   { src: surreal5, alt: "A snowy alpine peak with a giant pastel pink ice cream cone planted upright in the summit" },
   { src: surreal6, alt: "A colossal hot-air balloon carrying a tiny Mediterranean village in baskets, drifting over a wildflower meadow" },
-  { src: surreal7, alt: "A tiny figure standing outdoors on a soft hillside, holding up an enormous unfolded paper map and looking at it" },
+  { src: surreal7, alt: "A tiny figure dwarfed by an enormous unfolded paper map that fills the frame like a billowing sail, soft daylight on a sun-faded hillside" },
   { src: surreal8, alt: "Three colossal green olives balanced on an empty Mediterranean rooftop, calm sea in the distance" },
 ];
 

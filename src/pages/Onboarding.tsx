@@ -724,74 +724,94 @@ const Onboarding = () => {
 
                 {friendsCountSet && (
                   <div className="space-y-5">
-                    <div className="editorial-eyebrow text-muted-foreground">Passports</div>
-                    {friendsData.map((f, i) => (
-                      <div key={`p-${i}`}>
-                        <div className="editorial-eyebrow text-muted-foreground mb-2">Friend {i + 1} passport</div>
-                        <SearchableSelect
-                          options={passportNationalities}
-                          value={f.passport}
-                          onChange={(v) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, passport: v } : x))}
-                          placeholder="Search nationalities…"
-                          label="Select their passport"
-                        />
-                      </div>
-                    ))}
+                    {friendsData.map((f, i) => {
+                      // Gate: a friend's block only appears once the previous friend's
+                      // invite block was revealed (passport set + sameDeparture answered +
+                      // for "no" branch, departure city ≥ 2 chars).
+                      const isFriendInviteVisible = (x: typeof f) =>
+                        !!x.passport &&
+                        (x.sameDeparture === true ||
+                          (x.sameDeparture === false && (x.departure ?? "").trim().length >= 2));
+                      const prevReady = i === 0 || isFriendInviteVisible(friendsData[i - 1]);
+                      if (!prevReady) return null;
+
+                      const showSameCity = !!f.passport;
+                      const showDeparture = showSameCity && f.sameDeparture === false;
+                      const showInvite =
+                        showSameCity &&
+                        (f.sameDeparture === true ||
+                          (f.sameDeparture === false && (f.departure ?? "").trim().length >= 2));
+
+                      return (
+                        <div key={`friend-${i}`} className="space-y-4 pb-5 border-b border-foreground/10 last:border-0">
+                          <div className="editorial-eyebrow text-muted-foreground">Friend {i + 1}</div>
+
+                          <div>
+                            <div className="editorial-eyebrow text-muted-foreground mb-2">Friend {i + 1} passport</div>
+                            <SearchableSelect
+                              options={passportNationalities}
+                              value={f.passport}
+                              onChange={(v) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, passport: v } : x))}
+                              placeholder="Search nationalities…"
+                              label="Select their passport"
+                            />
+                          </div>
+
+                          {showSameCity && (
+                            <div>
+                              <div className="editorial-eyebrow text-muted-foreground mb-2">Leaving from the same city?</div>
+                              <div className="grid grid-cols-2 gap-1.5">
+                                {[
+                                  { v: true, label: "Yes" },
+                                  { v: false, label: "No" },
+                                ].map((o) => {
+                                  const on = f.sameDeparture === o.v;
+                                  return (
+                                    <button
+                                      key={String(o.v)}
+                                      onClick={() => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, sameDeparture: o.v } : x))}
+                                      className={cn(
+                                        "border px-3 py-2.5 text-sm transition-colors",
+                                        on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                                      )}
+                                    >
+                                      {o.label}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+
+                          {showDeparture && (
+                            <div>
+                              <div className="editorial-eyebrow text-muted-foreground mb-2">Where do they leave from?</div>
+                              <CityInput
+                                value={f.departure ?? ""}
+                                onChange={(v) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, departure: v } : x))}
+                                placeholder="Their departure city"
+                              />
+                            </div>
+                          )}
+
+                          {showInvite && (
+                            <div>
+                              <div className="editorial-eyebrow text-muted-foreground mb-2">Invite them to this trip</div>
+                              <input
+                                type="email"
+                                value={f.email ?? ""}
+                                onChange={(e) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, email: e.target.value } : x))}
+                                placeholder="their@email.com"
+                                className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-base py-2 placeholder:text-muted-foreground/60"
+                              />
+                              <div className="mt-1 text-[11px] text-muted-foreground">They'll get the workspace, not a marketing email.</div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
-
-                {friendsCountSet && friendsData.every((f) => !!f.passport) && friendsData.map((f, i) => (
-                  <div key={`d-${i}`} className="space-y-4 pb-5 border-b border-foreground/10 last:border-0">
-                    <div className="editorial-eyebrow text-muted-foreground">Friend {i + 1}</div>
-                    <div>
-                      <div className="editorial-eyebrow text-muted-foreground mb-2">Leaving from the same city?</div>
-                      <div className="grid grid-cols-2 gap-1.5">
-                        {[
-                          { v: true, label: "Yes" },
-                          { v: false, label: "No" },
-                        ].map((o) => {
-                          const on = f.sameDeparture === o.v;
-                          return (
-                            <button
-                              key={String(o.v)}
-                              onClick={() => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, sameDeparture: o.v } : x))}
-                              className={cn(
-                                "border px-3 py-2.5 text-sm transition-colors",
-                                on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
-                              )}
-                            >
-                              {o.label}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                    {f.sameDeparture === false && (
-                      <div>
-                        <div className="editorial-eyebrow text-muted-foreground mb-2">Where do they leave from?</div>
-                        <CityInput
-                          value={f.departure ?? ""}
-                          onChange={(v) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, departure: v } : x))}
-                          placeholder="Their departure city"
-                        />
-                      </div>
-                    )}
-                    {(f.sameDeparture === true ||
-                      (f.sameDeparture === false && (f.departure ?? "").trim().length >= 2)) && (
-                      <div>
-                        <div className="editorial-eyebrow text-muted-foreground mb-2">Invite them to this trip</div>
-                        <input
-                          type="email"
-                          value={f.email ?? ""}
-                          onChange={(e) => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, email: e.target.value } : x))}
-                          placeholder="their@email.com"
-                          className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-base py-2 placeholder:text-muted-foreground/60"
-                        />
-                        <div className="mt-1 text-[11px] text-muted-foreground">They'll get the workspace, not a marketing email.</div>
-                      </div>
-                    )}
-                  </div>
-                ))}
               </div>
             )}
 
@@ -833,11 +853,15 @@ const Onboarding = () => {
                   </div>
                 </div>
 
-                {/* passport per family member - explicit Adult/Teen/Child numbering */}
+                {/* passport per family member - sequential cascade */}
                 <div>
                   <div className="editorial-eyebrow text-muted-foreground mb-2">Passports</div>
                   <div className="space-y-3">
                     {familyPassports.map((p, i) => {
+                      // Sequential gate: only show member i's passport once member i-1 is filled.
+                      const prevFilled = i === 0 || !!familyPassports[i - 1];
+                      if (!prevFilled) return null;
+
                       let role = "Adult";
                       let num = i + 1;
                       if (i >= family.adults && i < family.adults + family.teens) {
@@ -863,62 +887,73 @@ const Onboarding = () => {
                   </div>
                 </div>
 
-                <div>
-                  <div className="editorial-eyebrow text-muted-foreground mb-2">All leaving from the same city?</div>
-                  <div className="grid grid-cols-2 gap-1.5">
-                    {[
-                      { v: true,  label: "Yes" },
-                      { v: false, label: "No, mixed" },
-                    ].map((o) => {
-                      const on = familySameDeparture === o.v;
-                      return (
-                        <button
-                          key={String(o.v)}
-                          onClick={() => setFamilySameDeparture(o.v)}
-                          className={cn(
-                            "border px-3 py-2.5 text-sm transition-colors",
-                            on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
-                          )}
-                        >
-                          {o.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  {familySameDeparture === false && (
-                    <div className="mt-4 space-y-3">
-                      <div className="text-[11px] text-muted-foreground">
-                        Tell me where each one leaves from. This shapes the itinerary later.
-                      </div>
-                      {Array.from({ length: family.adults + family.teens + family.children }).map((_, i) => {
-                        let role = "Adult";
-                        let num = i + 1;
-                        if (i >= family.adults && i < family.adults + family.teens) {
-                          role = "Teenager";
-                          num = i - family.adults + 1;
-                        } else if (i >= family.adults + family.teens) {
-                          role = "Child";
-                          num = i - family.adults - family.teens + 1;
-                        }
+                {/* Same-city — only after ALL family passports filled */}
+                {familyPassports.length > 0 && familyPassports.every((p) => !!p) && (
+                  <div>
+                    <div className="editorial-eyebrow text-muted-foreground mb-2">All leaving from the same city?</div>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {[
+                        { v: true,  label: "Yes" },
+                        { v: false, label: "No, mixed" },
+                      ].map((o) => {
+                        const on = familySameDeparture === o.v;
                         return (
-                          <div key={i}>
-                            <div className="text-[11px] text-muted-foreground mb-1.5">{role} {num} departure</div>
-                            <input
-                              type="text"
-                              value={familyDepartures[i] ?? ""}
-                              onChange={(e) => setFamilyDepartures((prev) => prev.map((x, idx) => idx === i ? e.target.value : x))}
-                              placeholder="Their departure city"
-                              autoComplete="off"
-                              className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-sm py-1.5 placeholder:text-muted-foreground/60"
-                            />
-                          </div>
+                          <button
+                            key={String(o.v)}
+                            onClick={() => setFamilySameDeparture(o.v)}
+                            className={cn(
+                              "border px-3 py-2.5 text-sm transition-colors",
+                              on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                            )}
+                          >
+                            {o.label}
+                          </button>
                         );
                       })}
                     </div>
-                  )}
-                </div>
+                    {familySameDeparture === false && (
+                      <div className="mt-4 space-y-3">
+                        <div className="text-[11px] text-muted-foreground">
+                          Tell me where each one leaves from. This shapes the itinerary later.
+                        </div>
+                        {Array.from({ length: family.adults + family.teens + family.children }).map((_, i) => {
+                          let role = "Adult";
+                          let num = i + 1;
+                          if (i >= family.adults && i < family.adults + family.teens) {
+                            role = "Teenager";
+                            num = i - family.adults + 1;
+                          } else if (i >= family.adults + family.teens) {
+                            role = "Child";
+                            num = i - family.adults - family.teens + 1;
+                          }
+                          return (
+                            <div key={i}>
+                              <div className="text-[11px] text-muted-foreground mb-1.5">{role} {num} departure</div>
+                              <input
+                                type="text"
+                                value={familyDepartures[i] ?? ""}
+                                onChange={(e) => setFamilyDepartures((prev) => prev.map((x, idx) => idx === i ? e.target.value : x))}
+                                placeholder="Their departure city"
+                                autoComplete="off"
+                                className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-sm py-1.5 placeholder:text-muted-foreground/60"
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
 
-                {family.adults > 0 && (
+                {/* Invite adults — gated on same-city flow being complete */}
+                {family.adults > 0 &&
+                  familyPassports.length > 0 &&
+                  familyPassports.every((p) => !!p) &&
+                  (familySameDeparture === true ||
+                    (familySameDeparture === false &&
+                      Array.from({ length: family.adults + family.teens + family.children }).every(
+                        (_, i) => (familyDepartures[i] ?? "").trim().length >= 2
+                      ))) && (
                   <div>
                     <div className="editorial-eyebrow text-muted-foreground mb-2">Invite the adults to this trip</div>
                     <div className="space-y-2">
