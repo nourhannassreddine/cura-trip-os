@@ -21,6 +21,7 @@ import During from "./pages/During";
 import Journal from "./pages/Journal";
 import Profile from "./pages/Profile";
 import NewTrip from "./pages/NewTrip";
+import TripImport from "./pages/TripImport";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -42,6 +43,7 @@ const App = () => (
           <Route path="/compare" element={<Compare />} />
           <Route path="/trips" element={<Trips />} />
           <Route path="/trip/new" element={<NewTrip />} />
+          <Route path="/trip/import" element={<TripImport />} />
           <Route path="/trip/:id" element={<TripWorkspace />} />
           <Route path="/itinerary" element={<ItineraryView />} />
           <Route path="/pack" element={<Pack />} />

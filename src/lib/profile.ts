@@ -8,15 +8,35 @@ import { useEffect, useState } from "react";
 
 export type CuraPath = "full" | "short";
 
+export interface Companion {
+  passport: string | null;
+  email?: string | null;
+  // for partner: same departure city as user?
+  sameDeparture?: boolean;
+  departure?: string | null;
+}
+
+export interface FamilyComposition {
+  adults: number;
+  teens: number;
+  children: number;
+}
+
 export interface CuraProfile {
   path: CuraPath | null;
   moods: string[];
   pace: string | null;
+  destination?: string | null; // short path: where they're thinking
   departure: string | null;
   passport?: string | null;
   company: string | null;
+  // company-specific extras
+  partner?: Companion | null;
+  friends?: Companion[];
+  family?: FamilyComposition | null;
   spend: string | null;
   dealbreakers: string[];
+  dealbreakerOther?: string | null;
   updatedAt: number;
 }
 
@@ -26,11 +46,16 @@ const empty: CuraProfile = {
   path: null,
   moods: [],
   pace: null,
+  destination: null,
   departure: null,
   passport: null,
   company: null,
+  partner: null,
+  friends: [],
+  family: null,
   spend: null,
   dealbreakers: [],
+  dealbreakerOther: null,
   updatedAt: 0,
 };
 
