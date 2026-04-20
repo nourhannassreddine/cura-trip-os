@@ -6,28 +6,28 @@ import { trips, curaWhispers, packing, destinations, journalEntries } from "@/da
 import fieldnote from "@/assets/home-fieldnote.jpg";
 
 /* Status sticker — small identifier chip whose color encodes trip phase.
-   Each status gets its own token so the eye learns the system.
-   - dreaming → sky (faded blue, low commitment)
-   - planning → primary (sun-faded orange, in motion)
+   Uses the editorial accent palette so each phase reads as its own marker.
+   - dreaming → sky   (faded blue, low commitment)
+   - planning → ochre (warm earth, in motion)
    - ready    → olive (committed, almost there)
-   - live     → ink (the trip is now)
-   - memory   → outline (past, archived) */
+   - live     → rust  (the trip is now)
+   - memory   → rose  (past, archived) */
 const statusStyles: Record<string, string> = {
-  dreaming: "bg-sky-soft text-foreground",
-  planning: "bg-primary-soft text-foreground",
-  ready: "bg-olive-soft text-foreground",
-  live: "bg-ink text-ink-foreground",
-  memory: "border border-foreground/25 text-foreground",
+  dreaming: "bg-accent-sky text-foreground",
+  planning: "bg-accent-ochre text-white",
+  ready: "bg-accent-olive text-white",
+  live: "bg-accent-rust text-white",
+  memory: "bg-accent-rose text-white",
 };
 
 /* Solid action-button surface for "Continue ___" — shares the sticker's color
    so the user reads card + button as the same identifier system. */
 const statusActionStyles: Record<string, string> = {
-  dreaming: "bg-sky text-sky-foreground border-sky",
-  planning: "bg-primary text-primary-foreground border-primary",
-  ready: "bg-olive text-olive-foreground border-olive",
-  live: "bg-ink text-ink-foreground border-ink",
-  memory: "bg-foreground text-background border-foreground",
+  dreaming: "bg-accent-sky text-foreground border-accent-sky",
+  planning: "bg-accent-ochre text-white border-accent-ochre",
+  ready: "bg-accent-olive text-white border-accent-olive",
+  live: "bg-accent-rust text-white border-accent-rust",
+  memory: "bg-accent-rose text-white border-accent-rose",
 };
 
 const statusVerb: Record<string, string> = {
@@ -92,8 +92,8 @@ const Home = () => {
       {/* Hero — greeting + days-to header. Tight, an entry not the focus. */}
       <section className="px-5 pt-3 pb-4 cura-rise">
         <div className="flex items-end justify-between">
-          <h1 className="font-serif text-[40px] leading-[0.95] max-w-[10ch]">
-            Good afternoon, <span className="italic-serif">Lia</span>.
+          <h1 className="font-serif text-[40px] leading-[0.95] max-w-[12ch]">
+            Good afternoon, <span className="italic-serif">Nourhan</span>.
           </h1>
           {primary && (
             <div className="text-right text-xs text-muted-foreground pb-1.5">
@@ -238,69 +238,74 @@ const Home = () => {
         </section>
       )}
 
-      {/* Field note — editorial breathing room, no brand mention */}
-      <section className="mt-12 grid grid-cols-5 gap-0 items-stretch">
-        <div className="col-span-3 relative h-[200px]">
-          <img
-            src={fieldnote}
-            alt="A flat-lay of a straw hat, folded linen, leather sandals and olives on warm stone"
-            loading="lazy"
-            className="h-full w-full object-cover"
-          />
-        </div>
-        <div className="col-span-2 bg-paper-deep p-4 flex flex-col justify-between">
-          <div className="editorial-eyebrow text-muted-foreground">Field note</div>
-          <p className="italic-serif text-[15px] leading-tight">
-            "Pack like you live there, not like you visit."
-          </p>
-          <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
-            — Cura, on packing
+      {/* Field note — wrapped in px-5 to share the page's gutter rhythm */}
+      <section className="mt-12 px-5">
+        <div className="grid grid-cols-5 gap-0 items-stretch border border-foreground/10">
+          <div className="col-span-3 relative h-[200px]">
+            <img
+              src={fieldnote}
+              alt="A flat-lay of a cream linen shirt, wide-leg trousers, leather mules and a rust silk scarf on warm stone"
+              loading="lazy"
+              className="h-full w-full object-cover"
+            />
+          </div>
+          <div className="col-span-2 bg-paper-deep p-4 flex flex-col justify-between">
+            <div className="editorial-eyebrow text-muted-foreground">Field note</div>
+            <p className="italic-serif text-[15px] leading-tight">
+              "Pack like you live there, not like you visit."
+            </p>
+            <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
+              — Cura, on packing
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ELSEWHERE — small list of destinations not yet claimed as a trip.
-          Lives below the field note: discovery, not the priority. */}
+      {/* ELSEWHERE — horizontal scroll of editorial destination cards.
+          Flight-time chip top-left (utility, stays ink), serif name + tagline below. */}
       {elsewhere.length > 0 && (
-        <section className="mt-10 px-5">
-          <div className="flex items-baseline justify-between mb-3">
+        <section className="mt-10">
+          <div className="flex items-baseline justify-between mb-3 px-5">
             <div className="editorial-eyebrow text-muted-foreground">A small list of elsewhere</div>
             <Link
               to="/discover"
-              className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground"
+              className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
             >
-              Discover
+              All <ArrowRight className="h-3 w-3 -rotate-45" strokeWidth={1.5} />
             </Link>
           </div>
-          <ul className="divide-y divide-foreground/10 border-t border-b border-foreground/10">
+          <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-5 pb-1">
             {elsewhere.map((d) => (
-              <li key={d.id}>
-                <Link
-                  to="/discover"
-                  className="flex items-baseline justify-between py-3 hover:bg-paper/60 px-1 -mx-1 transition-colors"
-                >
-                  <div className="min-w-0 pr-3">
-                    <div className="font-serif text-[17px] leading-tight">
-                      {d.name}
-                      <span className="text-muted-foreground font-sans text-[11px] tracking-wide ml-2">
-                        {d.country}
-                      </span>
-                    </div>
-                    <div className="italic-serif text-[12px] text-foreground/65 mt-0.5">
-                      {d.tagline}
-                    </div>
-                  </div>
-                  <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground shrink-0">
+              <Link
+                key={d.id}
+                to="/discover"
+                className="snap-start shrink-0 w-[42%] group"
+              >
+                <div className="relative aspect-[3/4] overflow-hidden">
+                  <img
+                    src={d.cover}
+                    alt={`${d.name}, ${d.country}`}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute top-2 left-2 bg-ink text-ink-foreground px-1.5 py-0.5 text-[10px] tracking-[0.12em] uppercase">
                     {d.flightHrs}
                   </div>
-                </Link>
-              </li>
+                </div>
+                <div className="mt-2">
+                  <div className="font-serif text-[17px] leading-tight">{d.name}</div>
+                  <div className="italic-serif text-[12px] text-foreground/65 mt-0.5 line-clamp-1">
+                    {d.tagline}
+                  </div>
+                </div>
+              </Link>
             ))}
-          </ul>
+          </div>
         </section>
       )}
 
-      {/* FROM THE ARCHIVE — auto-narrative from past trips. Memory layer. */}
+      {/* FROM THE ARCHIVE — bordered editorial card per past trip.
+          Copy left, narrow tall image right. Memory layer. */}
       {archive.length > 0 && (
         <section className="mt-10 px-5">
           <div className="flex items-baseline justify-between mb-3">
@@ -312,13 +317,35 @@ const Home = () => {
               Journal
             </Link>
           </div>
-          <ul className="space-y-4">
+          <ul className="space-y-3">
             {archive.map((j) => (
-              <li key={j.day} className="border-l-2 border-foreground/20 pl-3">
-                <div className="editorial-eyebrow text-muted-foreground">{j.day}</div>
-                <p className="italic-serif text-[14px] leading-snug text-foreground/80 mt-1">
-                  {j.narrative}
-                </p>
+              <li key={j.day}>
+                <Link
+                  to="/journal"
+                  className="grid grid-cols-[1fr_120px] border border-foreground/15 hover:border-foreground/40 transition-colors overflow-hidden"
+                >
+                  <div className="p-4 flex flex-col justify-between gap-3">
+                    <div className="editorial-eyebrow text-muted-foreground">
+                      {j.dateRange ?? j.day}
+                    </div>
+                    <div className="font-serif text-[26px] leading-none">
+                      {j.city ?? j.day}
+                    </div>
+                    <p className="italic-serif text-[13px] leading-snug text-foreground/75">
+                      "{j.quote ?? j.highlight}"
+                    </p>
+                  </div>
+                  {j.cover && (
+                    <div className="relative h-full min-h-[150px]">
+                      <img
+                        src={j.cover}
+                        alt={j.city ?? j.day}
+                        loading="lazy"
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
+                    </div>
+                  )}
+                </Link>
               </li>
             ))}
           </ul>
