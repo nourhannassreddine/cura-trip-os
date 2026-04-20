@@ -68,6 +68,22 @@ const spending = [
   { id: "guilt-free",    label: "I want to not think about it",          note: "tell me the total, then disappear" },
 ];
 
+const purposes = [
+  { id: "reset",         label: "A reset",                    note: "I need the noise turned down" },
+  { id: "celebration",   label: "A celebration",              note: "birthday, anniversary, a milestone" },
+  { id: "honeymoon",     label: "A honeymoon",                note: "the first trip as us" },
+  { id: "babymoon",      label: "A last quiet trip",          note: "before the baby, before the change" },
+  { id: "work",          label: "Work, with edges",           note: "the meeting is real, the rest is mine" },
+  { id: "creative",      label: "A creative project",         note: "shoot, write, research, make" },
+  { id: "reunion",       label: "A reunion",                  note: "people I don't see enough" },
+  { id: "wedding",       label: "Someone's wedding",          note: "I'm a guest, not the planner" },
+  { id: "grief",         label: "Quiet, after something hard", note: "I want a place to be still" },
+  { id: "milestone",     label: "A solo milestone",            note: "the trip I promised myself" },
+  { id: "family",        label: "Family time, the good kind", note: "everyone, in one place, slowly" },
+  { id: "scout",         label: "Scouting somewhere",         note: "could I live here?" },
+  { id: "none",          label: "No reason. I just want to go", note: "the urge is the reason" },
+];
+
 const dealbreakers = [
   { id: "crowds",        label: "Crowds & queues" },
   { id: "early",         label: "Early starts" },
@@ -113,19 +129,9 @@ const dealbreakers = [
   { id: "visa-interview",label: "In-person visa interviews" },
   { id: "visa-onarrival",label: "Visa-on-arrival queues" },
   { id: "passport-stamps", label: "Politically sensitive passport stamps" },
-  { id: "border-questions", label: "Aggressive border questioning" },
-  { id: "biometrics",    label: "Heavy biometric or fingerprint controls" },
   { id: "cash-only",     label: "Cash-only economies" },
   { id: "no-uber",       label: "No ride-share apps, only street taxis" },
-  { id: "currency-fees", label: "Awful currency exchange rates" },
-  { id: "long-immigration", label: "Two-hour immigration lines" },
-  { id: "slow-checkin",  label: "3pm hotel check-in, no exceptions" },
-  { id: "single-supplement", label: "Single-supplement penalties" },
-  { id: "tipping-mandatory", label: "Mandatory service charges on top of tips" },
   { id: "no-direct-flight", label: "No direct flight from my city" },
-  { id: "early-checkout", label: "11am hotel checkouts" },
-  { id: "buffet-breakfast", label: "Buffet-only breakfasts" },
-  { id: "shared-driver", label: "Group tours with a shared driver" },
 ];
 
 /* utility — clean a number for friend count */
