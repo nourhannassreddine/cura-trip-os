@@ -204,6 +204,12 @@ const Onboarding = () => {
       while (next.length > family.adults) next.pop();
       return next;
     });
+    setFamilyDepartures((prev) => {
+      const next = [...prev];
+      while (next.length < total) next.push("");
+      while (next.length > total) next.pop();
+      return next;
+    });
   }, [family.adults, family.teens, family.children]);
 
   const toggle = (id: string) => {
@@ -268,7 +274,7 @@ const Onboarding = () => {
   const friendsValid =
     companyChoice !== "friends"
       ? true
-      : !!(passport && friendsData.length === clamp(friendsCount) &&
+      : !!(passport && friendsCountSet && friendsData.length === clamp(friendsCount) &&
           friendsData.every((f) => f.passport &&
             (f.sameDeparture || (f.departure ?? "").trim().length >= 2)));
 
@@ -279,15 +285,22 @@ const Onboarding = () => {
           const total = family.adults + family.teens + family.children;
           if (total < 1) return false;
           if (familyPassports.length !== total) return false;
+          if (familySameDeparture === null) return false;
+          if (familySameDeparture === false) {
+            if (familyDepartures.length !== total) return false;
+            if (!familyDepartures.every((d) => d.trim().length >= 2)) return false;
+          }
           return familyPassports.every((p) => !!p) && !!passport;
         })();
 
-  /* full path: step 2 = context (with passport+with), step 3 = dealbreakers, step 4 = reading
-     short path: step 2 = destination, step 3 = context condensed */
+  /* Step routing
+     full  : 0 Feel · 1 Decide · 2 Purpose · 3 Context · 4 Dealbreakers · 5 Reading
+     short : 0 Feel · 1 Decide · 2 Purpose · 3 Destination · 4 Context           */
 
-  const isFullContext = !isShort && step === 2;
-  const isShortDestination = isShort && step === 2;
-  const isShortContext = isShort && step === 3;
+  const isPurpose = step === 2;
+  const isFullContext = !isShort && step === 3;
+  const isShortDestination = isShort && step === 3;
+  const isShortContext = isShort && step === 4;
 
   const fullContextValid =
     isFullContext &&
@@ -308,17 +321,20 @@ const Onboarding = () => {
   const canContinue =
     (step === 0 && picked.size >= 1) ||
     (step === 1 && pace !== null) ||
+    (isPurpose && purpose !== null) ||
     (isShortDestination && destination.trim().length >= 2) ||
     fullContextValid ||
     shortContextValid ||
-    (!isShort && step === 3) ||
-    (!isShort && step === 4);
+    (!isShort && step === 4) ||
+    (!isShort && step === 5);
 
   const persist = () => {
     saveProfile({
       path,
       moods: Array.from(picked),
       pace,
+      purpose,
+      purposeNote: purposeNote.trim() || null,
       destination: isShort ? (destination.trim() || null) : null,
       departure: departure.trim() || null,
       passport,
@@ -331,6 +347,9 @@ const Onboarding = () => {
       } : null,
       friends: companyChoice === "friends" ? friendsData : [],
       family: companyChoice === "family" ? family : null,
+      familyDepartures: companyChoice === "family"
+        ? (familySameDeparture === false ? familyDepartures : [])
+        : [],
       spend,
       dealbreakers: isShort ? [] : Array.from(breakers),
       dealbreakerOther: isShort ? null : (breakerOther.trim() || null),
