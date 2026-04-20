@@ -123,7 +123,7 @@ const Welcome = () => {
             And <span className="italic-serif">opinions.</span>
           </h1>
           <p className="mt-3 text-[13px] leading-relaxed text-foreground/70 max-w-[34ch]">
-            Cura learns your instincts and leads you to the trip that was always yours.
+            We learn your instincts, then lead you to the trip that was always yours.
           </p>
         </section>
 
