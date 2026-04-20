@@ -8,6 +8,8 @@ import surreal4 from "@/assets/welcome-surreal-4.jpg";
 import surreal5 from "@/assets/welcome-surreal-5.jpg";
 import surreal6 from "@/assets/welcome-surreal-6.jpg";
 import surreal7 from "@/assets/welcome-surreal-7.jpg";
+import surreal8 from "@/assets/welcome-surreal-8.jpg";
+import surreal9 from "@/assets/welcome-surreal-9.jpg";
 
 /* ------------------------------------------------------------------
    Welcome - Plate I.
@@ -17,19 +19,21 @@ import surreal7 from "@/assets/welcome-surreal-7.jpg";
    Footer is treated as an editorial imprint, not a UI element.
 ------------------------------------------------------------------ */
 
-type Frame = { src: string; alt: string; logoTone: "dark" | "light" };
+type Frame = { src: string; alt: string };
 
-/* 7 frames, one album. Jacquemus × Tim Walker × Slim Aarons — sun-faded, low
-   saturation, single oversized object per frame. logoTone flips to "light"
-   (white) on frames whose top-left is bright enough that black would be lost. */
+/* 9 frames, one album. Jacquemus × Tim Walker × Slim Aarons — sun-faded, low
+   saturation, single oversized object per frame. Each composed for the locked
+   3:2 horizontal banner so subjects sit fully inside the frame. */
 const frames: Frame[] = [
-  { src: surreal1, alt: "A colossal cream silk ribbon coiling slowly across pale dunes, one set of footprints leading into it", logoTone: "dark" },
-  { src: surreal2, alt: "An enormous terracotta urn lying on its side in a quiet olive grove, light spilling out like water", logoTone: "dark" },
-  { src: surreal3, alt: "A giant folded white linen napkin standing upright on a bare wooden table on a sunlit terrace, sea behind", logoTone: "dark" },
-  { src: surreal4, alt: "A monumental matte-black rotary telephone half-buried in a pale rose desert, receiver slightly off the hook", logoTone: "light" },
-  { src: surreal5, alt: "A vast pearl-grey storm cloud the size of a building, parked low over a quiet stone village square at midday", logoTone: "light" },
-  { src: surreal6, alt: "A giant single brass key resting on still water in a flooded marble courtyard, soft reflections", logoTone: "dark" },
-  { src: surreal7, alt: "A house-sized woven straw basket placed gently on a mountain road at golden hour, lavender hills behind", logoTone: "dark" },
+  { src: surreal1, alt: "A colossal cream silk ribbon coiling impossibly across pale dunes, soft footprints leading into it" },
+  { src: surreal2, alt: "A giant beautiful seashell larger than a person resting on an empty beach in soft morning light" },
+  { src: surreal3, alt: "A folded white linen napkin standing upright on a terrace table over the sea, paper birds emerging from the fold" },
+  { src: surreal4, alt: "A house-sized woven straw sun hat casting a circular shadow on a sunlit plaza, a tiny figure standing in the shade" },
+  { src: surreal5, alt: "A snowy alpine peak with a giant pastel pink ice cream cone planted upright in the summit" },
+  { src: surreal6, alt: "A colossal hot-air balloon carrying a tiny Mediterranean village in baskets, drifting over a wildflower meadow" },
+  { src: surreal7, alt: "A small figure crouched on the floor, looking down at an enormous unfolded paper map larger than a room" },
+  { src: surreal8, alt: "A larger-than-life painterly flamingo standing in a tropical lagoon, towering over palms and still water" },
+  { src: surreal9, alt: "Three colossal green olives balanced on an empty Mediterranean rooftop, calm sea in the distance" },
 ];
 
 /* Rotating editorial thought - chosen once per app open.
@@ -54,8 +58,6 @@ const Welcome = () => {
     return () => clearInterval(id);
   }, []);
 
-  const currentTone = frames[i].logoTone;
-
   return (
     <main className="app-shell relative grain overflow-hidden flex flex-col">
       {/* Hero carousel - locked 3:2 landscape banner. Images are composed for
@@ -75,15 +77,10 @@ const Welcome = () => {
             }`}
           />
         ))}
-        {/* Logo - 8px from the safe edge, lowercase Playfair, tone flips per frame */}
+        {/* Logo - 8px from the safe edge, lowercase Playfair, always white with
+            soft shadow for legibility on every frame regardless of background */}
         <div className="absolute top-2 left-2 p-2">
-          <div
-            className={`font-serif lowercase text-2xl leading-none tracking-tight transition-colors duration-[1600ms] ${
-              currentTone === "light"
-                ? "text-white/95 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]"
-                : "text-foreground/85 mix-blend-multiply"
-            }`}
-          >
+          <div className="font-serif lowercase text-2xl leading-none tracking-tight text-white/95 drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)]">
             cura
           </div>
         </div>
