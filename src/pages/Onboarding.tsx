@@ -384,7 +384,7 @@ const Onboarding = () => {
   return (
     <main className="app-shell flex flex-col">
       <TopBar
-        eyebrow={`Movement ${step + 1} of ${stepCount}${isShort ? " · short" : ""}`}
+        eyebrow={`Movement ${step + 1} of ${stepCount}`}
         title="Calibration"
         right={
           <Link to="/home" className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground">
@@ -394,7 +394,7 @@ const Onboarding = () => {
       />
 
       <div className="px-5">
-        <div className={cn("grid gap-1.5", isShort ? "grid-cols-4" : "grid-cols-5")}>
+        <div className={cn("grid gap-1.5", isShort ? "grid-cols-5" : "grid-cols-6")}>
           {Array.from({ length: stepCount }).map((_, i) => (
             <div key={i} className={cn("h-px", i <= step ? "bg-primary" : "bg-foreground/20")} />
           ))}
