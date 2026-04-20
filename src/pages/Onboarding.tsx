@@ -145,6 +145,8 @@ const Onboarding = () => {
   const [step, setStep] = useState(0);
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [pace, setPace] = useState<string | null>(null);
+  const [purpose, setPurpose] = useState<string | null>(null);
+  const [purposeNote, setPurposeNote] = useState<string>("");
   const [destination, setDestination] = useState<string>(""); // short path only
   const [passport, setPassport] = useState<string | null>(null);
   const [departure, setDeparture] = useState<string>("");
@@ -156,12 +158,14 @@ const Onboarding = () => {
   const [partnerEmail, setPartnerEmail] = useState<string>("");
   // Friends extras
   const [friendsCount, setFriendsCount] = useState<number>(2);
+  const [friendsCountSet, setFriendsCountSet] = useState<boolean>(false);
   const [friendsData, setFriendsData] = useState<Companion[]>([]);
   // Family extras
   const [family, setFamily] = useState<FamilyComposition>({ adults: 1, teens: 0, children: 0 });
   const [familyPassports, setFamilyPassports] = useState<(string | null)[]>([]);
   const [familyEmails, setFamilyEmails] = useState<string[]>([]);
-  const [familySameDeparture, setFamilySameDeparture] = useState<boolean>(true);
+  const [familySameDeparture, setFamilySameDeparture] = useState<boolean | null>(null);
+  const [familyDepartures, setFamilyDepartures] = useState<string[]>([]);
 
   const [spend, setSpend] = useState<string | null>(null);
   const [breakers, setBreakers] = useState<Set<string>>(new Set());
@@ -169,7 +173,7 @@ const Onboarding = () => {
   const [lastMood, setLastMood] = useState<string | null>(null);
 
   const nav = useNavigate();
-  const stepCount = isShort ? 4 : 5;
+  const stepCount = isShort ? 5 : 6;
 
   // reset step if path changes mid-flow
   useEffect(() => { setStep(0); }, [path]);
