@@ -67,17 +67,28 @@ const Welcome = () => {
       {/* Hero carousel - bleeds the full width, sits inside a fixed 44dvh frame */}
       <div className="relative h-[44dvh] w-full overflow-hidden shrink-0 bg-paper-deep">
         {frames.map((f, idx) => (
-          <img
+          <div
             key={idx}
-            src={f.src}
-            alt={f.alt}
-            loading={idx === 0 ? "eager" : "lazy"}
-            width={832}
-            height={1216}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[3200ms] ease-in-out ${
+            className={`absolute inset-0 transition-opacity duration-[3200ms] ease-in-out ${
               idx === i ? "opacity-100" : "opacity-0"
             }`}
-          />
+          >
+            <img
+              src={f.src}
+              alt=""
+              aria-hidden="true"
+              loading={idx === 0 ? "eager" : "lazy"}
+              className="absolute inset-0 h-full w-full object-cover blur-xl scale-105 saturate-125"
+            />
+            <img
+              src={f.src}
+              alt={f.alt}
+              loading={idx === 0 ? "eager" : "lazy"}
+              width={1536}
+              height={864}
+              className="absolute inset-0 h-full w-full object-contain"
+            />
+          </div>
         ))}
         {/* Logo - 8px from the safe edge, lowercase Playfair, tone flips per frame */}
         <div className="absolute top-2 left-2 p-2">
@@ -112,7 +123,7 @@ const Welcome = () => {
             And <span className="italic-serif">opinions.</span>
           </h1>
           <p className="mt-3 text-[13px] leading-relaxed text-foreground/70 max-w-[34ch]">
-            Cura studies the way you move and quietly walks you into the trip you were always going to love.
+            Cura learns your instincts and leads you to the trip that was always yours.
           </p>
         </section>
 
