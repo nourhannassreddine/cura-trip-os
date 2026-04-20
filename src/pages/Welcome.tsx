@@ -8,9 +8,6 @@ import surreal4 from "@/assets/welcome-surreal-4.jpg";
 import surreal5 from "@/assets/welcome-surreal-5.jpg";
 import surreal6 from "@/assets/welcome-surreal-6.jpg";
 import surreal7 from "@/assets/welcome-surreal-7.jpg";
-import surreal8 from "@/assets/welcome-surreal-8.jpg";
-import surreal9 from "@/assets/welcome-surreal-9.jpg";
-import surreal10 from "@/assets/welcome-surreal-10.jpg";
 
 /* ------------------------------------------------------------------
    Welcome - Plate I.
@@ -22,20 +19,17 @@ import surreal10 from "@/assets/welcome-surreal-10.jpg";
 
 type Frame = { src: string; alt: string; logoTone: "dark" | "light" };
 
-/* 10 frames, locked. All warm/light palette - same album, same hour of day.
-   logoTone flips to "light" (white) on any frame whose top-left region is
-   bright enough that black would be lost. */
+/* 7 frames, one album. Jacquemus × Tim Walker × Slim Aarons — sun-faded, low
+   saturation, single oversized object per frame. logoTone flips to "light"
+   (white) on frames whose top-left is bright enough that black would be lost. */
 const frames: Frame[] = [
-  { src: surreal1, alt: "An enormous ripe peach the size of a small house in a field of pale lavender at golden hour, a tiny figure in pink linen walking toward it", logoTone: "dark" },
-  { src: surreal2, alt: "A colossal coral-pink flamingo wading in a turquoise tropical lagoon framed by palms and bougainvillea, a tiny figure in a white linen sundress standing knee-deep in the water nearby", logoTone: "dark" },
-  { src: surreal3, alt: "A giant sky-blue origami paper crane perched on a glossy wet street in Tokyo at dusk, soft pink and violet neon glow, a tiny figure in a long red coat with a clear umbrella", logoTone: "light" },
-  { src: surreal4, alt: "An enormous pastel mint green ice cream cone standing upright on a snowy mountain peak under a clear cobalt blue sky, a tiny figure in a bright orange puffer jacket at the base", logoTone: "light" },
-  { src: surreal5, alt: "An enormous white linen sheet draped over an invisible form on a warm pink stucco rooftop overlooking a sleepy Mediterranean village at dusk", logoTone: "light" },
-  { src: surreal6, alt: "A colossal pearlescent shellfish on wet reflective sand at a quiet pale-blue beach at dawn, a tiny figure in cream linen standing beside it", logoTone: "light" },
-  { src: surreal7, alt: "An enormous straw sun hat casting a perfect circular shadow on a sun-bleached pink stucco plaza, a tiny figure in a red dress standing inside the shadow", logoTone: "light" },
-  { src: surreal8, alt: "A surreal pastel sky-blue hot air balloon with an entire small Mediterranean village hanging beneath it, drifting low over a vast meadow of mixed wildflowers in full bloom at golden hour", logoTone: "light" },
-  { src: surreal9, alt: "A giant peach-coral hibiscus flower blooming in a dense emerald green jungle clearing with golden sunlight filtering through the canopy, a tiny figure in a white linen dress in front of one petal", logoTone: "dark" },
-  { src: surreal10, alt: "A massive blank folded paper map standing upright like a sail on a calm green hillside at dusk, a tiny figure in a white shirt looking up at it", logoTone: "dark" },
+  { src: surreal1, alt: "A colossal cream silk ribbon coiling slowly across pale dunes, one set of footprints leading into it", logoTone: "dark" },
+  { src: surreal2, alt: "An enormous terracotta urn lying on its side in a quiet olive grove, light spilling out like water", logoTone: "dark" },
+  { src: surreal3, alt: "A giant folded white linen napkin standing upright on a bare wooden table on a sunlit terrace, sea behind", logoTone: "dark" },
+  { src: surreal4, alt: "A monumental matte-black rotary telephone half-buried in a pale rose desert, receiver slightly off the hook", logoTone: "light" },
+  { src: surreal5, alt: "A vast pearl-grey storm cloud the size of a building, parked low over a quiet stone village square at midday", logoTone: "light" },
+  { src: surreal6, alt: "A giant single brass key resting on still water in a flooded marble courtyard, soft reflections", logoTone: "dark" },
+  { src: surreal7, alt: "A house-sized woven straw basket placed gently on a mountain road at golden hour, lavender hills behind", logoTone: "dark" },
 ];
 
 /* Rotating editorial thought - chosen once per app open.
@@ -64,31 +58,22 @@ const Welcome = () => {
 
   return (
     <main className="app-shell relative grain overflow-hidden flex flex-col">
-      {/* Hero carousel - bleeds the full width, sits inside a fixed 44dvh frame */}
-      <div className="relative h-[44dvh] w-full overflow-hidden shrink-0 bg-paper-deep">
+      {/* Hero carousel - locked 3:2 landscape banner. Images are composed for
+          this exact ratio so object-cover never crops the subject. */}
+      <div className="relative aspect-[3/2] w-full overflow-hidden shrink-0 bg-paper-deep">
         {frames.map((f, idx) => (
-          <div
+          <img
             key={idx}
-            className={`absolute inset-0 transition-opacity duration-[3200ms] ease-in-out ${
+            src={f.src}
+            alt={idx === i ? f.alt : ""}
+            aria-hidden={idx === i ? undefined : true}
+            loading={idx === 0 ? "eager" : "lazy"}
+            width={1536}
+            height={1024}
+            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-[3200ms] ease-in-out ${
               idx === i ? "opacity-100" : "opacity-0"
             }`}
-          >
-            <img
-              src={f.src}
-              alt=""
-              aria-hidden="true"
-              loading={idx === 0 ? "eager" : "lazy"}
-              className="absolute inset-0 h-full w-full object-cover blur-xl scale-105 saturate-125"
-            />
-            <img
-              src={f.src}
-              alt={f.alt}
-              loading={idx === 0 ? "eager" : "lazy"}
-              width={1536}
-              height={864}
-              className="absolute inset-0 h-full w-full object-contain"
-            />
-          </div>
+          />
         ))}
         {/* Logo - 8px from the safe edge, lowercase Playfair, tone flips per frame */}
         <div className="absolute top-2 left-2 p-2">
@@ -123,7 +108,7 @@ const Welcome = () => {
             And <span className="italic-serif">opinions.</span>
           </h1>
           <p className="mt-3 text-[13px] leading-relaxed text-foreground/70 max-w-[34ch]">
-            We learn your instincts, then lead you to the trip that was always yours.
+            You bring the appetite. Cura will handle the rest.
           </p>
         </section>
 
