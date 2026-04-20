@@ -23,7 +23,6 @@ import Profile from "./pages/Profile";
 import NewTrip from "./pages/NewTrip";
 import TripImport from "./pages/TripImport";
 import NotFound from "./pages/NotFound.tsx";
-import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -33,7 +32,6 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/begin" element={<EntryGate />} />
