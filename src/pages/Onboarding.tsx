@@ -1,31 +1,45 @@
-import { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowRight, Check } from "lucide-react";
 import { TopBar } from "@/components/cura/TopBar";
 import { CuraWhisper } from "@/components/cura/CuraWhisper";
 import { cn } from "@/lib/utils";
+import { saveProfile, type CuraPath } from "@/lib/profile";
 
 /* ----------------------------------------------------------
    CURA Onboarding — calibration, not a quiz.
-   Five movements: Feel · Decide · Context · Dealbreakers · Reading
+   Path-aware:
+     full  → 5 steps (Feel · Decide · Context+Departure · Dealbreakers · Reading)
+     short → 3 steps (Feel · Decide · Context condensed) → /trip/new
 ---------------------------------------------------------- */
 
 const moods = [
-  { id: "slow",     label: "Slow & sun-faded",     note: "long lunches, no schedule",       react: "Noted. We'll guard your mornings." },
-  { id: "design",   label: "Design-forward",       note: "neighborhoods, not landmarks",    react: "Good. Landmarks are mostly other people's photos." },
-  { id: "wild",     label: "A little wild",        note: "say yes more often",              react: "I'll leave more room for accidents." },
-  { id: "refined",  label: "Refined & quiet",      note: "fewer, better choices",           react: "Then I'll cut three things from every day." },
-  { id: "creative", label: "For making things",    note: "shoot, write, walk",              react: "I'll plan around light, not opening hours." },
-  { id: "social",   label: "Loud, with people",    note: "music, late dinners",             react: "Dinners after 9, then. No museums at 9am." },
+  { id: "slow",        label: "Slow & sun-faded",            note: "long lunches, no schedule",       react: "Noted. We'll guard your mornings." },
+  { id: "design",      label: "Design-forward",              note: "neighborhoods, not landmarks",    react: "Good. Landmarks are mostly other people's photos." },
+  { id: "wild",        label: "A little wild",               note: "say yes more often",              react: "I'll leave more room for accidents." },
+  { id: "refined",     label: "Refined & quiet",             note: "fewer, better choices",           react: "Then I'll cut three things from every day." },
+  { id: "creative",    label: "For making things",           note: "shoot, write, walk",              react: "I'll plan around light, not opening hours." },
+  { id: "social",      label: "Loud, with people",           note: "music, late dinners",             react: "Dinners after 9, then. No museums at 9am." },
+  { id: "solo",        label: "Alone, on purpose",           note: "I came here to think",            react: "Then I'll plan tables for one without flinching." },
+  { id: "luxury",      label: "Quiet luxury, no logos",      note: "soft sheets, hard to find",       react: "Understood. The good places don't have signs." },
+  { id: "spontaneous", label: "Plans are suggestions",       note: "I want room to drift",            react: "I'll pencil things, not ink them." },
+  { id: "structured",  label: "A clean schedule is a kindness", note: "I rest better with a plan",  react: "Then I'll book everything before you ask." },
 ];
 
 const pacing = [
-  { id: "auto",    label: "Plan it for me",      note: "I trust your taste",       react: "Then I'll be opinionated. You can overrule me." },
-  { id: "planner", label: "Let me design it",    note: "I want the controls",      react: "Fine. I'll stay out of the way until you ask." },
-  { id: "mixed",   label: "A bit of both",       note: "structure + room to drift", react: "Most travelers say this. The good ones mean it." },
+  { id: "auto",    label: "Plan it for me",      note: "I trust your taste",        react: "Then I'll be opinionated. You can overrule me." },
+  { id: "mixed",   label: "A bit of both",       note: "I suggest, you confirm",    react: "Most travelers say this. The good ones mean it." },
+  { id: "planner", label: "Let me design it",    note: "I want the controls",       react: "Fine. I'll provide structure, not decisions." },
 ];
 
 const passports = ["Italian", "American", "British", "French", "German", "Brazilian", "Indian", "Nigerian", "Other"];
+
+const departureCities = [
+  "Lagos", "New York", "London", "Lisbon", "Dubai", "Mumbai", "São Paulo",
+  "Paris", "Berlin", "Rome", "Milan", "Madrid", "Barcelona", "Amsterdam",
+  "Istanbul", "Cairo", "Nairobi", "Cape Town", "Singapore", "Hong Kong",
+  "Tokyo", "Seoul", "Sydney", "Toronto", "Mexico City",
+];
 
 const company = [
   { id: "solo",    label: "Alone",          note: "I move at my own speed" },
@@ -35,35 +49,47 @@ const company = [
 ];
 
 const spending = [
-  { id: "considered", label: "Considered",  note: "I spend on what matters, skip the rest" },
-  { id: "splurger",   label: "Splurger",    note: "I'll overpay for the right moment" },
-  { id: "stretcher",  label: "Stretcher",   note: "I want the trip to last longer" },
-  { id: "unbothered", label: "Unbothered",  note: "I don't track. It works out." },
+  { id: "luxury-first",  label: "Luxury-first",   note: "I start at the top and work down" },
+  { id: "balanced",      label: "Balanced",       note: "I spend where it shows" },
+  { id: "budget-aware",  label: "Budget-aware",   note: "I want range, not stretch" },
+  { id: "impulsive",     label: "Impulsive",      note: "I decide at the table" },
 ];
 
 const dealbreakers = [
-  { id: "crowds",    label: "Crowds & queues" },
-  { id: "early",     label: "Early starts" },
-  { id: "transit",   label: "Long transit days" },
-  { id: "tourist",   label: "Tourist menus" },
-  { id: "noise",     label: "Hotel noise" },
-  { id: "rushing",   label: "Rushing between things" },
-  { id: "kitsch",    label: "Kitsch & costume" },
-  { id: "chains",    label: "Chains & franchises" },
+  { id: "crowds",        label: "Crowds & queues" },
+  { id: "early",         label: "Early starts" },
+  { id: "transit",       label: "Long transfers" },
+  { id: "tourist",       label: "Tourist traps" },
+  { id: "noise",         label: "Hotel noise" },
+  { id: "rushing",       label: "Rushing" },
+  { id: "bad-coffee",    label: "Bad coffee" },
+  { id: "fees",          label: "Hidden fees" },
+  { id: "chains",        label: "Chain restaurants" },
+  { id: "overplanned",   label: "Over-planned days" },
+  { id: "dead-night",    label: "Dead nightlife" },
+  { id: "wifi",          label: "Slow wifi" },
 ];
 
 const Onboarding = () => {
+  const [params] = useSearchParams();
+  const path: CuraPath = params.get("path") === "short" ? "short" : "full";
+  const isShort = path === "short";
+
   const [step, setStep] = useState(0);
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [pace, setPace] = useState<string | null>(null);
   const [passport, setPassport] = useState<string>("Italian");
+  const [departure, setDeparture] = useState<string>("");
   const [companyChoice, setCompanyChoice] = useState<string | null>(null);
   const [spend, setSpend] = useState<string | null>(null);
   const [breakers, setBreakers] = useState<Set<string>>(new Set());
   const [lastMood, setLastMood] = useState<string | null>(null);
 
   const nav = useNavigate();
-  const stepCount = 5;
+  const stepCount = isShort ? 3 : 5;
+
+  // reset step if path changes mid-flow
+  useEffect(() => { setStep(0); }, [path]);
 
   const toggle = (id: string) => {
     const next = new Set(picked);
@@ -78,12 +104,12 @@ const Onboarding = () => {
     setBreakers(next);
   };
 
-  /* ----- CURA's reading of the user (step 5) ----- */
+  /* ----- CURA's reading of the user (full path, step 5) ----- */
   const reading = useMemo(() => {
-    const moodSet = picked;
-    const isSlow = moodSet.has("slow") || moodSet.has("refined");
-    const isDesign = moodSet.has("design") || moodSet.has("creative");
-    const isWild = moodSet.has("wild") || moodSet.has("social");
+    const m = picked;
+    const isSlow = m.has("slow") || m.has("refined") || m.has("luxury");
+    const isDesign = m.has("design") || m.has("creative");
+    const isWild = m.has("wild") || m.has("social") || m.has("spontaneous");
 
     const headline = isDesign
       ? "You don't travel for landmarks."
@@ -117,17 +143,57 @@ const Onboarding = () => {
   const moodReaction = lastMood ? moods.find((m) => m.id === lastMood)?.react : null;
   const paceReaction = pace ? pacing.find((p) => p.id === pace)?.react : null;
 
+  const isContextStep = step === 2;
+  const contextValid = isShort
+    ? departure.trim().length >= 2 && companyChoice !== null && spend !== null
+    : departure.trim().length >= 2 && companyChoice !== null && spend !== null;
+
   const canContinue =
     (step === 0 && picked.size >= 1) ||
     (step === 1 && pace !== null) ||
-    (step === 2 && companyChoice !== null && spend !== null) ||
-    (step === 3) ||
-    step === 4;
+    (isContextStep && contextValid) ||
+    (!isShort && step === 3) ||
+    (!isShort && step === 4);
+
+  const persist = () => {
+    saveProfile({
+      path,
+      moods: Array.from(picked),
+      pace,
+      departure: departure.trim() || null,
+      passport: isShort ? null : passport,
+      company: companyChoice,
+      spend,
+      dealbreakers: isShort ? [] : Array.from(breakers),
+    });
+  };
+
+  const handleContinue = () => {
+    if (step < stepCount - 1) {
+      // persist progressively at every step
+      persist();
+      setStep(step + 1);
+      return;
+    }
+    // final step
+    persist();
+    if (isShort) {
+      nav("/trip/new");
+    } else {
+      nav("/home");
+    }
+  };
+
+  const finalLabel = isShort
+    ? "Build my trip"
+    : step < stepCount - 1
+      ? "Continue"
+      : `Take me to ${reading.pick}`;
 
   return (
     <main className="app-shell flex flex-col">
       <TopBar
-        eyebrow={`Movement ${step + 1} of ${stepCount}`}
+        eyebrow={`Movement ${step + 1} of ${stepCount}${isShort ? " · short" : ""}`}
         title="Calibration"
         right={
           <Link to="/home" className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground">
@@ -137,7 +203,7 @@ const Onboarding = () => {
       />
 
       <div className="px-5">
-        <div className="grid grid-cols-5 gap-1.5">
+        <div className={cn("grid gap-1.5", isShort ? "grid-cols-3" : "grid-cols-5")}>
           {Array.from({ length: stepCount }).map((_, i) => (
             <div key={i} className={cn("h-px", i <= step ? "bg-primary" : "bg-foreground/20")} />
           ))}
@@ -231,27 +297,51 @@ const Onboarding = () => {
               The <span className="italic-serif">facts</span> of how you move.
             </h2>
 
-            {/* Passport — editorial chip row, not a form */}
+            {/* Departure — required, datalist-backed free text */}
             <div className="mt-7">
-              <div className="editorial-eyebrow text-muted-foreground mb-2">Passport</div>
-              <div className="flex flex-wrap gap-1.5">
-                {passports.map((p) => {
-                  const on = passport === p;
-                  return (
-                    <button
-                      key={p}
-                      onClick={() => setPassport(p)}
-                      className={cn(
-                        "px-3 py-1.5 border text-xs tracking-wide transition-colors",
-                        on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/25 text-foreground/70 hover:border-foreground/60"
-                      )}
-                    >
-                      {p}
-                    </button>
-                  );
-                })}
+              <div className="editorial-eyebrow text-muted-foreground mb-2">Departure</div>
+              <label className="block">
+                <span className="sr-only">Where do you usually leave from?</span>
+                <input
+                  type="text"
+                  list="cura-cities"
+                  value={departure}
+                  onChange={(e) => setDeparture(e.target.value)}
+                  placeholder="Where do you usually leave from?"
+                  className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-lg py-2 placeholder:text-muted-foreground/60"
+                />
+                <datalist id="cura-cities">
+                  {departureCities.map((c) => <option key={c} value={c} />)}
+                </datalist>
+              </label>
+              <div className="mt-1 text-[11px] text-muted-foreground">
+                Anywhere in the world. I use this for routes, not marketing.
               </div>
             </div>
+
+            {/* Passport — only on full path */}
+            {!isShort && (
+              <div className="mt-7">
+                <div className="editorial-eyebrow text-muted-foreground mb-2">Passport</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {passports.map((p) => {
+                    const on = passport === p;
+                    return (
+                      <button
+                        key={p}
+                        onClick={() => setPassport(p)}
+                        className={cn(
+                          "px-3 py-1.5 border text-xs tracking-wide transition-colors",
+                          on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/25 text-foreground/70 hover:border-foreground/60"
+                        )}
+                      >
+                        {p}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Who you travel with */}
             <div className="mt-7">
@@ -276,7 +366,7 @@ const Onboarding = () => {
               </div>
             </div>
 
-            {/* Spending mindset — not a number */}
+            {/* Spending mindset */}
             <div className="mt-7">
               <div className="editorial-eyebrow text-muted-foreground mb-2">Money, honestly</div>
               <ul className="space-y-1.5">
@@ -305,14 +395,16 @@ const Onboarding = () => {
 
             <div className="mt-7">
               <CuraWhisper variant="inline">
-                I won't ask your budget. I'll watch how you spend on day two and adjust.
+                {isShort
+                  ? "I'll learn the rest from how you move. Dealbreakers come up when they need to."
+                  : "I won't ask your budget. I'll watch how you spend on day two and adjust."}
               </CuraWhisper>
             </div>
           </>
         )}
 
-        {/* ---------- STEP 3 — DEALBREAKERS ---------- */}
-        {step === 3 && (
+        {/* ---------- STEP 3 — DEALBREAKERS (full only) ---------- */}
+        {!isShort && step === 3 && (
           <>
             <div className="editorial-eyebrow text-muted-foreground mb-3">iv. Dealbreakers</div>
             <h2 className="display-lg max-w-[14ch]">
@@ -322,7 +414,6 @@ const Onboarding = () => {
               I'd rather know what to remove than what to add.
             </p>
 
-            {/* Asymmetric tag cloud — staggered, varying widths */}
             <div className="mt-7 flex flex-wrap gap-1.5">
               {dealbreakers.map((d, i) => {
                 const on = breakers.has(d.id);
@@ -344,7 +435,6 @@ const Onboarding = () => {
               })}
             </div>
 
-            {/* unexpected element — pulled-quote */}
             <div className="mt-10 ml-auto max-w-[22ch] text-right">
               <div className="editorial-eyebrow text-primary mb-2">Cura · note</div>
               <p className="italic-serif text-[17px] leading-snug text-foreground/85">
@@ -354,8 +444,8 @@ const Onboarding = () => {
           </>
         )}
 
-        {/* ---------- STEP 4 — CURA READS YOU ---------- */}
-        {step === 4 && (
+        {/* ---------- STEP 4 — CURA READS YOU (full only) ---------- */}
+        {!isShort && step === 4 && (
           <>
             <div className="editorial-eyebrow text-primary mb-3">v. Reading</div>
             <h2 className="display-lg max-w-[16ch]">
@@ -365,7 +455,6 @@ const Onboarding = () => {
               {reading.sub}
             </p>
 
-            {/* the challenge — bold and slightly off */}
             <div className="mt-8 -ml-2 border-l-2 border-primary pl-4">
               <div className="editorial-eyebrow text-primary mb-1.5">A small challenge</div>
               <p className="font-serif text-[17px] leading-snug text-foreground/85">
@@ -373,7 +462,6 @@ const Onboarding = () => {
               </p>
             </div>
 
-            {/* the opinionated starter trip */}
             <div className="mt-8 bg-ink text-ink-foreground p-5 relative">
               <div className="absolute -top-3 left-4 px-2 bg-background text-foreground editorial-eyebrow">
                 I started you in
@@ -404,16 +492,14 @@ const Onboarding = () => {
           Back
         </button>
         <button
-          onClick={() => (step < stepCount - 1 ? setStep(step + 1) : nav("/home"))}
+          onClick={handleContinue}
           disabled={!canContinue}
           className={cn(
             "group flex items-center gap-3 border border-foreground bg-ink text-ink-foreground px-5 py-3 transition-opacity",
             !canContinue && "opacity-40 pointer-events-none"
           )}
         >
-          <span className="text-sm tracking-wide">
-            {step < stepCount - 1 ? "Continue" : "Take me to Puglia"}
-          </span>
+          <span className="text-sm tracking-wide">{finalLabel}</span>
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" strokeWidth={1.5} />
         </button>
       </footer>

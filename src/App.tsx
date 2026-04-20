@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Welcome from "./pages/Welcome";
+import EntryGate from "./pages/EntryGate";
 import Onboarding from "./pages/Onboarding";
 import Home from "./pages/Home";
 import Dream from "./pages/Dream";
@@ -32,6 +33,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Welcome />} />
+          <Route path="/begin" element={<EntryGate />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/home" element={<Home />} />
           <Route path="/dream" element={<Dream />} />
