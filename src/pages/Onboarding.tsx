@@ -1030,10 +1030,10 @@ const Onboarding = () => {
           </>
         )}
 
-        {/* ---------- STEP 4 — CURA READS YOU (full only) ---------- */}
-        {!isShort && step === 4 && (
+        {/* ---------- STEP 5 — CURA READS YOU (full only) ---------- */}
+        {!isShort && step === 5 && (
           <>
-            <div className="editorial-eyebrow text-primary mb-3">v. Reading</div>
+            <div className="editorial-eyebrow text-primary mb-3">vi. Reading</div>
             <h2 className="display-lg max-w-[16ch]">
               {reading.headline}
             </h2>
