@@ -31,7 +31,7 @@ const paths = [
   {
     n: "iv",
     title: "I already have a trip",
-    sub: "Bring me what you have — I'll do the rest",
+    sub: "Bring me what you have. I'll do the rest.",
     to: "/trip/import",
   },
 ];
@@ -47,12 +47,13 @@ const EntryGate = () => {
           Where are you <span className="italic-serif">right now?</span>
         </h1>
         <p className="mt-3 text-sm text-muted-foreground max-w-[34ch]">
-          Not physically. In the trip.
+          Forget the map. Tell me where your head is.
         </p>
       </section>
 
-      {/* Options share the same px-5 gutter as the heading above.
-          All four items are left-aligned to the same column. */}
+      {/* Options share the same px-5 gutter as the heading.
+          Numerals sit in a fixed-width column so all titles
+          AND subs left-align to the same vertical line. */}
       <ul className="border-t border-foreground/15">
         {paths.map((p) => (
           <li key={p.n} className="border-b border-foreground/15">
@@ -60,8 +61,8 @@ const EntryGate = () => {
               to={p.to}
               className="group flex items-center justify-between gap-4 px-5 py-5 transition-colors hover:bg-foreground/[0.03]"
             >
-              <div className="flex items-baseline gap-3 min-w-0">
-                <span className="font-serif italic text-sm text-muted-foreground w-5 shrink-0">
+              <div className="flex items-start gap-3 min-w-0">
+                <span className="font-serif italic text-sm text-muted-foreground w-6 shrink-0 pt-0.5">
                   {p.n}.
                 </span>
                 <div className="min-w-0">
