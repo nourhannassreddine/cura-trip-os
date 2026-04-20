@@ -2,51 +2,53 @@
 
 ## Goal
 
-Ship the 9-frame surreal hero set with **giant olives** as frame 9. Lock the CURA logo to permanent white-with-shadow for universal legibility. Container ratio (`aspect-[3/2]`), copy, and routing all stay untouched.
+Final pass on the Welcome hero: remove flamingo, rework 4 frames for stronger surreal scale + perspective, fix the Jacquemus text leak on the balloon frame, and collapse the headline to a single line.
 
-## Final frame list (locked order)
+## Frame changes
 
-| # | Concept |
-|---|---|
-| 1 | Surreal cream silk ribbon across pale dunes — exaggerated impossible scale, soft footprints leading in |
-| 2 | Giant beautiful seashell on an empty beach, larger than a person, soft morning light |
-| 3 | Folded white linen napkin upright on a terrace table, sea behind, paper birds emerging from the fold |
-| 4 | House-sized woven straw sun hat casting circular shadow on a sunlit plaza, tiny figure in the shade |
-| 5 | Snowy alpine peak with a giant pastel ice cream cone planted upright in the summit |
-| 6 | Colossal hot-air balloon carrying a tiny Mediterranean village in baskets, drifting over wildflower meadow |
-| 7 | Small figure crouched on the ground, looking down at an enormous unfolded paper map |
-| 8 | Larger-than-life flamingo in a tropical lagoon, palm fronds, painterly surreal scale |
-| 9 | **Three colossal green olives balanced on an empty Mediterranean rooftop**, soft afternoon light, sea in distance |
+| # | Action | New / revised concept |
+|---|---|---|
+| 1 | **Replace** | Giant slightly-open pomegranate with a few seeds spilled on pale dunes, tiny person standing beside it for scale (replaces silk ribbon) |
+| 2 | **Revise** | Same beach + shell, but shell scaled up dramatically (house-sized), tiny person added at base for perspective |
+| 3 | **Replace concept** | Drop napkin/paper-birds. New: a giant porcelain teacup tipped on its side on a sunlit terrace, calm sea spilling out of it onto the tiles — single surreal object, cohesive palette |
+| 4 | Keep | Giant straw hat + tiny figure in shade |
+| 5 | Keep | Snowy peak + ice cream cone |
+| 6 | **Revise** | Same hot-air balloon Mediterranean village over wildflowers — regenerate cleanly with NO text, NO logos, NO "Jacquemus" or any wordmark anywhere in frame |
+| 7 | **Revise** | Tiny person standing outdoors (meadow / hillside) **holding** an oversized unfolded paper map in front of them, looking at it — replaces the crouched-over-map composition |
+| 8 | **Remove** | Flamingo frame deleted entirely |
+| 9 | Keep | Giant olives on Mediterranean rooftop |
 
-Cohesion held by: same desaturated film stock, soft directional sunlight, single oversized subject per frame, no neon, painterly fashion-editorial finish.
+Final count: **8 frames** (was 9).
 
-## Logo treatment
+## Copy change
 
-Remove `logoTone` field entirely. Logo always renders as:
-`text-white/95 drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)]`
+Subheadline currently wraps:
+> "You bring the appetite. Cura will handle the rest."
 
-Guarantees legibility on every frame regardless of background brightness.
+Force single line. Remove the `max-w-[34ch]` constraint on that paragraph so it flows the full content width without breaking. Headline above stays as-is.
+
+## Logo
+
+No change — stays permanent white + drop shadow.
 
 ## Technical changes
 
 ```text
 src/pages/Welcome.tsx
-├── frames[] grows from 7 → 9 entries
-├── Frame type: drop logoTone field
-├── Logo block: remove conditional, single white+shadow class
-└── alt text updated per new concepts
+├── frames[] shrinks 9 → 8 (remove flamingo entry, slot 8)
+├── Re-import: drop welcome-surreal-8 (flamingo); welcome-surreal-9 (olives) becomes new slot 8
+├── alt text rewritten for frames 1, 2, 3, 7
+└── Subheadline <p>: remove max-w-[34ch] so it stays one line
 
 src/assets/  (regenerate in place at 1536×1024, 3:2)
-├── welcome-surreal.jpg     → more surreal cream ribbon dunes
-├── welcome-surreal-2.jpg   → giant seashell on beach
-├── welcome-surreal-3.jpg   → linen napkin + paper birds
-├── welcome-surreal-4.jpg   → giant straw hat + tiny figure in shade
-├── welcome-surreal-5.jpg   → snowy peak + ice cream cone
-├── welcome-surreal-6.jpg   → hot-air balloon Mediterranean village over wildflowers
-├── welcome-surreal-7.jpg   → tiny figure + giant paper map
-├── welcome-surreal-8.jpg   → larger-than-life flamingo lagoon (NEW slot)
-└── welcome-surreal-9.jpg   → giant olives on rooftop (NEW slot)
+├── welcome-surreal.jpg     → giant open pomegranate + tiny person, pale dunes
+├── welcome-surreal-2.jpg   → much larger seashell + tiny person at base
+├── welcome-surreal-3.jpg   → giant tipped porcelain teacup spilling sea on terrace
+├── welcome-surreal-6.jpg   → balloon village — regenerate, NO text/wordmarks anywhere
+└── welcome-surreal-7.jpg   → tiny person outdoors holding giant unfolded map
 ```
 
-Generated with Nano banana pro (`google/gemini-3-pro-image-preview`) at 1536×1024 with explicit "horizontal landscape, centered subject, full subject visible inside safe margins, soft sun-faded cohesive palette, painterly editorial fashion-house aesthetic, low saturation" framing instructions to prevent any cropping regressions.
+Generation: Nano banana pro (`google/gemini-3-pro-image-preview`) at 1536×1024, with explicit framing prompt: "horizontal landscape, centered subject, full subject visible inside safe margins, sun-faded cohesive painterly palette, low saturation, **no text, no logos, no wordmarks, no signage, no letters anywhere in the image**".
+
+No changes to container ratio, headline, Plate I block, CTA, footer, routing, or tokens.
 
