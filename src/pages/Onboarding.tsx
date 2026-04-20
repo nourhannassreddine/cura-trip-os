@@ -480,10 +480,67 @@ const Onboarding = () => {
           </>
         )}
 
-        {/* ---------- SHORT PATH STEP 2 — DESTINATION ---------- */}
+        {/* ---------- STEP 2 — PURPOSE (both paths) ---------- */}
+        {isPurpose && (
+          <>
+            <div className="editorial-eyebrow text-muted-foreground mb-3">iii. Purpose</div>
+            <h2 className="display-lg max-w-[14ch]">
+              What's the <span className="italic-serif">point</span> of this trip?
+            </h2>
+            <p className="mt-3 text-sm text-muted-foreground max-w-[34ch]">
+              If there's one. Pick the closest. The truth, not the polite version.
+            </p>
+
+            <ul className="mt-7 space-y-2">
+              {purposes.map((p) => {
+                const on = purpose === p.id;
+                return (
+                  <li key={p.id}>
+                    <button
+                      onClick={() => setPurpose(p.id)}
+                      className={cn(
+                        "w-full flex items-center justify-between border px-4 py-3 text-left transition-colors",
+                        on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                      )}
+                    >
+                      <div>
+                        <div className="font-serif text-[15px] leading-tight">{p.label}</div>
+                        <div className={cn("text-[11px] mt-0.5", on ? "text-ink-foreground/70" : "text-muted-foreground")}>{p.note}</div>
+                      </div>
+                      {on && <Check className="h-4 w-4" strokeWidth={1.5} />}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {purpose && (
+              <div className="mt-6">
+                <div className="editorial-eyebrow text-muted-foreground mb-2">Anything I should know?</div>
+                <input
+                  type="text"
+                  value={purposeNote}
+                  onChange={(e) => setPurposeNote(e.target.value)}
+                  placeholder="A name, a date, a quiet detail. Skip if not."
+                  className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-base py-2 placeholder:text-muted-foreground/60"
+                />
+              </div>
+            )}
+
+            {purpose && (
+              <div className="mt-7">
+                <CuraWhisper variant="inline">
+                  Noted. The reason quietly changes everything: pace, table sizes, what I'd never suggest.
+                </CuraWhisper>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ---------- SHORT PATH STEP 3 — DESTINATION ---------- */}
         {isShortDestination && (
           <>
-            <div className="editorial-eyebrow text-muted-foreground mb-3">iii. Destination</div>
+            <div className="editorial-eyebrow text-muted-foreground mb-3">iv. Destination</div>
             <h2 className="display-lg max-w-[14ch]">
               Where are you <span className="italic-serif">thinking?</span>
             </h2>
@@ -492,22 +549,20 @@ const Onboarding = () => {
             </p>
 
             <div className="mt-7">
-              <div className="editorial-eyebrow text-muted-foreground mb-2">Where</div>
               <CityInput value={destination} onChange={setDestination} placeholder="Type a place. Anywhere in the world." />
-              <div className="mt-1 text-[11px] text-muted-foreground">
-                No list, no limits. Tell me where you're thinking and I'll meet you there.
-              </div>
             </div>
 
-            <div className="mt-8">
-              <CuraWhisper variant="inline">
-                Good. I won't try to talk you out of it. But I might suggest you go in a different month.
-              </CuraWhisper>
-            </div>
+            {destination.trim().length >= 2 && (
+              <div className="mt-8">
+                <CuraWhisper variant="inline">
+                  Good. I won't try to talk you out of it. I might suggest you go in a different month.
+                </CuraWhisper>
+              </div>
+            )}
           </>
         )}
 
-        {/* ---------- CONTEXT (full step 2  ·  short step 3) ---------- */}
+        {/* ---------- CONTEXT (full step 3  ·  short step 4) ---------- */}
         {(isFullContext || isShortContext) && (
           <>
             <div className="editorial-eyebrow text-muted-foreground mb-3">
