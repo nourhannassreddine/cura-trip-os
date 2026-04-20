@@ -1,88 +1,73 @@
+## Goal
+
+Stop fighting the carousel. Lock the hero into a true horizontal landscape banner, generate **7 cohesive surreal frames** (Jacquemus-adjacent, muted not bright) where each image is composed *for that exact frame* (no `object-contain` letterboxing, no `object-cover` cropping of subjects), and replace the subheadline with one line that actually sounds like CURA.
+
+## Why the framing keeps breaking
+
+The hero is currently `h-[44dvh]` inside a 440px-wide shell. That ratio is a moving target across devices, so we either crop subjects (`object-cover`) or letterbox them (`object-contain`, current state). Neither is acceptable for an editorial cover.
+
+**Fix at the container level first**: lock the hero to a fixed landscape ratio (`aspect-[3/2]`, ~440×293) so the visible canvas is *predictable*. Then generate every image at the matching 3:2 ratio (1536×1024) with the subject framed inside a safe zone. Use `object-cover` (no blur backdrop, no letterbox), and keep `object-position: center` — because the source already fits, nothing gets cut.
+
+## Hero set — 7 frames, one album
+
+Direction: **Jacquemus × Tim Walker × Slim Aarons in a low-saturation dust-and-cream palette**. Sun-faded, slightly chalky, never neon. Single oversized object per frame, single tiny human or none. Quiet surrealism. One unified light: late-morning to soft-afternoon, never night. No two frames in the same environment.
 
 
-## Refactor: Multi-path entry + logic-driven calibration
+| #   | Frame                                                                                                        | Palette anchor                 | Logo tone |
+| --- | ------------------------------------------------------------------------------------------------------------ | ------------------------------ | --------- |
+| 1   | A colossal cream silk ribbon coiling slowly across pale dunes, one set of footprints leading into it         | warm sand, ivory               | dark      |
+| 2   | An enormous terracotta urn lying on its side in a quiet olive grove, light spilling out like water           | clay, olive, bone              | dark      |
+| 3   | A giant folded white linen napkin standing upright on a bare wooden table on a sunlit terrace, sea behind    | bleached blue, linen           | dark      |
+| 4   | A monumental matte-black rotary telephone half-buried in a pale rose desert, receiver slightly off the hook  | dust pink, ink black           | light     |
+| 5   | A vast pearl-grey storm cloud the size of a building, parked low over a quiet stone village square at midday | slate, stone, cream            | light     |
+| 6   | A giant single brass key resting on still water in a flooded marble courtyard, soft reflections              | water-grey, brass              | dark      |
+| 7   | A house-sized woven straw basket placed gently on a mountain road at golden hour, lavender hills behind      | wheat, faded purple, dusk gold | dark      |
 
-### 1. Visual fixes (Welcome.tsx)
-- **Hero**: regenerate `welcome-surreal.jpg` as a surreal **water/beach** scene (oversized object on wet sand, white-linen figure walking), not desert.
-- **Logo**: move "cura" (lowercase, Playfair) to **top-left** of the image with breathing padding, not edge-aligned. Remove right-side "CURA" mark.
-- **Caption hierarchy**: clean stack — `PLATE I` eyebrow → thin rule → `"Scale, reconsidered."` italic line. No overlap.
-- **Layout**: shrink hero to ~48dvh, tighten headline + supporting paragraph, ensure entire screen fits in 832px viewport without scroll.
-- **CTAs**: keep "Begin" as the bordered ink button; downgrade "I already have an account" to a **plain text link** centered below.
 
-### 2. New entry routing (replaces direct → /onboarding)
-"Begin" now routes to a new screen **`/begin`** — *"Where are you right now?"*
+Cohesion is enforced by: same desaturated film stock look, same soft directional light, no bright primaries (the current ice-cream/origami/balloon all break this — they go).
+
+Old assets (`welcome-surreal-2…10.jpg`) get **regenerated in place** at 1536×1024, so the import paths stay clean. We drop the 8th, 9th, and 10th slots entirely.
+
+## Subheadline — final pass
+
+Headline stays: *"A system with taste. And opinions."*
+
+New subheadline (one line, CURA voice, confident, slightly amused, no justification):
+
+> **"You bring the appetite. Cura will handle the rest."**
+
+Tone notes: first-person singular (CURA speaks as a person, matching `CuraWhisper` voice across the app), declarative, faintly imperious, not explaining mechanics.
+
+If the user prefers a less literal version, the alternate held in reserve is:
+*"Tell me you're going. I already know how."*
+
+Only one ships.
+
+## Other Welcome copy
+
+Everything else on the page stays exactly as is — Plate I rotating thought, eyebrow, headline, Begin CTA, footer imprint. No structural changes.
+
+## Technical changes
 
 ```text
-┌──────────────────────────────┐
-│  WHERE ARE YOU RIGHT NOW?    │
-│  Not physically. In the trip.│
-│                              │
-│  ─ I don't know where to go  │  → /onboarding?path=full
-│    I have the urge, not plan │
-│  ─ I have somewhere in mind  │  → /onboarding?path=short
-│    Help me shape it properly │
-│  ─ I'm choosing between      │  → /compare?seed=auto
-│    Help me decide            │
-│  ─ I already have a trip     │  → /trip/new
-│    Organize or improve it    │
-└──────────────────────────────┘
+src/pages/Welcome.tsx
+├── Hero container: h-[44dvh]  →  aspect-[3/2] w-full
+├── Drop the blur backdrop <img> + the object-contain pattern
+├── Single <img> per frame, object-cover, position center
+├── frames[] trimmed from 10 → 7, alts + logoTone updated
+└── Subheadline string replaced
+
+src/assets/
+├── welcome-surreal.jpg       → regenerate (frame 1, ribbon dunes)
+├── welcome-surreal-2.jpg     → regenerate (urn / olive grove)
+├── welcome-surreal-3.jpg     → regenerate (linen napkin terrace)
+├── welcome-surreal-4.jpg     → regenerate (rotary telephone desert)
+├── welcome-surreal-5.jpg     → regenerate (storm cloud village)
+├── welcome-surreal-6.jpg     → regenerate (brass key marble courtyard)
+├── welcome-surreal-7.jpg     → regenerate (straw basket mountain road)
+└── welcome-surreal-8/9/10.jpg → unused (left in place, no imports)
 ```
 
-Editorial style: numbered roman (i, ii, iii, iv), asymmetric — first item indented, full-width borders, no card grid.
+All images generated at 1536×1024 (3:2) using the high-quality image model, with explicit "centered subject, safe margins on all four sides, full subject visible, horizontal landscape composition" framing instructions to prevent the cropping problem from recurring.
 
-### 3. Onboarding becomes path-aware (Onboarding.tsx)
-Read `?path=full|short` query param. Same component, two flows:
-
-**Full path (5 steps — existing, with one addition)**
-- Feel · Decide · **Context (+Departure)** · Dealbreakers · Reading
-- Add new "Departure" subsection in Context: searchable city input (free text + datalist of ~25 global cities: Lagos, NYC, London, Lisbon, Dubai, Mumbai, São Paulo, etc.). Required.
-
-**Short path (3 steps)**
-- Feel · Decide · **Context (condensed)**
-- Context shows ONLY: Departure city, Usually with, Money honestly. No passport, no dealbreakers.
-- Final continue → `/trip/new` (skip the Reading screen and Puglia auto-pick — user already has destination).
-
-`stepCount` and `canContinue` switch by path. Progress bar adapts (5 vs 3 segments).
-
-### 4. Question expansion
-**Moods** — add: `solo` ("Alone, on purpose"), `luxury` ("Quiet luxury, no logos"), `spontaneous` ("Plans are suggestions"), `structured` ("A clean schedule is a kindness"). Each gets a CURA reaction line.
-
-**Money, honestly** — replace 4 with 4 sharper:
-- `luxury-first` — "I start at the top and work down"
-- `balanced` — "I spend where it shows"
-- `budget-aware` — "I want range, not stretch"
-- `impulsive` — "I decide at the table"
-
-**Dealbreakers** — replace vague items, expand to 12 across logistics/crowds/pricing/food/pace:
-crowds, early starts, long transfers, tourist traps, hotel noise, rushing, bad coffee, hidden fees, chain restaurants, over-planned days, dead nightlife, slow wifi.
-
-### 5. Behavioral output (state persistence)
-Create **`src/lib/profile.ts`** — small store (localStorage) with `saveProfile()` / `loadProfile()`:
-```ts
-{ path, moods[], pace, departure, passport?, company, spend, dealbreakers[] }
-```
-Wire into Onboarding submit + expose `useProfile()` hook. Other screens (Dream, Itinerary, Compare) can read it later — for now we just persist + log so behavior is wired, not passive.
-
-### 6. Compare page seeding (Compare.tsx)
-Read `?seed=auto` — if present, show banner: *"You didn't bring places. I picked three you'd actually consider."* Already pre-loads 3 destinations — just add the framing line + a "Bring your own" link.
-
-### 7. Routing (App.tsx)
-- `/` → Welcome
-- `/begin` → **new** EntryGate page
-- `/onboarding` → existing (now reads `?path`)
-- `/compare?seed=auto` → existing
-- `/trip/new` → existing
-
----
-
-**Files touched**
-- `src/pages/Welcome.tsx` — visual fixes, route to `/begin`
-- `src/pages/EntryGate.tsx` — **new**, the 4-path screen
-- `src/pages/Onboarding.tsx` — path-aware (full vs short), add Departure, expanded options, persist profile
-- `src/pages/Compare.tsx` — seed banner
-- `src/lib/profile.ts` — **new**, profile persistence
-- `src/App.tsx` — register `/begin`
-- `src/assets/welcome-surreal.jpg` — regenerate (surreal water/beach)
-
-No data model changes to `cura.ts`. No changes to existing trip workspace, journal, or other engines.
-
+No changes to EntryGate, Onboarding, copy elsewhere, routing, or design tokens.
