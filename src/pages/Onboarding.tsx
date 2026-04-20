@@ -665,7 +665,8 @@ const Onboarding = () => {
                   </div>
                 )}
 
-                {partnerSameDeparture !== null && (
+                {(partnerSameDeparture === true ||
+                  (partnerSameDeparture === false && partnerDeparture.trim().length >= 2)) && (
                   <div>
                     <div className="editorial-eyebrow text-muted-foreground mb-2">Invite them to this trip</div>
                     <input
@@ -675,7 +676,7 @@ const Onboarding = () => {
                       placeholder="their@email.com"
                       className="w-full bg-transparent border-b border-foreground/30 focus:border-foreground outline-none font-serif text-base py-2 placeholder:text-muted-foreground/60"
                     />
-                    <div className="mt-1 text-[11px] text-muted-foreground">Optional. They'll get the workspace, not a marketing email.</div>
+                    <div className="mt-1 text-[11px] text-muted-foreground">They'll get the workspace, not a marketing email.</div>
                   </div>
                 )}
               </div>
