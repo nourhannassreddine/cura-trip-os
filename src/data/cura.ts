@@ -6,6 +6,8 @@ import puglia from "@/assets/hero-puglia.jpg";
 import marrakech from "@/assets/hero-marrakech.jpg";
 import santorini from "@/assets/hero-santorini.jpg";
 import still from "@/assets/still-objects.jpg";
+import archive1 from "@/assets/archive-1.jpg";
+import archive2 from "@/assets/archive-2.jpg";
 
 export const heroImages = { lisbon, puglia, marrakech, santorini, still };
 
@@ -355,16 +357,29 @@ export interface JournalEntry {
   day: string;
   narrative: string;     // CURA's auto-generated summary
   highlight: string;     // the one moment to remember
+  // Archive card fields (used on Home / archive cards)
+  city?: string;
+  dateRange?: string;
+  cover?: string;
+  quote?: string;        // short editorial pull-quote for archive card
 }
 
 export const journalEntries: JournalEntry[] = [
   {
     day: "Day 1 · Lisbon",
+    city: "Lisbon",
+    dateRange: "Oct 18 — Oct 24, 2024",
+    cover: archive1,
+    quote: "Yellow afternoons. The pastéis were better the second day.",
     narrative: "You walked 9km, mostly downhill. Lunch ran late, dinner ran later. You stayed at the table after the bill came — that's usually a good sign.",
     highlight: "The pastel was better the second day. Try Manteigaria next time.",
   },
   {
-    day: "Day 2 · Lisbon",
+    day: "Day 2 · Kyoto",
+    city: "Kyoto",
+    dateRange: "Apr 02 — Apr 09, 2024",
+    cover: archive2,
+    quote: "Lanterns on wet stone. We ate where the queue wasn't.",
     narrative: "Slow morning. You skipped the tram and walked Alfama instead. You bought the linen shirt you'd been thinking about for 3 trips.",
     highlight: "Alfama, not Bairro Alto. Save this for next time.",
   },
