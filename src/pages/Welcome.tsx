@@ -8,8 +8,7 @@ import surreal4 from "@/assets/welcome-surreal-4.jpg";
 import surreal5 from "@/assets/welcome-surreal-5.jpg";
 import surreal6 from "@/assets/welcome-surreal-6.jpg";
 import surreal7 from "@/assets/welcome-surreal-7.jpg";
-import surreal8 from "@/assets/welcome-surreal-8.jpg";
-import surreal9 from "@/assets/welcome-surreal-9.jpg";
+import surreal8 from "@/assets/welcome-surreal-9.jpg";
 
 /* ------------------------------------------------------------------
    Welcome - Plate I.
@@ -25,15 +24,14 @@ type Frame = { src: string; alt: string };
    saturation, single oversized object per frame. Each composed for the locked
    3:2 horizontal banner so subjects sit fully inside the frame. */
 const frames: Frame[] = [
-  { src: surreal1, alt: "A colossal cream silk ribbon coiling impossibly across pale dunes, soft footprints leading into it" },
-  { src: surreal2, alt: "A giant beautiful seashell larger than a person resting on an empty beach in soft morning light" },
-  { src: surreal3, alt: "A folded white linen napkin standing upright on a terrace table over the sea, paper birds emerging from the fold" },
+  { src: surreal1, alt: "A colossal slightly-open pomegranate on pale dunes with seeds spilled on the sand, a tiny figure standing beside it for scale" },
+  { src: surreal2, alt: "A house-sized seashell on an empty beach, a tiny figure standing at its base for perspective, soft morning light" },
+  { src: surreal3, alt: "A giant porcelain teacup tipped on its side on a sunlit Mediterranean terrace, calm sea spilling out across the tiles" },
   { src: surreal4, alt: "A house-sized woven straw sun hat casting a circular shadow on a sunlit plaza, a tiny figure standing in the shade" },
   { src: surreal5, alt: "A snowy alpine peak with a giant pastel pink ice cream cone planted upright in the summit" },
   { src: surreal6, alt: "A colossal hot-air balloon carrying a tiny Mediterranean village in baskets, drifting over a wildflower meadow" },
-  { src: surreal7, alt: "A small figure crouched on the floor, looking down at an enormous unfolded paper map larger than a room" },
-  { src: surreal8, alt: "A larger-than-life painterly flamingo standing in a tropical lagoon, towering over palms and still water" },
-  { src: surreal9, alt: "Three colossal green olives balanced on an empty Mediterranean rooftop, calm sea in the distance" },
+  { src: surreal7, alt: "A tiny figure standing outdoors on a soft hillside, holding up an enormous unfolded paper map and looking at it" },
+  { src: surreal8, alt: "Three colossal green olives balanced on an empty Mediterranean rooftop, calm sea in the distance" },
 ];
 
 /* Rotating editorial thought - chosen once per app open.
@@ -104,7 +102,7 @@ const Welcome = () => {
             A system <span className="italic-serif">with taste.</span><br />
             And <span className="italic-serif">opinions.</span>
           </h1>
-          <p className="mt-3 text-[13px] leading-relaxed text-foreground/70 max-w-[34ch]">
+          <p className="mt-3 text-[13px] leading-relaxed text-foreground/70 whitespace-nowrap">
             You bring the appetite. Cura will handle the rest.
           </p>
         </section>
