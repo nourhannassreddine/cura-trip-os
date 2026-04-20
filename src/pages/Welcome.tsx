@@ -22,21 +22,38 @@ import surreal10 from "@/assets/welcome-surreal-10.jpg";
 
 type Frame = { src: string; alt: string; logoTone: "dark" | "light" };
 
+/* 10 frames, locked. All warm/light palette - same album, same hour of day.
+   logoTone flips to "light" (white) on any frame whose top-left region is
+   bright enough that black would be lost. */
 const frames: Frame[] = [
   { src: surreal1, alt: "An enormous ripe peach the size of a small house in a field of pale lavender at golden hour, a tiny figure in pink linen walking toward it", logoTone: "dark" },
-  { src: surreal2, alt: "An enormous low cumulus cloud hovering over a vast empty pale-green meadow at dusk, casting a soft round shadow on the grass, a tiny figure in a long red dress standing inside the shadow looking up", logoTone: "dark" },
-  { src: surreal3, alt: "An oversized ripe orange resting in a quiet pastel olive grove, a small woman in a flowing yellow dress walking past for scale", logoTone: "light" },
+  { src: surreal2, alt: "An enormous terracotta urn the size of a small house resting on a pale pink salt flat at golden hour, a tiny figure in a flowing cream linen dress walking past it", logoTone: "dark" },
+  { src: surreal3, alt: "An oversized pale-cream seashell on warm beige sand dunes at soft morning light, a tiny figure in a pale blue linen dress walking past it", logoTone: "dark" },
   { src: surreal4, alt: "A giant pastel pink suitcase abandoned on a vast empty salt flat, a tiny figure in a wide straw hat sitting on top", logoTone: "dark" },
-  { src: surreal5, alt: "An enormous white linen sheet draped over an invisible form on a warm pink stucco rooftop overlooking a sleepy Mediterranean village at dusk", logoTone: "dark" },
-  { src: surreal6, alt: "A colossal pearlescent shellfish on wet reflective sand at a quiet pale-blue beach at dawn, a tiny figure in cream linen standing beside it", logoTone: "dark" },
+  { src: surreal5, alt: "An enormous white linen sheet draped over an invisible form on a warm pink stucco rooftop overlooking a sleepy Mediterranean village at dusk", logoTone: "light" },
+  { src: surreal6, alt: "A colossal pearlescent shellfish on wet reflective sand at a quiet pale-blue beach at dawn, a tiny figure in cream linen standing beside it", logoTone: "light" },
   { src: surreal7, alt: "An enormous straw sun hat casting a perfect circular shadow on a sun-bleached pink stucco plaza, a tiny figure in a red dress standing inside the shadow", logoTone: "light" },
   { src: surreal8, alt: "An enormous antique brass pocket watch the size of a small car half-buried in soft pale pink desert sand at golden hour, a tiny figure in a flowing cream linen dress walking past it", logoTone: "light" },
-  { src: surreal9, alt: "An oversized antique brass key the length of a bus laying flat on cracked white salt flats under a pale lavender sky", logoTone: "dark" },
+  { src: surreal9, alt: "An oversized antique brass key the length of a bus laying flat on cracked white salt flats under a pale lavender sky", logoTone: "light" },
   { src: surreal10, alt: "A massive blank folded paper map standing upright like a sail on a calm green hillside at dusk, a tiny figure in a white shirt looking up at it", logoTone: "dark" },
+];
+
+/* Rotating editorial thought - chosen once per app open.
+   These are observations, not motivation. CURA's voice. */
+const thoughts: string[] = [
+  "Most trips are decided before they are planned.",
+  "The good ones happen on purpose.",
+  "Taste is the part of you that does not need a reason.",
+  "A trip is a sequence of small refusals.",
+  "Where you go is rarely the question. How you go is.",
+  "The interesting part of any city is what it asks of you.",
+  "Itineraries are written. Trips are edited.",
 ];
 
 const Welcome = () => {
   const [i, setI] = useState(0);
+  // Pick a thought once per mount (i.e. per app open).
+  const [thought] = useState(() => thoughts[Math.floor(Math.random() * thoughts.length)]);
 
   useEffect(() => {
     const id = setInterval(() => setI((n) => (n + 1) % frames.length), 6000);
@@ -78,12 +95,13 @@ const Welcome = () => {
 
       {/* Everything below the image shares the same px-5 rhythm */}
       <div className="flex-1 flex flex-col px-5">
-        {/* Caption sits cleanly under the image, aligned to the same gutter */}
+        {/* Caption sits cleanly under the image, aligned to the same gutter.
+            Eyebrow is a fixed system label; the line below rotates per app open. */}
         <div className="pt-4 cura-rise">
-          <div className="editorial-eyebrow text-muted-foreground">Plate I · A note before you begin</div>
+          <div className="editorial-eyebrow text-muted-foreground">A thought before you begin</div>
           <div className="h-px w-8 bg-foreground/40 my-1.5" />
           <p className="italic-serif text-[13px] leading-tight text-foreground/75">
-            "Travel, with judgment."
+            "{thought}"
           </p>
         </div>
 
@@ -94,7 +112,7 @@ const Welcome = () => {
             And <span className="italic-serif">opinions.</span>
           </h1>
           <p className="mt-3 text-[13px] leading-relaxed text-foreground/70 max-w-[34ch]">
-            Cura plans the trip you would have chosen, if you had the time to choose properly.
+            Cura plans the trip you would have chosen.
           </p>
         </section>
 
