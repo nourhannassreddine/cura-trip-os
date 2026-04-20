@@ -380,7 +380,7 @@ const Onboarding = () => {
             <h2 className="display-lg max-w-[12ch]">
               How do you like to <span className="italic-serif">feel</span> on a trip?
             </h2>
-            <p className="mt-3 text-sm text-muted-foreground">Pick two or three. Don't overthink it — I'm watching the pattern, not the labels.</p>
+            <p className="mt-3 text-sm text-muted-foreground">Pick two or three. Don't overthink it. I'm watching the pattern, not the labels.</p>
 
             <ul className="mt-7 space-y-2">
               {moods.map((m) => {
@@ -464,9 +464,9 @@ const Onboarding = () => {
 
             <div className="mt-7">
               <div className="editorial-eyebrow text-muted-foreground mb-2">Where</div>
-              <CityInput value={destination} onChange={setDestination} placeholder="Type a place — anywhere" />
+              <CityInput value={destination} onChange={setDestination} placeholder="Type a place. Anywhere in the world." />
               <div className="mt-1 text-[11px] text-muted-foreground">
-                Hints are world cities. I accept anything you type. Mapped against Google.
+                No list, no limits. Tell me where you're thinking and I'll meet you there.
               </div>
             </div>
 

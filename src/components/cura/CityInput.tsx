@@ -13,7 +13,7 @@ interface Props {
   placeholder?: string;
 }
 
-export function CityInput({ value, onChange, placeholder = "Type a city — anywhere" }: Props) {
+export function CityInput({ value, onChange, placeholder = "Type a city. Anywhere." }: Props) {
   const id = useId();
   return (
     <>
