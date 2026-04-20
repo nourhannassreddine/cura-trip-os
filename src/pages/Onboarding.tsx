@@ -566,7 +566,7 @@ const Onboarding = () => {
         {(isFullContext || isShortContext) && (
           <>
             <div className="editorial-eyebrow text-muted-foreground mb-3">
-              {isShort ? "iv." : "iii."} Context
+              {isShort ? "v." : "iv."} Context
             </div>
             <h2 className="display-lg max-w-[14ch]">
               The <span className="italic-serif">facts</span> of how you move.
