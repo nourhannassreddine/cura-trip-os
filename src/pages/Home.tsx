@@ -2,9 +2,51 @@ import { Link } from "react-router-dom";
 import { Plus, Bell, ArrowRight, Sparkles, AlertCircle } from "lucide-react";
 import { BottomNav } from "@/components/cura/BottomNav";
 import { CuraWhisper } from "@/components/cura/CuraWhisper";
-import { Tag } from "@/components/cura/Tag";
-import { trips, curaWhispers, packing } from "@/data/cura";
+import { trips, curaWhispers, packing, destinations, journalEntries } from "@/data/cura";
 import fieldnote from "@/assets/home-fieldnote.jpg";
+
+/* Status sticker — small identifier chip whose color encodes trip phase.
+   Each status gets its own token so the eye learns the system.
+   - dreaming → sky (faded blue, low commitment)
+   - planning → primary (sun-faded orange, in motion)
+   - ready    → olive (committed, almost there)
+   - live     → ink (the trip is now)
+   - memory   → outline (past, archived) */
+const statusStyles: Record<string, string> = {
+  dreaming: "bg-sky-soft text-foreground",
+  planning: "bg-primary-soft text-foreground",
+  ready: "bg-olive-soft text-foreground",
+  live: "bg-ink text-ink-foreground",
+  memory: "border border-foreground/25 text-foreground",
+};
+
+/* Solid action-button surface for "Continue ___" — shares the sticker's color
+   so the user reads card + button as the same identifier system. */
+const statusActionStyles: Record<string, string> = {
+  dreaming: "bg-sky text-sky-foreground border-sky",
+  planning: "bg-primary text-primary-foreground border-primary",
+  ready: "bg-olive text-olive-foreground border-olive",
+  live: "bg-ink text-ink-foreground border-ink",
+  memory: "bg-foreground text-background border-foreground",
+};
+
+const statusVerb: Record<string, string> = {
+  dreaming: "Continue dreaming",
+  planning: "Continue planning",
+  ready: "Open trip",
+  live: "Open today",
+  memory: "Revisit",
+};
+
+const StatusSticker = ({ status }: { status: string }) => (
+  <span
+    className={`inline-flex items-center px-2 py-0.5 text-[10px] tracking-[0.16em] uppercase ${
+      statusStyles[status] ?? statusStyles.planning
+    }`}
+  >
+    {status}
+  </span>
+);
 
 const Home = () => {
   // Active trips, sorted by closest first.
@@ -12,24 +54,32 @@ const Home = () => {
     .filter((t) => t.status !== "memory")
     .sort((a, b) => a.daysOut - b.daysOut);
 
-  // The one trip the user is actually working on.
   const primary = active[0];
   const secondary = active.slice(1);
 
-  // What's missing: packing items not yet packed (drives "See what's missing")
+  // Drives "See what's missing"
   const missingCount = packing.filter((p) => !p.packed).length;
+
+  // Elsewhere — destinations the user hasn't claimed as a trip yet.
+  const claimedIds = new Set(trips.map((t) => t.id.split("-")[0]));
+  const elsewhere = destinations.filter((d) => !claimedIds.has(d.id)).slice(0, 3);
+
+  const archive = journalEntries.slice(0, 2);
 
   return (
     <main className="app-shell pb-20">
-      {/* Header — editorial masthead, locked white-on-paper logo treatment */}
-      <header className="px-5 pt-5 pb-2 flex items-center justify-between">
+      {/* Header — logo locked top-left, date sits underneath as the timestamp.
+          Right cluster keeps the two utility actions. */}
+      <header className="px-5 pt-5 pb-2 flex items-start justify-between">
         <div>
-          <div className="editorial-eyebrow text-muted-foreground">Tuesday · 4:12 pm</div>
-          <div className="font-serif lowercase text-2xl leading-none tracking-tight mt-0.5">
+          <div className="font-serif lowercase text-2xl leading-none tracking-tight">
             cura
           </div>
+          <div className="editorial-eyebrow text-muted-foreground mt-1.5">
+            Tuesday · 4:12 pm
+          </div>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 -mr-2">
           <button aria-label="Notifications" className="p-2 hover:opacity-70">
             <Bell className="h-5 w-5" strokeWidth={1.5} />
           </button>
@@ -39,8 +89,8 @@ const Home = () => {
         </div>
       </header>
 
-      {/* Hero — tightened: greeting + whisper, kept as entry not focus */}
-      <section className="px-5 pt-1 pb-4 cura-rise">
+      {/* Hero — greeting + days-to header. Tight, an entry not the focus. */}
+      <section className="px-5 pt-3 pb-4 cura-rise">
         <div className="flex items-end justify-between">
           <h1 className="font-serif text-[40px] leading-[0.95] max-w-[10ch]">
             Good afternoon, <span className="italic-serif">Lia</span>.
@@ -52,8 +102,10 @@ const Home = () => {
             </div>
           )}
         </div>
-        <div className="mt-4">
-          <CuraWhisper variant="inline">{curaWhispers[0]}</CuraWhisper>
+        {/* Cura whisper — the original block treatment with the orange rule
+            on the left. Reads as an editor's margin note, not inline copy. */}
+        <div className="mt-5">
+          <CuraWhisper variant="block">{curaWhispers[0]}</CuraWhisper>
         </div>
       </section>
 
@@ -74,7 +126,7 @@ const Home = () => {
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute top-3 left-3">
-                <Tag variant="ink">{primary.status}</Tag>
+                <StatusSticker status={primary.status} />
               </div>
               <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
                 <div className="editorial-eyebrow text-white/80">{primary.country}</div>
@@ -99,13 +151,18 @@ const Home = () => {
               </div>
             </div>
 
-            {/* ACTION LAYER — what to do next */}
+            {/* ACTION LAYER — primary CTA color matches the status sticker
+                so the card reads as a single identifier system. */}
             <div className="p-4 pt-3">
               <Link
                 to={`/trip/${primary.id}`}
-                className="group flex items-center justify-between border border-foreground bg-ink text-ink-foreground px-4 py-3"
+                className={`group flex items-center justify-between border px-4 py-3 ${
+                  statusActionStyles[primary.status] ?? statusActionStyles.planning
+                }`}
               >
-                <span className="font-sans text-sm tracking-wide">Continue planning</span>
+                <span className="font-sans text-sm tracking-wide">
+                  {statusVerb[primary.status] ?? "Open trip"}
+                </span>
                 <ArrowRight
                   className="h-4 w-4 transition-transform group-hover:translate-x-1"
                   strokeWidth={1.5}
@@ -135,7 +192,7 @@ const Home = () => {
         </section>
       )}
 
-      {/* SECONDARY TRIPS — compact list */}
+      {/* SECONDARY TRIPS — compact list, status sticker on the right */}
       {secondary.length > 0 && (
         <section className="mt-8 px-5">
           <div className="flex items-baseline justify-between mb-3">
@@ -169,7 +226,7 @@ const Home = () => {
                     </div>
                   </div>
                   <div className="pr-3 text-right">
-                    <Tag variant="outline">{t.status}</Tag>
+                    <StatusSticker status={t.status} />
                     <div className="text-[10px] text-muted-foreground mt-1">
                       {t.readiness}%
                     </div>
@@ -186,7 +243,7 @@ const Home = () => {
         <div className="col-span-3 relative h-[200px]">
           <img
             src={fieldnote}
-            alt="Linen, straw hat, leather sandals and a gold hoop on warm beige stone"
+            alt="A flat-lay of a straw hat, folded linen, leather sandals and olives on warm stone"
             loading="lazy"
             className="h-full w-full object-cover"
           />
@@ -202,10 +259,76 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Editorial imprint — consistent with Welcome */}
+      {/* ELSEWHERE — small list of destinations not yet claimed as a trip.
+          Lives below the field note: discovery, not the priority. */}
+      {elsewhere.length > 0 && (
+        <section className="mt-10 px-5">
+          <div className="flex items-baseline justify-between mb-3">
+            <div className="editorial-eyebrow text-muted-foreground">A small list of elsewhere</div>
+            <Link
+              to="/discover"
+              className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground"
+            >
+              Discover
+            </Link>
+          </div>
+          <ul className="divide-y divide-foreground/10 border-t border-b border-foreground/10">
+            {elsewhere.map((d) => (
+              <li key={d.id}>
+                <Link
+                  to="/discover"
+                  className="flex items-baseline justify-between py-3 hover:bg-paper/60 px-1 -mx-1 transition-colors"
+                >
+                  <div className="min-w-0 pr-3">
+                    <div className="font-serif text-[17px] leading-tight">
+                      {d.name}
+                      <span className="text-muted-foreground font-sans text-[11px] tracking-wide ml-2">
+                        {d.country}
+                      </span>
+                    </div>
+                    <div className="italic-serif text-[12px] text-foreground/65 mt-0.5">
+                      {d.tagline}
+                    </div>
+                  </div>
+                  <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground shrink-0">
+                    {d.flightHrs}
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* FROM THE ARCHIVE — auto-narrative from past trips. Memory layer. */}
+      {archive.length > 0 && (
+        <section className="mt-10 px-5">
+          <div className="flex items-baseline justify-between mb-3">
+            <div className="editorial-eyebrow text-muted-foreground">From the archive</div>
+            <Link
+              to="/journal"
+              className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground"
+            >
+              Journal
+            </Link>
+          </div>
+          <ul className="space-y-4">
+            {archive.map((j) => (
+              <li key={j.day} className="border-l-2 border-foreground/20 pl-3">
+                <div className="editorial-eyebrow text-muted-foreground">{j.day}</div>
+                <p className="italic-serif text-[14px] leading-snug text-foreground/80 mt-1">
+                  {j.narrative}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Editorial imprint — matched to Welcome (No. 001 · Vol. I · Spring) */}
       <footer
         aria-label="Edition imprint"
-        className="px-5 pt-6 pb-4 flex justify-between text-[10px] tracking-[0.22em] uppercase text-foreground/35 select-none"
+        className="px-5 pt-8 pb-4 flex justify-between text-[10px] tracking-[0.22em] uppercase text-foreground/35 select-none"
       >
         <span>No. 001</span>
         <span>Vol. I · Spring</span>
