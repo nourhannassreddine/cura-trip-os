@@ -27,14 +27,14 @@ type Frame = { src: string; alt: string; logoTone: "dark" | "light" };
    bright enough that black would be lost. */
 const frames: Frame[] = [
   { src: surreal1, alt: "An enormous ripe peach the size of a small house in a field of pale lavender at golden hour, a tiny figure in pink linen walking toward it", logoTone: "dark" },
-  { src: surreal2, alt: "An enormous terracotta urn the size of a small house resting on a pale pink salt flat at golden hour, a tiny figure in a flowing cream linen dress walking past it", logoTone: "dark" },
-  { src: surreal3, alt: "An oversized pale-cream seashell on warm beige sand dunes at soft morning light, a tiny figure in a pale blue linen dress walking past it", logoTone: "dark" },
-  { src: surreal4, alt: "A giant pastel pink suitcase abandoned on a vast empty salt flat, a tiny figure in a wide straw hat sitting on top", logoTone: "dark" },
+  { src: surreal2, alt: "A colossal cherry-red vintage rotary telephone floating above a turquoise tropical lagoon framed by lush palms, a tiny figure in a yellow swimsuit on a small wooden boat", logoTone: "dark" },
+  { src: surreal3, alt: "A giant sky-blue origami paper crane perched on a glossy wet street in Tokyo at dusk, soft pink and violet neon glow, a tiny figure in a long red coat with a clear umbrella", logoTone: "light" },
+  { src: surreal4, alt: "An enormous pastel mint green ice cream cone standing upright on a snowy mountain peak under a clear cobalt blue sky, a tiny figure in a bright orange puffer jacket at the base", logoTone: "light" },
   { src: surreal5, alt: "An enormous white linen sheet draped over an invisible form on a warm pink stucco rooftop overlooking a sleepy Mediterranean village at dusk", logoTone: "light" },
   { src: surreal6, alt: "A colossal pearlescent shellfish on wet reflective sand at a quiet pale-blue beach at dawn, a tiny figure in cream linen standing beside it", logoTone: "light" },
   { src: surreal7, alt: "An enormous straw sun hat casting a perfect circular shadow on a sun-bleached pink stucco plaza, a tiny figure in a red dress standing inside the shadow", logoTone: "light" },
-  { src: surreal8, alt: "An enormous antique brass pocket watch the size of a small car half-buried in soft pale pink desert sand at golden hour, a tiny figure in a flowing cream linen dress walking past it", logoTone: "light" },
-  { src: surreal9, alt: "An oversized antique brass key the length of a bus laying flat on cracked white salt flats under a pale lavender sky", logoTone: "light" },
+  { src: surreal8, alt: "A colossal tangerine orange hot air balloon floating low over a vast field of golden sunflowers at golden hour", logoTone: "light" },
+  { src: surreal9, alt: "A giant fuchsia pink hibiscus flower blooming in a dense emerald green jungle clearing with golden sunlight filtering through the canopy, a tiny figure in a white linen dress in front of one petal", logoTone: "dark" },
   { src: surreal10, alt: "A massive blank folded paper map standing upright like a sail on a calm green hillside at dusk, a tiny figure in a white shirt looking up at it", logoTone: "dark" },
 ];
 
@@ -98,7 +98,7 @@ const Welcome = () => {
         {/* Caption sits cleanly under the image, aligned to the same gutter.
             Eyebrow is a fixed system label; the line below rotates per app open. */}
         <div className="pt-4 cura-rise">
-          <div className="editorial-eyebrow text-muted-foreground">A thought before you begin</div>
+          <div className="editorial-eyebrow text-muted-foreground">Plate I · A thought before you begin</div>
           <div className="h-px w-8 bg-foreground/40 my-1.5" />
           <p className="italic-serif text-[13px] leading-tight text-foreground/75">
             "{thought}"
@@ -112,7 +112,7 @@ const Welcome = () => {
             And <span className="italic-serif">opinions.</span>
           </h1>
           <p className="mt-3 text-[13px] leading-relaxed text-foreground/70 max-w-[34ch]">
-            Cura plans the trip you would have chosen.
+            We already know the trip. We are simply waiting for you to ask.
           </p>
         </section>
 
