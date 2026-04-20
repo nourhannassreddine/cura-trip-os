@@ -33,8 +33,8 @@ const frames: Frame[] = [
   { src: surreal5, alt: "An enormous white linen sheet draped over an invisible form on a warm pink stucco rooftop overlooking a sleepy Mediterranean village at dusk", logoTone: "light" },
   { src: surreal6, alt: "A colossal pearlescent shellfish on wet reflective sand at a quiet pale-blue beach at dawn, a tiny figure in cream linen standing beside it", logoTone: "light" },
   { src: surreal7, alt: "An enormous straw sun hat casting a perfect circular shadow on a sun-bleached pink stucco plaza, a tiny figure in a red dress standing inside the shadow", logoTone: "light" },
-  { src: surreal8, alt: "A colossal pastel sky-blue hot air balloon floating low over an endless meadow of mixed wildflowers in full bloom at golden hour", logoTone: "light" },
-  { src: surreal9, alt: "A giant fuchsia pink hibiscus flower blooming in a dense emerald green jungle clearing with golden sunlight filtering through the canopy, a tiny figure in a white linen dress in front of one petal", logoTone: "dark" },
+  { src: surreal8, alt: "A surreal pastel sky-blue hot air balloon with an entire small Mediterranean village hanging beneath it, drifting low over a vast meadow of mixed wildflowers in full bloom at golden hour", logoTone: "light" },
+  { src: surreal9, alt: "A giant peach-coral hibiscus flower blooming in a dense emerald green jungle clearing with golden sunlight filtering through the canopy, a tiny figure in a white linen dress in front of one petal", logoTone: "dark" },
   { src: surreal10, alt: "A massive blank folded paper map standing upright like a sail on a calm green hillside at dusk, a tiny figure in a white shirt looking up at it", logoTone: "dark" },
 ];
 
@@ -112,7 +112,7 @@ const Welcome = () => {
             And <span className="italic-serif">opinions.</span>
           </h1>
           <p className="mt-3 text-[13px] leading-relaxed text-foreground/70 max-w-[34ch]">
-            The trip is already yours. We hand it over.
+            Cura studies the way you move and quietly walks you into the trip you were always going to love.
           </p>
         </section>
 
