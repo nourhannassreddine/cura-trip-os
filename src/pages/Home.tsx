@@ -90,8 +90,23 @@ const Home = () => {
         </div>
       </header>
 
+      {/* Hero — greeting + days-to header. */}
+      <section className="px-5 pt-3 pb-4 cura-rise">
+        <div className="flex items-end justify-between">
+          <h1 className="font-serif text-[40px] leading-[0.95] max-w-[12ch]">
+            Good afternoon, <span className="italic-serif">Nourhan</span>.
+          </h1>
+          {primary && (
+            <div className="text-right text-xs text-muted-foreground pb-1.5">
+              <div>{primary.daysOut} days</div>
+              <div>to {primary.city}</div>
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* CURA insight strip — Type B: no surface, sits on ivory page bg.
-          First element of scroll body after fixed header. */}
+          Sits between greeting and trip card. */}
       <section className="px-5" style={{ paddingTop: "28px", paddingBottom: "24px" }}>
         <div
           className="font-sans uppercase"
@@ -117,21 +132,6 @@ const Home = () => {
           className="mt-5 w-full"
           style={{ height: "0.5px", background: "hsl(var(--ink) / 0.1)" }}
         />
-      </section>
-
-      {/* Hero — greeting + days-to header. */}
-      <section className="px-5 pt-3 pb-4 cura-rise">
-        <div className="flex items-end justify-between">
-          <h1 className="font-serif text-[40px] leading-[0.95] max-w-[12ch]">
-            Good afternoon, <span className="italic-serif">Nourhan</span>.
-          </h1>
-          {primary && (
-            <div className="text-right text-xs text-muted-foreground pb-1.5">
-              <div>{primary.daysOut} days</div>
-              <div>to {primary.city}</div>
-            </div>
-          )}
-        </div>
       </section>
 
       {/* STATE 1 — no active trips. Single editorial empty state, CURA voice. */}
@@ -368,11 +368,15 @@ const Home = () => {
                 to="/discover"
                 className="snap-start shrink-0 w-[42%] group"
               >
-                <div className="relative aspect-[3/4] overflow-hidden">
+                <div className="relative overflow-hidden" style={{ height: "220px" }}>
                   <img
                     src={d.cover}
                     alt={`${d.name}, ${d.country}`}
                     loading="lazy"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src =
+                        "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&q=80";
+                    }}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute top-2 left-2 bg-ink text-ink-foreground px-1.5 py-0.5 text-[10px] tracking-[0.12em] uppercase z-10">
