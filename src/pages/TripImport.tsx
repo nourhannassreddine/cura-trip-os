@@ -33,7 +33,7 @@ const TripImport = () => {
 
   return (
     <main className="app-shell flex flex-col bg-background">
-      <TopBar back="/begin" eyebrow="Path iv" title="Bring me your trip" />
+      <TopBar back="/begin" eyebrow="PLATE II · ½" title="Import · Your trip" />
 
       <section className="px-5 pt-5 pb-6 cura-rise">
         <div className="editorial-eyebrow text-muted-foreground mb-3">Plate III</div>

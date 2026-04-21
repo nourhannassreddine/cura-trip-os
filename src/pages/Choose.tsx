@@ -77,8 +77,14 @@ const Choose = () => {
     <main className="app-shell flex flex-col bg-background">
       <TopBar
         back={step === 1 ? "/begin" : undefined}
-        eyebrow="Plate II"
-        title="Choose"
+        eyebrow={`MOVEMENT ${step} · OF 3`}
+        title={
+          step === 1
+            ? "Compare · Places"
+            : step === 2
+              ? "Compare · Passports"
+              : "Compare · Departure"
+        }
       />
 
       {step !== 1 && (
