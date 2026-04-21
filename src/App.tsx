@@ -22,6 +22,14 @@ import RouteScreen from "./pages/Route";
 import During from "./pages/During";
 import Journal from "./pages/Journal";
 import Profile from "./pages/Profile";
+import HowYouTravel from "./pages/profile/HowYouTravel";
+import WhatYouTravelFor from "./pages/profile/WhatYouTravelFor";
+import WhatTravelMeans from "./pages/profile/WhatTravelMeans";
+import YourRhythm from "./pages/profile/YourRhythm";
+import InTransit from "./pages/profile/InTransit";
+import WhereYouveBeen from "./pages/profile/WhereYouveBeen";
+import WhatCuraKnows from "./pages/profile/WhatCuraKnows";
+import YourPlan from "./pages/profile/YourPlan";
 import NewTrip from "./pages/NewTrip";
 import TripImport from "./pages/TripImport";
 import Cura from "./pages/Cura";
@@ -63,6 +71,14 @@ const App = () => (
           <Route path="/during" element={<During />} />
           <Route path="/journal" element={<Journal />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/how-you-travel" element={<HowYouTravel />} />
+          <Route path="/profile/what-you-travel-for" element={<WhatYouTravelFor />} />
+          <Route path="/profile/what-travel-means" element={<WhatTravelMeans />} />
+          <Route path="/profile/your-rhythm" element={<YourRhythm />} />
+          <Route path="/profile/in-transit" element={<InTransit />} />
+          <Route path="/profile/where-youve-been" element={<WhereYouveBeen />} />
+          <Route path="/profile/what-cura-knows" element={<WhatCuraKnows />} />
+          <Route path="/profile/your-plan" element={<YourPlan />} />
           <Route path="/cura" element={<Cura />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
