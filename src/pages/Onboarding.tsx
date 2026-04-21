@@ -173,7 +173,7 @@ const Onboarding = () => {
   const [lastMood, setLastMood] = useState<string | null>(null);
 
   const nav = useNavigate();
-  const stepCount = isShort ? 5 : 6;
+  const stepCount = 6;
 
   // reset step if path changes mid-flow
   useEffect(() => { setStep(0); }, [path]);
@@ -293,25 +293,18 @@ const Onboarding = () => {
           return familyPassports.every((p) => !!p) && !!passport;
         })();
 
-  /* Step routing
+  /* Step routing — both paths share screens 0–4. They diverge only at 5.
      full  : 0 Feel · 1 Decide · 2 Purpose · 3 Context · 4 Dealbreakers · 5 Reading
-     short : 0 Feel · 1 Decide · 2 Purpose · 3 Destination · 4 Context           */
+     short : 0 Feel · 1 Decide · 2 Purpose · 3 Context · 4 Dealbreakers · 5 Destination */
 
   const isPurpose = step === 2;
-  const isFullContext = !isShort && step === 3;
-  const isShortDestination = isShort && step === 3;
-  const isShortContext = isShort && step === 4;
+  const isContext = step === 3;
+  const isDealbreakers = step === 4;
+  const isFullReading = !isShort && step === 5;
+  const isShortDestination = isShort && step === 5;
 
-  const fullContextValid =
-    isFullContext &&
-    departure.trim().length >= 2 &&
-    !!passport &&
-    companyChoice !== null &&
-    spend !== null &&
-    partnerValid && friendsValid && familyValid;
-
-  const shortContextValid =
-    isShortContext &&
+  const contextValid =
+    isContext &&
     departure.trim().length >= 2 &&
     !!passport &&
     companyChoice !== null &&
@@ -322,11 +315,10 @@ const Onboarding = () => {
     (step === 0 && picked.size >= 1) ||
     (step === 1 && pace !== null) ||
     (isPurpose && purpose !== null) ||
-    (isShortDestination && destination.trim().length >= 2) ||
-    fullContextValid ||
-    shortContextValid ||
-    (!isShort && step === 4) ||
-    (!isShort && step === 5);
+    contextValid ||
+    isDealbreakers ||
+    isFullReading ||
+    (isShortDestination && destination.trim().length >= 2);
 
   const persist = () => {
     saveProfile({
@@ -351,8 +343,8 @@ const Onboarding = () => {
         ? (familySameDeparture === false ? familyDepartures : [])
         : [],
       spend,
-      dealbreakers: isShort ? [] : Array.from(breakers),
-      dealbreakerOther: isShort ? null : (breakerOther.trim() || null),
+      dealbreakers: Array.from(breakers),
+      dealbreakerOther: breakerOther.trim() || null,
     });
   };
 
@@ -384,8 +376,22 @@ const Onboarding = () => {
   return (
     <main className="app-shell flex flex-col">
       <TopBar
-        eyebrow={`Movement ${step + 1} of ${stepCount}`}
-        title="Calibration"
+        eyebrow={`MOVEMENT ${step + 1} · OF ${stepCount}`}
+        title={`Calibration · ${
+          step === 0
+            ? "Feel"
+            : step === 1
+              ? "Decide"
+              : step === 2
+                ? "Purpose"
+                : step === 3
+                  ? "Context"
+                  : step === 4
+                    ? "Dealbreakers"
+                    : isShort
+                      ? "Destination"
+                      : "Reading"
+        }`}
         right={
           <Link to="/home" className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground">
             Skip
@@ -394,7 +400,7 @@ const Onboarding = () => {
       />
 
       <div className="px-5">
-        <div className={cn("grid gap-1.5", isShort ? "grid-cols-5" : "grid-cols-6")}>
+        <div className="grid gap-1.5 grid-cols-6">
           {Array.from({ length: stepCount }).map((_, i) => (
             <div key={i} className={cn("h-px", i <= step ? "bg-primary" : "bg-foreground/20")} />
           ))}
@@ -562,11 +568,11 @@ const Onboarding = () => {
           </>
         )}
 
-        {/* ---------- CONTEXT (full step 3  ·  short step 4) ---------- */}
-        {(isFullContext || isShortContext) && (
+        {/* ---------- STEP 3 — CONTEXT (both paths) ---------- */}
+        {isContext && (
           <>
             <div className="editorial-eyebrow text-muted-foreground mb-3">
-              {isShort ? "v." : "iv."} Context
+              iv. Context
             </div>
             <h2 className="display-lg max-w-[14ch]">
               The <span className="italic-serif">facts</span> of how you move.
@@ -969,16 +975,14 @@ const Onboarding = () => {
 
             <div className="mt-7">
               <CuraWhisper variant="inline">
-                {isShort
-                  ? "I'll learn the rest from how you move. Dealbreakers come up when they need to."
-                  : "I won't ask your budget. I'll watch how you spend on day two and adjust."}
+                I won't ask your budget. I'll watch how you spend on day two and adjust.
               </CuraWhisper>
             </div>
           </>
         )}
 
-        {/* ---------- STEP 4 — DEALBREAKERS (full only) ---------- */}
-        {!isShort && step === 4 && (
+        {/* ---------- STEP 4 — DEALBREAKERS (both paths) ---------- */}
+        {isDealbreakers && (
           <>
             <div className="editorial-eyebrow text-muted-foreground mb-3">v. Dealbreakers</div>
             <h2 className="display-lg max-w-[14ch]">
