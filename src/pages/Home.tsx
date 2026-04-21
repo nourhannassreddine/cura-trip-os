@@ -204,10 +204,10 @@ const Home = () => {
                 <span>Readiness</span>
                 <span>{primary.readiness}%</span>
               </div>
-              <div className="mt-2 h-px bg-foreground/15 relative">
+              <div className="mt-2 h-1 bg-foreground/15 relative overflow-hidden">
                 <div
-                  className="absolute left-0 top-0 h-px"
-                  style={{ width: `${primary.readiness}%`, background: "#C24E2A" }}
+                  className="absolute left-0 top-0 h-full"
+                  style={{ width: `${primary.readiness}%`, backgroundColor: "#C24E2A" }}
                 />
               </div>
             </div>
@@ -373,9 +373,9 @@ const Home = () => {
                     src={d.cover}
                     alt={`${d.name}, ${d.country}`}
                     loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute top-2 left-2 bg-ink text-ink-foreground px-1.5 py-0.5 text-[10px] tracking-[0.12em] uppercase">
+                  <div className="absolute top-2 left-2 bg-ink text-ink-foreground px-1.5 py-0.5 text-[10px] tracking-[0.12em] uppercase z-10">
                     {d.flightHrs}
                   </div>
                 </div>
