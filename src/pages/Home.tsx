@@ -90,8 +90,23 @@ const Home = () => {
         </div>
       </header>
 
+      {/* Hero — greeting + days-to header. */}
+      <section className="px-5 pt-3 pb-4 cura-rise">
+        <div className="flex items-end justify-between">
+          <h1 className="font-serif text-[40px] leading-[0.95] max-w-[12ch]">
+            Good afternoon, <span className="italic-serif">Nourhan</span>.
+          </h1>
+          {primary && (
+            <div className="text-right text-xs text-muted-foreground pb-1.5">
+              <div>{primary.daysOut} days</div>
+              <div>to {primary.city}</div>
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* CURA insight strip — Type B: no surface, sits on ivory page bg.
-          First element of scroll body after fixed header. */}
+          Sits between greeting and trip card. */}
       <section className="px-5" style={{ paddingTop: "28px", paddingBottom: "24px" }}>
         <div
           className="font-sans uppercase"
@@ -117,21 +132,6 @@ const Home = () => {
           className="mt-5 w-full"
           style={{ height: "0.5px", background: "hsl(var(--ink) / 0.1)" }}
         />
-      </section>
-
-      {/* Hero — greeting + days-to header. */}
-      <section className="px-5 pt-3 pb-4 cura-rise">
-        <div className="flex items-end justify-between">
-          <h1 className="font-serif text-[40px] leading-[0.95] max-w-[12ch]">
-            Good afternoon, <span className="italic-serif">Nourhan</span>.
-          </h1>
-          {primary && (
-            <div className="text-right text-xs text-muted-foreground pb-1.5">
-              <div>{primary.daysOut} days</div>
-              <div>to {primary.city}</div>
-            </div>
-          )}
-        </div>
       </section>
 
       {/* STATE 1 — no active trips. Single editorial empty state, CURA voice. */}
