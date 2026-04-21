@@ -89,19 +89,22 @@ const Welcome = () => {
         {/* Caption sits cleanly under the image, aligned to the same gutter.
             Eyebrow is a fixed system label; the line below rotates per app open. */}
         <div className="pt-4 cura-rise">
-          <div className="editorial-eyebrow text-muted-foreground">Plate I · A thought before you begin</div>
-          <div
-            aria-hidden
-            className="font-serif text-[36px] leading-none text-foreground/30 mt-2 -mb-1"
-          >
-            “
+          <div className="bg-foreground/[0.03] border-l-2 border-foreground/15 px-4 py-4">
+            <div className="editorial-eyebrow text-muted-foreground">Plate I · A thought before you begin</div>
+            <div
+              aria-hidden
+              className="font-serif text-[36px] leading-none text-foreground/30 mt-2 -mb-1"
+            >
+              “
+            </div>
+            <p className="italic-serif text-[15px] leading-snug text-foreground/80 max-w-[34ch]">
+              {thought}
+            </p>
+            <div className="editorial-eyebrow text-muted-foreground mt-3 text-right">Cura · thought</div>
           </div>
-          <p className="italic-serif text-[15px] leading-snug text-foreground/80 max-w-[34ch]">
-            {thought}
-          </p>
         </div>
 
-        <section className="pt-5">
+        <section className="pt-10">
           <div className="editorial-eyebrow text-primary mb-2">A travel operating system</div>
           <h1 className="display-md leading-[0.95]">
             A system <span className="italic-serif">with taste.</span><br />
@@ -117,7 +120,7 @@ const Welcome = () => {
             to="/identify"
             className="group flex items-center justify-between border border-foreground bg-ink text-ink-foreground px-5 py-3.5"
           >
-            <span className="font-sans text-sm tracking-wide">Show me Cura</span>
+            <span className="font-sans text-sm tracking-wide">I'm new here, show me cura</span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" strokeWidth={1.5} />
           </Link>
           <div className="mt-2.5 text-center">
