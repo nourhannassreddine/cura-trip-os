@@ -25,6 +25,8 @@ import Profile from "./pages/Profile";
 import NewTrip from "./pages/NewTrip";
 import TripImport from "./pages/TripImport";
 import Cura from "./pages/Cura";
+import Identify from "./pages/Identify";
+import Choose from "./pages/Choose";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -37,6 +39,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Welcome />} />
+          <Route path="/identify" element={<Identify />} />
+          <Route path="/choose" element={<Choose />} />
           <Route path="/begin" element={<EntryGate />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/home" element={<Home />} />

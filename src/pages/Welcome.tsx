@@ -90,10 +90,19 @@ const Welcome = () => {
             Eyebrow is a fixed system label; the line below rotates per app open. */}
         <div className="pt-4 cura-rise">
           <div className="editorial-eyebrow text-muted-foreground">Plate I · A thought before you begin</div>
-          <div className="h-px w-8 bg-foreground/40 my-1.5" />
-          <p className="italic-serif text-[13px] leading-tight text-foreground/75">
-            "{thought}"
+          <div
+            aria-hidden
+            className="font-serif text-[36px] leading-none text-foreground/30 mt-2 -mb-1"
+          >
+            “
+          </div>
+          <p className="italic-serif text-[15px] leading-snug text-foreground/80 max-w-[34ch]">
+            {thought}
           </p>
+          <div className="mt-2 flex items-center justify-end gap-2">
+            <div className="h-px w-6 bg-foreground/30" />
+            <span className="editorial-eyebrow text-muted-foreground">— Cura</span>
+          </div>
         </div>
 
         <section className="pt-5">
@@ -109,10 +118,10 @@ const Welcome = () => {
 
         <section className="mt-auto pt-5">
           <Link
-            to="/begin"
+            to="/identify"
             className="group flex items-center justify-between border border-foreground bg-ink text-ink-foreground px-5 py-3.5"
           >
-            <span className="font-sans text-sm tracking-wide">Begin</span>
+            <span className="font-sans text-sm tracking-wide">Show me Cura</span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" strokeWidth={1.5} />
           </Link>
           <div className="mt-2.5 text-center">
@@ -120,7 +129,7 @@ const Welcome = () => {
               to="/home"
               className="font-serif italic text-[13px] text-muted-foreground hover:text-foreground underline-offset-4 hover:underline"
             >
-              I already have an account
+              I've been here before
             </Link>
           </div>
         </section>
