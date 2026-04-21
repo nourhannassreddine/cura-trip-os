@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft, ArrowRight, Plus, X } from "lucide-react";
 import { TopBar } from "@/components/cura/TopBar";
+import { SearchableSelect } from "@/components/cura/SearchableSelect";
+import { passportNationalities } from "@/data/locations";
 
 /* ------------------------------------------------------------------
    Choose — three-question flow for users deciding between places.
@@ -11,27 +13,34 @@ import { TopBar } from "@/components/cura/TopBar";
 
 type Step = 1 | 2 | 3;
 
-const titles: Record<Step, string> = {
-  1: "One of three",
-  2: "Two of three",
-  3: "Three of three",
-};
-
 const numerals: Record<Step, string> = { 1: "i / iii", 2: "ii / iii", 3: "iii / iii" };
+const rowNumerals = ["i.", "ii.", "iii."];
+const placeholders = ["e.g. Lisbon", "or Marrakech", "…and one more"];
+
+const passportOptions = passportNationalities.filter((p) => p !== "Israeli");
 
 const Choose = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState<Step>(1);
 
-  const [d1, setD1] = useState("");
-  const [d2, setD2] = useState("");
-  const [d3, setD3] = useState("");
+  const [destinations, setDestinations] = useState<string[]>(["", ""]);
   const [passport, setPassport] = useState("");
   const [from, setFrom] = useState("");
 
-  const q1Valid = d1.trim().length > 0;
+  const trimmedDestinations = destinations.map((d) => d.trim()).filter(Boolean);
+  const q1Valid = trimmedDestinations.length > 0;
   const q2Valid = passport.trim().length > 0;
   const q3Valid = from.trim().length > 0;
+
+  const updateDestination = (idx: number, value: string) => {
+    setDestinations((prev) => prev.map((d, i) => (i === idx ? value : d)));
+  };
+  const removeDestination = (idx: number) => {
+    setDestinations((prev) => prev.filter((_, i) => i !== idx));
+  };
+  const addDestination = () => {
+    if (destinations.length < 3) setDestinations((prev) => [...prev, ""]);
+  };
 
   const goBack = () => {
     if (step === 1) navigate("/begin");
@@ -42,12 +51,11 @@ const Choose = () => {
     if (step === 1 && q1Valid) setStep(2);
     else if (step === 2 && q2Valid) setStep(3);
     else if (step === 3 && q3Valid) {
-      const destinations = [d1, d2, d3].map((s) => s.trim()).filter(Boolean);
       try {
         localStorage.setItem(
           "cura.choose",
           JSON.stringify({
-            destinations,
+            destinations: trimmedDestinations,
             passport: passport.trim(),
             from: from.trim(),
           }),
@@ -60,17 +68,17 @@ const Choose = () => {
   };
 
   const canContinue = step === 1 ? q1Valid : step === 2 ? q2Valid : q3Valid;
-  const continueLabel = step === 3 ? "See them side by side" : "Continue";
+  const continueLabel = step === 3 ? "Lay them on the table" : "Continue";
 
   const inputClass =
-    "mt-2 w-full bg-transparent border-0 border-b border-foreground/30 focus:border-foreground rounded-none px-0 py-2 text-[16px] font-serif placeholder:font-serif placeholder:italic placeholder:text-foreground/40 focus:outline-none";
+    "w-full bg-transparent border-0 border-b border-foreground/30 focus:border-foreground rounded-none px-0 py-2 text-[16px] font-serif placeholder:font-serif placeholder:italic placeholder:text-foreground/40 focus:outline-none";
 
   return (
     <main className="app-shell flex flex-col bg-background">
       <TopBar
         back={step === 1 ? "/begin" : undefined}
-        eyebrow="Plate II · Choose"
-        title={titles[step]}
+        eyebrow="Plate II"
+        title="Choose"
       />
 
       {step !== 1 && (
@@ -102,8 +110,8 @@ const Choose = () => {
         )}
         {step === 2 && (
           <h1 className="display-md max-w-[18ch] mt-3">
-            Which <span className="italic-serif">passport</span> are you
-            traveling on?
+            Which passport do you{" "}
+            <span className="italic-serif">travel with?</span>
           </h1>
         )}
         {step === 3 && (
@@ -115,53 +123,52 @@ const Choose = () => {
 
       <div className="px-5 flex flex-col gap-7">
         {step === 1 && (
-          <>
-            <label className="block">
-              <span className="editorial-eyebrow text-muted-foreground">First</span>
-              <input
-                autoFocus
-                value={d1}
-                onChange={(e) => setD1(e.target.value)}
-                placeholder="e.g. Lisbon"
-                className={inputClass}
-              />
-            </label>
-            <label className="block">
-              <span className="editorial-eyebrow text-muted-foreground">Second</span>
-              <input
-                value={d2}
-                onChange={(e) => setD2(e.target.value)}
-                placeholder="e.g. Marrakech"
-                className={inputClass}
-              />
-            </label>
-            <label className="block">
-              <span className="editorial-eyebrow text-muted-foreground">
-                Third (optional)
-              </span>
-              <input
-                value={d3}
-                onChange={(e) => setD3(e.target.value)}
-                placeholder="one more, if you have it"
-                className={inputClass}
-              />
-            </label>
-          </>
+          <div className="flex flex-col gap-5">
+            {destinations.map((value, idx) => (
+              <div key={idx} className="flex items-end gap-3">
+                <span className="font-serif italic text-muted-foreground text-[15px] pb-2 w-7 shrink-0">
+                  {rowNumerals[idx]}
+                </span>
+                <input
+                  autoFocus={idx === 0}
+                  value={value}
+                  onChange={(e) => updateDestination(idx, e.target.value)}
+                  placeholder={placeholders[idx]}
+                  className={inputClass}
+                />
+                {destinations.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeDestination(idx)}
+                    aria-label="Remove"
+                    className="pb-2 text-foreground/40 hover:text-foreground transition-colors"
+                  >
+                    <X className="h-4 w-4" strokeWidth={1.5} />
+                  </button>
+                )}
+              </div>
+            ))}
+            {destinations.length < 3 && (
+              <button
+                type="button"
+                onClick={addDestination}
+                className="self-start flex items-center gap-2 text-[12px] text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />
+                <span>Add another place</span>
+              </button>
+            )}
+          </div>
         )}
 
         {step === 2 && (
-          <label className="block">
-            <span className="editorial-eyebrow text-muted-foreground">
-              Passport nationality
-            </span>
-            <input
-              autoFocus
-              value={passport}
-              onChange={(e) => setPassport(e.target.value)}
-              placeholder="e.g. Canadian, Egyptian, German"
-              className={inputClass}
-            />
-          </label>
+          <SearchableSelect
+            options={passportOptions}
+            value={passport || null}
+            onChange={setPassport}
+            placeholder="Search passports…"
+            label="Choose your passport"
+          />
         )}
 
         {step === 3 && (
@@ -174,7 +181,7 @@ const Choose = () => {
               value={from}
               onChange={(e) => setFrom(e.target.value)}
               placeholder="e.g. Toronto, Cairo, Berlin"
-              className={inputClass}
+              className={`mt-2 ${inputClass}`}
             />
           </label>
         )}
