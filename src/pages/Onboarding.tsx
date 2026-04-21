@@ -376,8 +376,22 @@ const Onboarding = () => {
   return (
     <main className="app-shell flex flex-col">
       <TopBar
-        eyebrow={`Movement ${step + 1} of ${stepCount}`}
-        title="Calibration"
+        eyebrow={`MOVEMENT ${step + 1} · OF ${stepCount}`}
+        title={`Calibration · ${
+          step === 0
+            ? "Feel"
+            : step === 1
+              ? "Decide"
+              : step === 2
+                ? "Purpose"
+                : step === 3
+                  ? "Context"
+                  : step === 4
+                    ? "Dealbreakers"
+                    : isShort
+                      ? "Destination"
+                      : "Reading"
+        }`}
         right={
           <Link to="/home" className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground">
             Skip
@@ -386,7 +400,7 @@ const Onboarding = () => {
       />
 
       <div className="px-5">
-        <div className={cn("grid gap-1.5", isShort ? "grid-cols-5" : "grid-cols-6")}>
+        <div className="grid gap-1.5 grid-cols-6">
           {Array.from({ length: stepCount }).map((_, i) => (
             <div key={i} className={cn("h-px", i <= step ? "bg-primary" : "bg-foreground/20")} />
           ))}
