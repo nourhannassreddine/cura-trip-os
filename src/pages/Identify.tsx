@@ -47,7 +47,7 @@ const Identify = () => {
       <form onSubmit={onSubmit} className="px-5 flex flex-col gap-7">
         <label className="block">
           <span className="editorial-eyebrow text-muted-foreground">
-            What should I call you?
+            Your name
           </span>
           <input
             type="text"
