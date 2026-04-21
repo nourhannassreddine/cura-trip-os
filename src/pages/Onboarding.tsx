@@ -343,8 +343,8 @@ const Onboarding = () => {
         ? (familySameDeparture === false ? familyDepartures : [])
         : [],
       spend,
-      dealbreakers: isShort ? [] : Array.from(breakers),
-      dealbreakerOther: isShort ? null : (breakerOther.trim() || null),
+      dealbreakers: Array.from(breakers),
+      dealbreakerOther: breakerOther.trim() || null,
     });
   };
 
