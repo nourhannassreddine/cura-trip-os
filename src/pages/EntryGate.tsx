@@ -26,7 +26,7 @@ const paths = [
     n: "iii",
     title: "I'm choosing between places",
     sub: "Help me decide",
-    to: "/compare?seed=auto",
+    to: "/choose",
   },
   {
     n: "iv",
