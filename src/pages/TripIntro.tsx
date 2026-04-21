@@ -31,9 +31,9 @@ const TripIntro = () => {
 
   const [shown, setShown] = useState("");
   const [fadingOut, setFadingOut] = useState(false);
+  const [focusing, setFocusing] = useState(false);
 
   useEffect(() => {
-    // mark seen so re-entry skips the intro
     if (id) sessionStorage.setItem(`cura.tripIntro.${id}`, "seen");
 
     let i = 0;
@@ -43,7 +43,7 @@ const TripIntro = () => {
       setShown(line.slice(0, i));
       if (i >= line.length) {
         clearInterval(tick);
-        // hold a beat, then fade out and route in
+        setTimeout(() => setFocusing(true), 500);
         setTimeout(() => setFadingOut(true), 700);
         setTimeout(() => navigate(`/trip/${trip.id}`, { replace: true }), 1100);
       }
@@ -54,12 +54,25 @@ const TripIntro = () => {
 
   return (
     <main
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center px-8 transition-opacity duration-[400ms] ${
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center px-8 transition-opacity duration-[400ms] overflow-hidden ${
         fadingOut ? "opacity-0" : "opacity-100"
       }`}
-      style={{ backgroundColor: "hsl(var(--ink-foreground))" }}
     >
-      <div className="absolute top-10 left-0 right-0 flex justify-center">
+      {/* Ghost image — barely there, comes into focus before route */}
+      <img
+        src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80"
+        alt=""
+        aria-hidden
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+        style={{ opacity: focusing ? 0.15 : 0.06, filter: "saturate(0.85)" }}
+      />
+      {/* Ivory wash on top */}
+      <div
+        className="absolute inset-0"
+        style={{ backgroundColor: "hsl(var(--ink-foreground) / 0.94)" }}
+      />
+
+      <div className="absolute top-10 left-0 right-0 flex justify-center z-10">
         <span
           className="text-[10px] tracking-[0.32em] uppercase"
           style={{ color: "hsl(var(--ink) / 0.35)" }}
@@ -69,8 +82,8 @@ const TripIntro = () => {
       </div>
 
       <p
-        className="font-serif text-center max-w-[22ch] leading-[1.18]"
-        style={{ color: "hsl(var(--ink))", fontSize: "30px" }}
+        className="relative z-10 font-serif text-center max-w-[22ch]"
+        style={{ color: "hsl(var(--ink))", fontSize: "30px", lineHeight: 1.18 }}
       >
         {shown}
         <span

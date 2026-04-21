@@ -18,36 +18,65 @@ const chapters = [
 
 const Profile = () => {
   return (
-    <main className="app-shell pb-20">
-      <header className="px-5 pt-6 pb-2">
-        <div className="editorial-eyebrow text-muted-foreground">You</div>
-      </header>
+    <main className="app-shell pb-24">
+      {/* Portrait header — ink black with giant ghost initial */}
+      <header
+        className="relative overflow-hidden"
+        style={{
+          height: "200px",
+          backgroundColor: "hsl(var(--ink))",
+          color: "hsl(var(--ink-foreground))",
+        }}
+      >
+        <span
+          aria-hidden
+          className="font-serif absolute top-1/2 -translate-y-1/2 leading-none select-none pointer-events-none"
+          style={{
+            right: "-12px",
+            fontSize: "140px",
+            color: "hsl(var(--ink-foreground) / 0.08)",
+          }}
+        >
+          N
+        </span>
 
-      {/* Identity block — three short lines, serif name. */}
-      <section className="px-5 pt-4 pb-8 cura-rise">
-        <h1 className="font-serif text-[40px] leading-[0.95] tracking-tight">
-          Nourhan
-        </h1>
-        <div className="mt-4 space-y-1 text-sm">
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Home</span>
-            <span>Cairo</span>
+        <div className="absolute left-5 bottom-5 right-5">
+          <div
+            className="text-[9px] tracking-[0.24em] uppercase"
+            style={{ color: "hsl(var(--ink-foreground) / 0.55)" }}
+          >
+            You
           </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Passport</span>
-            <span>Egyptian</span>
+          <h1
+            className="font-serif leading-[0.95] tracking-tight mt-1"
+            style={{ fontSize: "40px" }}
+          >
+            Nourhan
+          </h1>
+          <div
+            className="mt-3 space-y-1 text-[12px] tracking-[0.04em]"
+            style={{ color: "hsl(var(--ink-foreground) / 0.7)" }}
+          >
+            <div className="flex justify-between">
+              <span style={{ color: "hsl(var(--ink-foreground) / 0.45)" }}>Home</span>
+              <span>Cairo</span>
+            </div>
+            <div className="flex justify-between">
+              <span style={{ color: "hsl(var(--ink-foreground) / 0.45)" }}>Passport</span>
+              <span>Egyptian</span>
+            </div>
           </div>
         </div>
-      </section>
+      </header>
 
       {/* Chapters — tappable rows, label + arrow. Routes nowhere yet. */}
-      <section>
+      <section className="mt-2">
         <ul className="border-t border-foreground/15">
           {chapters.map((c) => (
             <li key={c.label} className="border-b border-foreground/15">
               <Link
                 to="#"
-                className="flex items-center justify-between px-5 py-4 hover:bg-foreground/[0.03] transition-colors"
+                className="flex items-center justify-between px-5 py-5 hover:bg-foreground/[0.03] transition-colors"
               >
                 <div>
                   <div className="font-serif text-[17px] leading-none">
@@ -66,7 +95,7 @@ const Profile = () => {
 
       <footer
         aria-label="Edition imprint"
-        className="px-5 pt-8 pb-4 flex justify-between text-[10px] tracking-[0.22em] uppercase text-foreground/35 select-none"
+        className="px-5 mt-8 pb-4 flex justify-between text-[10px] tracking-[0.22em] uppercase text-foreground/35 select-none"
       >
         <span>No. 001</span>
         <span>Vol. I · Spring</span>
