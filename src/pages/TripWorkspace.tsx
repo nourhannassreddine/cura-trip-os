@@ -1,109 +1,246 @@
-import { useParams, Link } from "react-router-dom";
-import { trips, curaWhispers, itinerary } from "@/data/cura";
-import { TopBar } from "@/components/cura/TopBar";
+import { useEffect } from "react";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { BottomNav } from "@/components/cura/BottomNav";
-import { TripTabs } from "@/components/cura/TripTabs";
-import { CuraWhisper } from "@/components/cura/CuraWhisper";
-import { MapCanvas } from "@/components/cura/MapCanvas";
-import { Tag } from "@/components/cura/Tag";
+import { trips } from "@/data/cura";
+
+/**
+ * Trip Dashboard — the central operating surface for one trip.
+ *
+ * Structure:
+ *   1. Ink-black header — destination, dates, country, countdown, readiness bar
+ *   2. CURA insight strip — sunflower, full bleed, italic Playfair line
+ *   3. Engine grid — 8 engines, 2 columns, hairline-bordered cards
+ *   4. "Also in motion" — quiet card pointing at the next trip
+ *
+ * On first visit per session, redirects to /trip/:id/intro for the
+ * CURA reading-the-trip-aloud transition.
+ */
+
+interface Engine {
+  key: string;
+  name: string;
+  status: string;
+  action: string;
+  state: "todo" | "doing" | "done";
+}
+
+const engines: Engine[] = [
+  { key: "visa",      name: "Visa",      status: "Visa-free for most EU passports", action: "Confirm passport nationality", state: "todo" },
+  { key: "flights",   name: "Flights",   status: "No flights added yet",           action: "Start with departure date",   state: "todo" },
+  { key: "stays",     name: "Stays",     status: "Accommodation undecided",        action: "Set your base — one place or two?", state: "todo" },
+  { key: "route",     name: "Route",     status: "10 nights, no movement mapped",  action: "Decide: stay or travel south", state: "todo" },
+  { key: "itinerary", name: "Itinerary", status: "Nothing planned yet",            action: "Build your first day",        state: "todo" },
+  { key: "prep",      name: "Prep",      status: "38 days to prepare",             action: "Open the pre-trip timeline",  state: "doing" },
+  { key: "pack",      name: "Pack",      status: "Packing list not started",       action: "Answer 3 questions to start", state: "todo" },
+  { key: "spend",     name: "Spend",     status: "No budget set",                  action: "Set a total trip budget",     state: "todo" },
+];
+
+const insightFor = (city: string) =>
+  city === "Puglia"
+    ? "Your itinerary has no evenings planned. Puglia's best hours are after 7pm."
+    : `${city} is taking shape. The next decision is the one that unlocks the rest.`;
+
+const StateDot = ({ state }: { state: Engine["state"] }) => {
+  if (state === "done") {
+    return <span className="inline-block h-2 w-2 rounded-full bg-foreground" />;
+  }
+  if (state === "doing") {
+    return (
+      <span className="relative inline-block h-2 w-2 rounded-full border border-foreground overflow-hidden">
+        <span className="absolute inset-y-0 left-0 w-1/2 bg-foreground" />
+      </span>
+    );
+  }
+  return <span className="inline-block h-2 w-2 rounded-full border border-foreground" />;
+};
 
 const TripWorkspace = () => {
   const { id } = useParams();
   const trip = trips.find((t) => t.id === id) ?? trips[0];
 
-  // Quick map — anchor + first day stops, used as a teaser
-  const mapPoints = itinerary[0].blocks
-    .filter((b) => b.x !== undefined)
-    .slice(0, 5)
-    .map((b, i) => ({ id: b.title, x: b.x!, y: b.y!, number: i + 1, label: b.place ?? b.title, variant: "ink" as const }));
+  // First-visit transition gate.
+  const introKey = `cura.tripIntro.${trip.id}`;
+  const seenIntro =
+    typeof window !== "undefined" && sessionStorage.getItem(introKey) === "seen";
+
+  useEffect(() => {
+    // No-op; just ensures the effect runs after mount.
+  }, []);
+
+  if (!seenIntro) {
+    return <Navigate to={`/trip/${trip.id}/intro`} replace />;
+  }
+
+  // The next trip in motion (not this one, not memory).
+  const alsoInMotion = trips.find(
+    (t) => t.id !== trip.id && t.status !== "memory",
+  );
 
   return (
-    <main className="app-shell pb-20">
-      <TopBar back="/trips" eyebrow="Trip" title={`${trip.city} · ${trip.country}`} />
-      <TripTabs tripId={trip.id} />
+    <main className="app-shell pb-24">
+      {/* HEADER — ink black */}
+      <header
+        className="px-5 pt-10 pb-0 relative"
+        style={{
+          backgroundColor: "hsl(var(--ink))",
+          color: "hsl(var(--ink-foreground))",
+          minHeight: "140px",
+        }}
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <h1
+              className="font-serif leading-[0.95] tracking-tight"
+              style={{ fontSize: "42px" }}
+            >
+              {trip.city}
+            </h1>
+            <div
+              className="text-[12px] tracking-[0.14em] mt-3"
+              style={{ color: "hsl(var(--ink-foreground) / 0.55)" }}
+            >
+              {trip.dates}
+            </div>
+            <div
+              className="text-[12px] tracking-[0.14em] mt-1"
+              style={{ color: "hsl(var(--ink-foreground) / 0.4)" }}
+            >
+              {trip.country}
+            </div>
+          </div>
 
-      {/* Cover — editorial */}
-      <section className="relative">
-        <div className="relative h-[280px] overflow-hidden">
-          <img src={trip.cover} alt={trip.city} className="h-full w-full object-cover" width={1024} height={1280} />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
-          <div className="absolute top-3 right-3">
-            <Tag variant="ink">{trip.mode} mode</Tag>
+          <div className="text-right shrink-0">
+            <div
+              className="text-[10px] tracking-[0.18em] uppercase"
+              style={{ color: "hsl(var(--ink-foreground) / 0.45)" }}
+            >
+              Until departure
+            </div>
+            <div
+              className="font-serif mt-1"
+              style={{ color: "hsl(var(--accent-rust))", fontSize: "22px", lineHeight: 1 }}
+            >
+              {trip.daysOut > 0 ? `${trip.daysOut} days` : trip.daysOut === 0 ? "today" : "—"}
+            </div>
           </div>
         </div>
-        <div className="px-5 -mt-16 relative">
-          <div className="editorial-eyebrow text-foreground/80">{trip.dates}</div>
-          <h1 className="display-xl leading-[0.85]">
-            {trip.city}<span className="italic-serif text-primary">.</span>
-          </h1>
-          <div className="mt-3 flex flex-wrap items-center gap-2">
-            <Tag variant="outline">{trip.travelers.join(" · ")}</Tag>
-            <Tag>{trip.daysOut > 0 ? `${trip.daysOut} days out` : "Past trip"}</Tag>
+
+        {/* Readiness bar — ivory on ink */}
+        <div className="mt-7 pb-3">
+          <div
+            className="h-[2px] w-full relative"
+            style={{ backgroundColor: "hsl(var(--ink-foreground) / 0.18)" }}
+          >
+            <div
+              className="absolute left-0 top-0 h-full"
+              style={{
+                width: `${trip.readiness}%`,
+                backgroundColor: "hsl(var(--ink-foreground))",
+              }}
+            />
+          </div>
+          <div
+            className="text-[10px] tracking-[0.18em] mt-2 text-right"
+            style={{ color: "hsl(var(--ink-foreground) / 0.55)" }}
+          >
+            {trip.readiness}% ready
           </div>
         </div>
+      </header>
+
+      {/* CURA INSIGHT — sunflower bleed */}
+      <section
+        className="px-5 py-4"
+        style={{
+          backgroundColor: "hsl(var(--accent-sun))",
+          color: "hsl(var(--ink))",
+        }}
+      >
+        <div
+          className="text-[9px] tracking-[0.24em] uppercase"
+          style={{ color: "hsl(var(--ink) / 0.55)" }}
+        >
+          Cura
+        </div>
+        <p className="italic-serif mt-1.5" style={{ fontSize: "16px", lineHeight: 1.35 }}>
+          {insightFor(trip.city)}
+        </p>
       </section>
 
-      {/* CURA whisper */}
-      <section className="px-5 mt-6">
-        <CuraWhisper>{curaWhispers[1]}</CuraWhisper>
-      </section>
-
-      {/* Readiness — editorial bar */}
-      <section className="px-5 mt-6">
-        <div className="flex items-baseline justify-between">
-          <div className="editorial-eyebrow text-muted-foreground">Readiness</div>
-          <div className="font-serif text-lg">{trip.readiness}<span className="text-muted-foreground text-sm">/100</span></div>
-        </div>
-        <div className="mt-2 h-px bg-foreground/15 relative">
-          <div className="absolute left-0 top-0 h-px bg-primary" style={{ width: `${trip.readiness}%` }} />
-        </div>
-        <div className="mt-2 flex justify-between text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
-          <span>Booked</span><span>Packed</span><span>Documents</span><span>Outfits</span>
-        </div>
-      </section>
-
-      {/* The shape — small map preview leading to Plan */}
-      <section className="px-5 mt-8">
-        <div className="flex items-baseline justify-between mb-3">
-          <h2 className="font-serif text-xl">The shape of it</h2>
-          <Link to="/route" className="text-[11px] tracking-[0.18em] uppercase text-primary">Open plan →</Link>
-        </div>
-        <MapCanvas points={mapPoints} caption="Day 1 · arrival arc" height={200} />
-      </section>
-
-      {/* What's next — editorial action list, not a generic grid */}
-      <section className="mt-9">
-        <div className="px-5 editorial-eyebrow text-muted-foreground mb-3">What's next</div>
-        <ul className="border-t border-foreground/15">
-          {[
-            { to: "/itinerary", primary: "Day 2 needs your eye", secondary: "I cut one stop. Confirm or push back.", tag: "review" },
-            { to: "/outfits", primary: "Two outfit moments still open", secondary: "Sunset on Day 1 + Alberobello morning.", tag: "open" },
-            { to: "/pack", primary: "Pack the slip dress", secondary: "Day 1 dinner is dressy. You haven't.", tag: "todo" },
-            { to: "/spend", primary: "€2,255 projected", secondary: "Stays paid. Food still flexible.", tag: "ok" },
-          ].map((row, i) => (
-            <li key={i} className="border-b border-foreground/10 last:border-0">
-              <Link to={row.to} className="flex items-center justify-between gap-3 px-5 py-4 hover:bg-paper transition-colors">
-                <div className="min-w-0">
-                  <div className="font-serif text-[17px] leading-tight">{row.primary}</div>
-                  <div className="italic-serif text-[12px] text-foreground/60 mt-1">{row.secondary}</div>
+      {/* ENGINE GRID */}
+      <section className="px-4 pt-4">
+        <div className="grid grid-cols-2 gap-[10px]">
+          {engines.map((e) => (
+            <Link
+              key={e.key}
+              to={`/trip/${trip.id}/engine/${e.key}`}
+              className="border border-foreground/15 bg-background p-3 flex flex-col justify-between hover:bg-foreground/[0.03] transition-colors"
+              style={{ minHeight: "100px" }}
+            >
+              <div className="flex items-start justify-between">
+                <div className="text-[11px] tracking-[0.16em] uppercase font-medium">
+                  {e.name}
                 </div>
-                <Tag variant={row.tag === "review" || row.tag === "todo" ? "default" : "outline"}>{row.tag}</Tag>
-              </Link>
-            </li>
+              </div>
+              <div className="text-[12px] text-foreground/65 leading-snug mt-2">
+                {e.status}
+              </div>
+              <div className="flex items-end justify-between mt-2">
+                <div
+                  className="text-[10px] leading-tight max-w-[80%]"
+                  style={{ color: "hsl(var(--accent-rust))" }}
+                >
+                  {e.action}
+                </div>
+                <StateDot state={e.state} />
+              </div>
+            </Link>
           ))}
-        </ul>
+        </div>
       </section>
 
-      {/* Live mode CTA */}
-      <section className="mt-9 px-5">
-        <Link to="/during" className="block border border-foreground bg-ink text-ink-foreground p-5 group">
-          <div className="editorial-eyebrow opacity-70 mb-2">When you arrive</div>
-          <div className="font-serif text-2xl leading-tight">Open <span className="italic-serif">Live mode</span> →</div>
-          <p className="text-xs opacity-70 mt-2">Today view, nearby saved places, quick actions.</p>
-        </Link>
-      </section>
+      {/* ALSO IN MOTION */}
+      {alsoInMotion && (
+        <section className="px-5 mt-10">
+          <div className="editorial-eyebrow text-foreground/45 mb-3">
+            Also in motion
+          </div>
+          <Link
+            to={`/trip/${alsoInMotion.id}`}
+            className="border border-foreground/15 px-4 py-4 flex items-center justify-between hover:bg-foreground/[0.03] transition-colors"
+          >
+            <div className="min-w-0">
+              <div className="font-serif text-[20px] leading-none truncate">
+                {alsoInMotion.city}
+              </div>
+              <div className="editorial-eyebrow text-foreground/55 mt-2">
+                {alsoInMotion.dates}
+              </div>
+            </div>
+            <div className="text-right shrink-0">
+              <span
+                className="inline-flex items-center px-2 py-0.5 text-[9px] tracking-[0.18em] uppercase"
+                style={{
+                  backgroundColor:
+                    alsoInMotion.status === "dreaming"
+                      ? "hsl(var(--accent-sky))"
+                      : "hsl(var(--accent-ochre))",
+                  color:
+                    alsoInMotion.status === "dreaming"
+                      ? "hsl(var(--foreground))"
+                      : "white",
+                }}
+              >
+                {alsoInMotion.status}
+              </span>
+              <div className="text-[10px] text-foreground/55 mt-1.5">
+                {alsoInMotion.readiness}% ready
+              </div>
+            </div>
+          </Link>
+        </section>
+      )}
 
-      <div className="h-10" />
       <BottomNav />
     </main>
   );

@@ -11,6 +11,8 @@ import Dream from "./pages/Dream";
 import Compare from "./pages/Compare";
 import Trips from "./pages/Trips";
 import TripWorkspace from "./pages/TripWorkspace";
+import TripIntro from "./pages/TripIntro";
+import TripEngine from "./pages/TripEngine";
 import ItineraryView from "./pages/ItineraryView";
 import Pack from "./pages/Pack";
 import Outfits from "./pages/Outfits";
@@ -46,6 +48,8 @@ const App = () => (
           <Route path="/trip/new" element={<NewTrip />} />
           <Route path="/trip/import" element={<TripImport />} />
           <Route path="/trip/:id" element={<TripWorkspace />} />
+          <Route path="/trip/:id/intro" element={<TripIntro />} />
+          <Route path="/trip/:id/engine/:engine" element={<TripEngine />} />
           <Route path="/itinerary" element={<ItineraryView />} />
           <Route path="/pack" element={<Pack />} />
           <Route path="/outfits" element={<Outfits />} />
