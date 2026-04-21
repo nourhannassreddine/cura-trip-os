@@ -75,6 +75,8 @@ export default {
         "accent-sky": "hsl(var(--accent-sky))",
         "accent-rose": "hsl(var(--accent-rose))",
         "accent-sun": "hsl(var(--accent-sun))",
+        "accent-burnt": "hsl(var(--accent-burnt))",
+        "paper-soft": "hsl(var(--paper-soft))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
