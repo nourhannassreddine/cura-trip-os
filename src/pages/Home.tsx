@@ -102,10 +102,12 @@ const Home = () => {
             </div>
           )}
         </div>
-        {/* Cura whisper — the original block treatment with the orange rule
-            on the left. Reads as an editor's margin note, not inline copy. */}
-        <div className="mt-5">
-          <CuraWhisper variant="block">{curaWhispers[0]}</CuraWhisper>
+        {/* Cura whisper — elevated. More breathing room, slightly heavier
+            typographic weight. The first thing felt, not the last noticed. */}
+        <div className="mt-7 mb-2">
+          <CuraWhisper variant="block" className="text-[16px]">
+            {curaWhispers[0]}
+          </CuraWhisper>
         </div>
       </section>
 
