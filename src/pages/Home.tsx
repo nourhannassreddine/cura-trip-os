@@ -80,12 +80,12 @@ const Home = () => {
             Tuesday · 4:12 pm
           </div>
         </div>
-        <div className="flex items-center gap-1 -mr-2">
-          <button aria-label="Notifications" className="p-2 hover:opacity-70">
+        <div className="flex items-center" style={{ gap: "12px" }}>
+          <button aria-label="Notifications" className="hover:opacity-70">
             <Bell className="h-5 w-5" strokeWidth={1.5} />
           </button>
-          <Link to="/begin" aria-label="Dream" className="p-2 hover:opacity-70">
-            <span className="inline-flex items-center justify-center h-5 w-5 text-[18px] leading-none text-foreground">✦</span>
+          <Link to="/begin" aria-label="Dream" className="hover:opacity-70">
+            <span className="inline-flex items-center justify-center h-5 w-5 text-[20px] leading-none text-foreground">✦</span>
           </Link>
         </div>
       </header>
