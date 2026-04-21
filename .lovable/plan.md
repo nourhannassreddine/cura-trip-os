@@ -2,110 +2,73 @@
 
 ## Goal
 
-Add editorial visual depth to four screens — Trip Workspace, Cura tab, You tab, and Trip Intro — without restructuring layout, copy, or routing. Bones stay; atmosphere arrives.
+Three small, surgical changes:
+1. Welcome (Plate I) — refine the rotating thought into a quote-framed editorial block, swap the primary CTA copy, tweak the secondary link copy.
+2. New "Identify yourself" page (name + email) — appears between Welcome and Plate II.
+3. Plate II option iii reroutes to a new 3-question flow that ends at `/compare`.
 
-## Global rules (applied across the four screens touched)
+No layout, styling, or color changes to existing screens beyond copy + the one routing change.
 
-- Section vertical padding +40% on the four target screens.
-- Body line-height ≥ 1.75 in copy blocks on these screens.
-- Image treatment utility: `filter: saturate(0.85)` + an ivory wash overlay at 8% opacity. Implemented as a reusable `.editorial-img` wrapper class in `src/index.css` (image fills wrapper; absolutely-positioned `::after` paints `hsl(var(--paper) / 0.08)`).
-- All body text remains left-aligned; no border-radius added beyond existing tokens.
+## 1. Welcome — copy + quote framing
 
-## Screen 1 — Trip Workspace (`src/pages/TripWorkspace.tsx`)
+In `src/pages/Welcome.tsx`:
 
-**Header — full-bleed image replaces ink-black block**
-- Container height: `min-h-[260px]`, `relative overflow-hidden`.
-- Background `<img>`: `https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80` (Puglia trulli), `absolute inset-0 w-full h-full object-cover`, with editorial treatment.
-- Gradient overlay: `absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/30 to-transparent`.
-- Text layout (over gradient, all ivory):
-  - Top-right: "UNTIL DEPARTURE" eyebrow + `38 days` in cherry red `#C8102E` (existing `--accent-rust` token reused if it matches; otherwise inline).
-  - Bottom-left: "Puglia" in Playfair 48px, then dates + country below.
-  - Readiness bar pinned to bottom edge of header (`absolute bottom-0 left-0 right-0`), ivory fill on `ivory/20` track — reads as a horizon line. "64% ready" sits just above-right of the bar.
+- **Quote framing for the rotating thought.** Today the thought is rendered as a flat italic line with a tiny rule above. Replace that single `<p>` with a small editorial quote block — same `px-5` gutter, same eyebrow above:
+  - A large serif opening quotation mark (`"`) sits on its own line at the top-left, Playfair, ~36px, low opacity (`text-foreground/30`), tight leading. Acts as a visual mark, not a character in the sentence.
+  - The thought sits directly below it, italic Playfair, slightly larger than today (`text-[15px] leading-snug`), no surrounding straight quotes anymore (the glyph above does the framing).
+  - A short hairline rule (`h-px w-6 bg-foreground/30`) and a tiny right-aligned attribution "— Cura" in `editorial-eyebrow` style sit below the thought.
+- **Primary CTA copy:** change `Begin` → `Show me Cura`. Keep the arrow, ink-black button styling, and `/begin` route untouched. *(Note: the route currently goes to `/begin` — see §2; we'll repoint it to the new identify page.)*
+- **Secondary link copy:** change `I already have an account` → `I've been here before`. Route + style unchanged (`/home`).
 
-**CURA insight (sunflower) — untouched.**
+Nothing else on Welcome changes — carousel, logo, eyebrow text, headline, footer imprint all stay.
 
-**Engine grid — Itinerary promoted**
-- `Itinerary` card rendered separately, full-width (`col-span-2`), `h-[120px]`.
-- Background layer: same Puglia image at `opacity-[0.12]` with `filter: blur(2px) saturate(0.85)`, absolutely positioned behind a relative content layer so the foreground text/labels remain crisp (no blur on text).
-- The other 7 engines render in the 2-col grid below, unchanged styling.
+## 2. New page — `src/pages/Identify.tsx`
 
-**Also-in-motion (Marrakech) — image card**
-- Replace plain card with a `flex` row, `h-[90px]`, `border border-foreground/15`.
-- Left 40% (`w-[40%]`): `<img>` `https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=600&q=80`, `object-cover h-full w-full`, with editorial treatment.
-- Right 60%: existing copy block (city, dates, status tag, readiness) — unchanged.
+Editorial two-field intake. Routed at `/identify`. Welcome's primary CTA repoints to this page, and Identify's continue button routes to `/begin` (Plate II). This inserts cleanly between Plate I and Plate II without altering Plate II.
 
-## Screen 2 — Cura tab (`src/pages/Cura.tsx`)
+**Layout (matches existing app rhythm — `app-shell`, `px-5`, TopBar):**
 
-**Top image band**
-- New section above the opening statement: `h-[180px] relative overflow-hidden`.
-- `<img>` `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80`, editorial treatment.
-- Bottom-left overlay: existing `Asterisk` icon + `CURA` label, ivory, 9px tracked uppercase, `absolute bottom-4 left-5`.
-- Existing top header row (`Asterisk` + "Cura" eyebrow on paper) is removed since the band now carries the mark.
+- `TopBar` with `back="/"`, eyebrow `"Plate I · ½"`, title `"Begin"`.
+- Heading section: editorial eyebrow `"A short introduction"` then a Playfair display heading: `Before we go, what should I call you?` with `call you?` in italic-serif accent.
+- Two stacked fields, hairline-bordered, no rounded corners, matching the editorial form treatment used elsewhere in the app:
+  - **Name** — label `"What should I call you?"` (10px tracked uppercase eyebrow), input below, no border except a single bottom hairline (`border-b border-foreground/30 focus:border-foreground`), Playfair italic placeholder `"a name, a nickname, anything"`.
+  - **Email** — label `"And where can I reach you?"`, hairline-bottom input, placeholder `"you@somewhere.com"`, `type="email"`.
+- Continue button: full-width, `bg-ink text-ink-foreground`, copy `Take me in →`. Disabled (opacity-50, pointer-events-none) until both fields have content (basic non-empty + email contains `@`). On submit, persist to localStorage as `cura.profile = { name, email }` so Home/You can read it later, then `navigate("/begin")`.
+- Cura whisper line at the bottom in italic-serif: `"I'll only ask once. After this, I just remember."` with `Cura · note` eyebrow.
 
-**Insight cards**
-- Each `<li>` gets `border-l-2` in burnt red `#BA181B` (added as `--accent-burnt` HSL var in `src/index.css`, mapped to `accent-burnt` in `tailwind.config.ts`).
-- Inner left padding bumped to `pl-5` (20px) for breathing room from the rule.
-- Alternating backgrounds via `even:bg-[hsl(var(--paper-soft))]` — add `--paper-soft: 36 24% 90%` (≈ `#EFE9DF`) to `:root` in `src/index.css`.
-- Category eyebrow + body untouched.
+State: local `useState` for `name` and `email`. No backend, no validation library — just `name.trim().length > 0 && /\S+@\S+\.\S+/.test(email)`.
 
-**Input field**
-- Add `pt-6` above the form.
-- Hairline rule above input: keep existing `border-t` but drop opacity to `border-foreground/15` (0.5px feel via existing 1px hairline + low opacity).
-- Placeholder set in Playfair italic via existing `italic-serif` class — confirm the input element uses `font-serif italic` for placeholder; if the current `italic-serif` class doesn't propagate to placeholder, add `placeholder:font-serif placeholder:italic` explicitly.
+Register the route in `src/App.tsx`: `<Route path="/identify" element={<Identify />} />` above the catch-all.
 
-## Screen 3 — You tab (`src/pages/Profile.tsx`)
+## 3. Plate II option iii → new 3-question Choose flow
 
-**Portrait header block (replaces current eyebrow + name section)**
-- `relative h-[200px] bg-ink text-ink-foreground overflow-hidden`.
-- Giant initial: `<span>` "N" in Playfair, `text-[140px] leading-none`, `text-[hsl(var(--ink-foreground)/0.08)]`, `absolute right-[-12px] top-1/2 -translate-y-1/2`. Bleeds slightly off right edge.
-- Bottom-left stack (`absolute left-5 bottom-5`):
-  - "YOU" eyebrow, 9px tracked, ivory low-opacity.
-  - "Nourhan" in Playfair 40px, ivory.
-  - Home / Passport rows below in ivory low-opacity, current key/value treatment but recolored for the dark surface.
+**Routing change in `src/pages/EntryGate.tsx`:** option iii's `to` becomes `/choose` (was `/compare?seed=auto`). No design or copy changes to EntryGate itself.
 
-**Spacing**
-- Add 8px gap between header block and the first row of chapters.
-- Existing chapter rows kept exactly as is.
+**New page `src/pages/Choose.tsx`** — single component that renders one of three steps based on internal state. Each step has its own back button (back from Q1 → `/begin`, back from Q2 → Q1, back from Q3 → Q2) and a continue button (Q3's continue → `/compare`).
 
-**Footer imprint**
-- Ensure `mt-8` (32px) above the imprint footer.
+Shared chrome on every step:
+- `app-shell`, `px-5`, `TopBar` with eyebrow `"Plate II · Choose"` and title that updates per step (`"One of three"`, `"Two of three"`, `"Three of three"`). The TopBar's `back` prop is set per step using a small handler — when not on Q1 it calls a local `goBack()` instead of navigating; we'll achieve this by rendering a custom mini back row for Q2/Q3 (a `button` styled like the TopBar back chevron) and using TopBar with `back="/begin"` only on Q1. Simpler alternative kept in implementation: render a small inline back button row above the question on every step and skip TopBar's back handling — keeps logic local. Going with the inline back row.
+- Tiny progress reading like `"i / iii"` in the editorial eyebrow style, top-right of the question block.
+- Heading per step (Playfair display, italic-serif accent on the key word).
+- Continue button at the bottom, ink-black, full width, disabled until the step's minimum input requirement is met.
 
-## Screen 4 — Trip Intro (`src/pages/TripIntro.tsx`)
+**Q1 — Destinations (up to 3).** Heading: `Where are you choosing between?` Three labeled inputs stacked vertically, each with hairline-bottom styling: `First`, `Second`, `Third (optional)`. Continue requires at least 1 non-empty input, accepts up to 3.
 
-**Layered ivory + ghost image**
-- Wrapper `relative overflow-hidden`. Add an absolutely-positioned `<img>` (Puglia URL) at `inset-0 w-full h-full object-cover`, `style={{ opacity: focusing ? 0.15 : 0.06 }}` with a 300ms transition.
-- Above the image, a `bg-[hsl(var(--paper)/0.94)]` layer gives the ivory feel while letting the image bleed through.
-- New state `focusing` flips to `true` ~200ms before `setFadingOut`, so the image gently comes into focus before the crossfade routes to the dashboard.
-- Text reveal animation untouched.
+**Q2 — Passport nationality.** Heading: `Which passport are you traveling on?` Single hairline-bottom input, placeholder `"e.g. Canadian, Egyptian, German"`. Free-text for now (no country dropdown — keeps scope small, matches editorial tone). Continue requires non-empty.
 
-## Tokens & utilities (`src/index.css`, `tailwind.config.ts`)
+**Q3 — Departure city.** Heading: `Where will you be flying from?` Single hairline-bottom input, placeholder `"e.g. Toronto, Cairo, Berlin"`. Continue copy: `See them side by side →`. On submit, persist `cura.choose = { destinations, passport, from }` to localStorage and `navigate("/compare?seed=auto")` so Compare keeps its existing seeded mode (the back link there already points to `/begin`).
+
+Register the route in `src/App.tsx`: `<Route path="/choose" element={<Choose />} />` above the catch-all.
+
+## 4. Files touched
 
 ```text
-:root {
-  --paper-soft: 36 24% 90%;     /* #EFE9DF */
-  --accent-burnt: 359 81% 41%;  /* #BA181B */
-}
-
-.editorial-img { position: relative; overflow: hidden; }
-.editorial-img > img { filter: saturate(0.85); width: 100%; height: 100%; object-fit: cover; }
-.editorial-img::after {
-  content: ""; position: absolute; inset: 0;
-  background: hsl(var(--paper) / 0.08); pointer-events: none;
-}
+src/pages/Welcome.tsx     → quote-frame the rotating thought; CTA copy "Show me Cura"; secondary "I've been here before"; primary route → "/identify"
+src/pages/Identify.tsx    → NEW — name + email intake, routes to /begin
+src/pages/EntryGate.tsx   → option iii `to` changes from "/compare?seed=auto" to "/choose" (only line touched)
+src/pages/Choose.tsx      → NEW — 3-step flow, ends at /compare?seed=auto
+src/App.tsx               → register /identify and /choose routes
 ```
 
-Tailwind `theme.extend.colors` gains `'paper-soft'` and `'accent-burnt'` mapped to the new vars.
-
-## Files touched
-
-```text
-src/index.css                  → add --paper-soft, --accent-burnt, .editorial-img utility
-tailwind.config.ts             → map new color tokens
-src/pages/TripWorkspace.tsx    → image header, promoted Itinerary card, Marrakech image card
-src/pages/Cura.tsx             → top image band, left-rule insight cards w/ alt bg, refined input
-src/pages/Profile.tsx          → ink portrait header w/ giant "N", spacing tweaks
-src/pages/TripIntro.tsx        → ghost image layer + focus-in transition
-```
-
-No other files, routes, copy, or navigation touched.
+No other pages, components, tokens, or styles touched.
 
