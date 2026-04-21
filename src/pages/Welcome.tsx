@@ -34,22 +34,8 @@ const frames: Frame[] = [
   { src: surreal8, alt: "Three colossal green olives balanced on an empty Mediterranean rooftop, calm sea in the distance" },
 ];
 
-/* Rotating editorial thought - chosen once per app open.
-   These are observations, not motivation. CURA's voice. */
-const thoughts: string[] = [
-  "Most trips are decided before they are planned.",
-  "The good ones happen on purpose.",
-  "Taste is the part of you that does not need a reason.",
-  "A trip is a sequence of small refusals.",
-  "Where you go is rarely the question. How you go is.",
-  "The interesting part of any city is what it asks of you.",
-  "Itineraries are written. Trips are edited.",
-];
-
 const Welcome = () => {
   const [i, setI] = useState(0);
-  // Pick a thought once per mount (i.e. per app open).
-  const [thought] = useState(() => thoughts[Math.floor(Math.random() * thoughts.length)]);
 
   useEffect(() => {
     const id = setInterval(() => setI((n) => (n + 1) % frames.length), 6000);
@@ -86,25 +72,7 @@ const Welcome = () => {
 
       {/* Everything below the image shares the same px-5 rhythm */}
       <div className="flex-1 flex flex-col px-5">
-        {/* Caption sits cleanly under the image, aligned to the same gutter.
-            Eyebrow is a fixed system label; the line below rotates per app open. */}
-        <div className="pt-4 cura-rise">
-          <div className="bg-foreground/[0.03] border-l-2 border-foreground/15 px-4 py-4">
-            <div className="editorial-eyebrow text-muted-foreground">Plate I · A thought before you begin</div>
-            <div
-              aria-hidden
-              className="font-serif text-[36px] leading-none text-foreground/30 mt-2 -mb-1"
-            >
-              “
-            </div>
-            <p className="italic-serif text-[15px] leading-snug text-foreground/80 max-w-[34ch]">
-              {thought}
-            </p>
-            <div className="editorial-eyebrow text-muted-foreground mt-3 text-right">Cura · thought</div>
-          </div>
-        </div>
-
-        <section className="pt-10">
+        <section className="pt-6">
           <div className="editorial-eyebrow text-primary mb-2">A travel operating system</div>
           <h1 className="display-md leading-[0.95]">
             A system <span className="italic-serif">with taste.</span><br />
