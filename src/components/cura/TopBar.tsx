@@ -19,7 +19,7 @@ export const TopBar = ({ back, eyebrow, title, right, className }: Props) => {
             <ArrowLeft className="h-5 w-5" strokeWidth={1.5} />
           </Link>
         ) : (
-          <div className="font-serif text-xl tracking-tight">CURA</div>
+          <div className="font-serif lowercase text-2xl leading-none tracking-tight">cura</div>
         )}
         <div className="min-w-0">
           {eyebrow && <div className="editorial-eyebrow text-muted-foreground">{eyebrow}</div>}
