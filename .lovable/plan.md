@@ -2,73 +2,93 @@
 
 ## Goal
 
-Three small, surgical changes:
-1. Welcome (Plate I) — refine the rotating thought into a quote-framed editorial block, swap the primary CTA copy, tweak the secondary link copy.
-2. New "Identify yourself" page (name + email) — appears between Welcome and Plate II.
-3. Plate II option iii reroutes to a new 3-question flow that ends at `/compare`.
+Five small, targeted refinements:
+1. Welcome (Plate I) — frame the rotating thought as a proper Cura "thought" sub-section with a faint background panel, an in-line `Cura · thought` attribution, and more separation before the headline section.
+2. Welcome — primary CTA copy: `I'm new here, show me cura` (lowercase "cura").
+3. Identify page — remove the redundant inline label that repeats the heading.
+4. Choose flow — fix header inconsistency across all 3 questions, make Q1 destinations feel dynamic (not "first/second/third"), promote Q2 passport to the searchable dropdown (excluding Israeli) with cleaner grammar, and rewrite the final CTA in Cura's voice.
 
-No layout, styling, or color changes to existing screens beyond copy + the one routing change.
+No layout, color, or routing changes beyond what's listed.
 
-## 1. Welcome — copy + quote framing
+## 1. `src/pages/Welcome.tsx`
 
-In `src/pages/Welcome.tsx`:
+**Quote sub-section as a framed panel**
 
-- **Quote framing for the rotating thought.** Today the thought is rendered as a flat italic line with a tiny rule above. Replace that single `<p>` with a small editorial quote block — same `px-5` gutter, same eyebrow above:
-  - A large serif opening quotation mark (`"`) sits on its own line at the top-left, Playfair, ~36px, low opacity (`text-foreground/30`), tight leading. Acts as a visual mark, not a character in the sentence.
-  - The thought sits directly below it, italic Playfair, slightly larger than today (`text-[15px] leading-snug`), no surrounding straight quotes anymore (the glyph above does the framing).
-  - A short hairline rule (`h-px w-6 bg-foreground/30`) and a tiny right-aligned attribution "— Cura" in `editorial-eyebrow` style sit below the thought.
-- **Primary CTA copy:** change `Begin` → `Show me Cura`. Keep the arrow, ink-black button styling, and `/begin` route untouched. *(Note: the route currently goes to `/begin` — see §2; we'll repoint it to the new identify page.)*
-- **Secondary link copy:** change `I already have an account` → `I've been here before`. Route + style unchanged (`/home`).
+Replace the current bare quote block with a contained editorial panel — same `px-5` outer gutter, but the panel itself sits inside a faint paper-deep wash so it visibly registers as "a moment of its own":
 
-Nothing else on Welcome changes — carousel, logo, eyebrow text, headline, footer imprint all stay.
+- Wrap the existing eyebrow + quote glyph + thought line in a single block with `bg-foreground/[0.03] border-l-2 border-foreground/15 px-4 py-4`. No border-radius (stays editorial).
+- Existing eyebrow `Plate I · A thought before you begin` and the large `"` glyph stay exactly as they are, just inside the panel.
+- Below the thought line, add a tiny right-aligned attribution row matching other Cura whisper attributions in the app: `<div className="editorial-eyebrow text-muted-foreground mt-3 text-right">Cura · thought</div>`.
 
-## 2. New page — `src/pages/Identify.tsx`
+**More separation before the headline section**
 
-Editorial two-field intake. Routed at `/identify`. Welcome's primary CTA repoints to this page, and Identify's continue button routes to `/begin` (Plate II). This inserts cleanly between Plate I and Plate II without altering Plate II.
+Bump the spacing between the thought panel and the "A travel operating system" section from `pt-5` to `pt-10` so the panel reads as its own moment.
 
-**Layout (matches existing app rhythm — `app-shell`, `px-5`, TopBar):**
+**Primary CTA copy**
 
-- `TopBar` with `back="/"`, eyebrow `"Plate I · ½"`, title `"Begin"`.
-- Heading section: editorial eyebrow `"A short introduction"` then a Playfair display heading: `Before we go, what should I call you?` with `call you?` in italic-serif accent.
-- Two stacked fields, hairline-bordered, no rounded corners, matching the editorial form treatment used elsewhere in the app:
-  - **Name** — label `"What should I call you?"` (10px tracked uppercase eyebrow), input below, no border except a single bottom hairline (`border-b border-foreground/30 focus:border-foreground`), Playfair italic placeholder `"a name, a nickname, anything"`.
-  - **Email** — label `"And where can I reach you?"`, hairline-bottom input, placeholder `"you@somewhere.com"`, `type="email"`.
-- Continue button: full-width, `bg-ink text-ink-foreground`, copy `Take me in →`. Disabled (opacity-50, pointer-events-none) until both fields have content (basic non-empty + email contains `@`). On submit, persist to localStorage as `cura.profile = { name, email }` so Home/You can read it later, then `navigate("/begin")`.
-- Cura whisper line at the bottom in italic-serif: `"I'll only ask once. After this, I just remember."` with `Cura · note` eyebrow.
+Change the button label from `Show me Cura` to `I'm new here, show me cura` — exact casing, lowercase `cura`. Route, styling, arrow all unchanged. (The button text already uses `font-sans tracking-wide`; no font swap needed, the lowercase "cura" reads naturally inside the sans label since it's a deliberate brand wink.)
 
-State: local `useState` for `name` and `email`. No backend, no validation library — just `name.trim().length > 0 && /\S+@\S+\.\S+/.test(email)`.
+## 2. `src/pages/Identify.tsx`
 
-Register the route in `src/App.tsx`: `<Route path="/identify" element={<Identify />} />` above the catch-all.
+**Remove the redundant question label**
 
-## 3. Plate II option iii → new 3-question Choose flow
+The page heading already reads `Before we go, what should I call you?`. The first input then re-asks `What should I call you?` as its eyebrow label — that's the redundancy. 
 
-**Routing change in `src/pages/EntryGate.tsx`:** option iii's `to` becomes `/choose` (was `/compare?seed=auto`). No design or copy changes to EntryGate itself.
+- Replace the name input's eyebrow `What should I call you?` with the simple field label `Your name` (kept in `editorial-eyebrow` style for consistency with the email field's `And where can I reach you?`).
+- Email field, placeholders, validation, button copy all unchanged.
 
-**New page `src/pages/Choose.tsx`** — single component that renders one of three steps based on internal state. Each step has its own back button (back from Q1 → `/begin`, back from Q2 → Q1, back from Q3 → Q2) and a continue button (Q3's continue → `/compare`).
+## 3. `src/pages/Choose.tsx` — header consistency
 
-Shared chrome on every step:
-- `app-shell`, `px-5`, `TopBar` with eyebrow `"Plate II · Choose"` and title that updates per step (`"One of three"`, `"Two of three"`, `"Three of three"`). The TopBar's `back` prop is set per step using a small handler — when not on Q1 it calls a local `goBack()` instead of navigating; we'll achieve this by rendering a custom mini back row for Q2/Q3 (a `button` styled like the TopBar back chevron) and using TopBar with `back="/begin"` only on Q1. Simpler alternative kept in implementation: render a small inline back button row above the question on every step and skip TopBar's back handling — keeps logic local. Going with the inline back row.
-- Tiny progress reading like `"i / iii"` in the editorial eyebrow style, top-right of the question block.
-- Heading per step (Playfair display, italic-serif accent on the key word).
-- Continue button at the bottom, ink-black, full width, disabled until the step's minimum input requirement is met.
+Today the TopBar shows `Plate II · Choose / One of three` while Plate II itself uses `Entry / Begin` and EntryGate's body shows `Plate II`. The user's complaint is internal to the Choose flow: the eyebrow + title combo is too long and inconsistent. Fix all three steps to share the exact same TopBar treatment, with the per-step progress only living in the question block (where `i / iii` already lives):
 
-**Q1 — Destinations (up to 3).** Heading: `Where are you choosing between?` Three labeled inputs stacked vertically, each with hairline-bottom styling: `First`, `Second`, `Third (optional)`. Continue requires at least 1 non-empty input, accepts up to 3.
+- TopBar on every step: `eyebrow="Plate II"`, `title="Choose"` — identical across Q1, Q2, Q3.
+- Remove the `titles` map (`"One of three"`, etc.) — no longer used.
+- The per-step indicator stays inside the question section: keep the existing `i / iii`, `ii / iii`, `iii / iii` numerals top-right of the question block.
+- Back behaviour unchanged (Q1 → `/begin` via TopBar's `back` prop; Q2/Q3 → previous step via the inline back row).
 
-**Q2 — Passport nationality.** Heading: `Which passport are you traveling on?` Single hairline-bottom input, placeholder `"e.g. Canadian, Egyptian, German"`. Free-text for now (no country dropdown — keeps scope small, matches editorial tone). Continue requires non-empty.
+## 4. Choose Q1 — make destinations feel dynamic, drop "First/Second/Third"
 
-**Q3 — Departure city.** Heading: `Where will you be flying from?` Single hairline-bottom input, placeholder `"e.g. Toronto, Cairo, Berlin"`. Continue copy: `See them side by side →`. On submit, persist `cura.choose = { destinations, passport, from }` to localStorage and `navigate("/compare?seed=auto")` so Compare keeps its existing seeded mode (the back link there already points to `/begin`).
+**State + UX shift**
 
-Register the route in `src/App.tsx`: `<Route path="/choose" element={<Choose />} />` above the catch-all.
+Replace the three fixed inputs (`d1`, `d2`, `d3`) with a single `destinations: string[]` array starting with two entries (`["", ""]`). Treat the third as opt-in via an "add another" button, matching the user's "maybe add a button to add a third country" ask. Cap at 3.
 
-## 4. Files touched
+- Render destinations via `destinations.map((value, idx) => ...)`. Each row has:
+  - A small serif italic Roman numeral on the left (`i.`, `ii.`, `iii.`) in `text-muted-foreground` — matches the EntryGate numeral pattern, so it feels native to the Plate II family rather than utilitarian "First/Second/Third" labels.
+  - The hairline-bottom input on the right, same `inputClass`, placeholders rotating editorially: `e.g. Lisbon`, `or Marrakech`, `…and one more`.
+  - For rows beyond the first, a tiny `×` remove button on the far right (`text-foreground/40 hover:text-foreground`) that splices the row out (only shown when `destinations.length > 1`).
+- Below the list, an `Add another place` button (only when `destinations.length < 3`):
+  - Editorial style: `flex items-center gap-2 text-[12px] text-muted-foreground hover:text-foreground` with a small `+` glyph. Not a heavy button — a quiet textual affordance.
+  - Clicking appends `""` to the array.
+- Validation: continue requires at least one non-empty trimmed destination.
+- On submit (Q3), the array is filtered/trimmed exactly as today before persisting to `cura.choose`.
+
+This kills "First / Second / Third" entirely and makes the section feel composed rather than a form.
+
+## 5. Choose Q2 — searchable passport dropdown, fixed grammar
+
+- Heading copy fix: `Which passport are you traveling on?` → `Which passport do you travel with?` (italic-serif accent moves to `travel with?`).
+- Remove the redundant `Passport nationality` eyebrow above the field — the heading already says it.
+- Replace the free-text `<input>` with the existing `SearchableSelect` component (already built for this exact purpose). 
+  - Options: `passportNationalities` from `src/data/locations.ts`, filtered to exclude `"Israeli"`. Since the current list does not contain `"Israeli"`, no entry needs to be removed — but to honor the explicit instruction defensively, derive options as `passportNationalities.filter(p => p !== "Israeli")` so the exclusion is enforced even if the data file ever changes.
+  - Props: `value={passport || null}`, `onChange={setPassport}`, `placeholder="Search passports…"`, `label="Choose your passport"`.
+- Validation unchanged (`q2Valid` already keys off `passport.trim().length > 0`).
+
+## 6. Choose Q3 — final CTA copy in Cura's voice
+
+Replace `See them side by side` with something more on-brand. Options aligned with Cura's register (chosen: the first):
+
+- Selected: `Lay them on the table`
+- Backup if user prefers: `Set them beside each other`, `Bring them in`, `Now we choose`
+
+Going with `Lay them on the table` — it matches Cura's editorial, tactile voice (echoes "field note", "plate", "imprint") and reads as an action, not a feature. Arrow stays.
+
+## Files touched
 
 ```text
-src/pages/Welcome.tsx     → quote-frame the rotating thought; CTA copy "Show me Cura"; secondary "I've been here before"; primary route → "/identify"
-src/pages/Identify.tsx    → NEW — name + email intake, routes to /begin
-src/pages/EntryGate.tsx   → option iii `to` changes from "/compare?seed=auto" to "/choose" (only line touched)
-src/pages/Choose.tsx      → NEW — 3-step flow, ends at /compare?seed=auto
-src/App.tsx               → register /identify and /choose routes
+src/pages/Welcome.tsx   → faint-bg quote panel, "Cura · thought" attribution, more separation before headline section, CTA → "I'm new here, show me cura"
+src/pages/Identify.tsx  → name field eyebrow renamed from repeated question to "Your name"
+src/pages/Choose.tsx    → unified TopBar (Plate II / Choose) on all steps; Q1 dynamic destinations w/ Roman numerals + "Add another place"; Q2 → SearchableSelect (Israeli excluded), grammar fix, removed redundant label; Q3 CTA copy → "Lay them on the table"
 ```
 
-No other pages, components, tokens, or styles touched.
+No other files, components, tokens, routes, or styles touched.
 
