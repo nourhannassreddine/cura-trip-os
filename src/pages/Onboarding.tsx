@@ -173,7 +173,7 @@ const Onboarding = () => {
   const [lastMood, setLastMood] = useState<string | null>(null);
 
   const nav = useNavigate();
-  const stepCount = isShort ? 5 : 6;
+  const stepCount = 6;
 
   // reset step if path changes mid-flow
   useEffect(() => { setStep(0); }, [path]);
@@ -293,25 +293,18 @@ const Onboarding = () => {
           return familyPassports.every((p) => !!p) && !!passport;
         })();
 
-  /* Step routing
+  /* Step routing — both paths share screens 0–4. They diverge only at 5.
      full  : 0 Feel · 1 Decide · 2 Purpose · 3 Context · 4 Dealbreakers · 5 Reading
-     short : 0 Feel · 1 Decide · 2 Purpose · 3 Destination · 4 Context           */
+     short : 0 Feel · 1 Decide · 2 Purpose · 3 Context · 4 Dealbreakers · 5 Destination */
 
   const isPurpose = step === 2;
-  const isFullContext = !isShort && step === 3;
-  const isShortDestination = isShort && step === 3;
-  const isShortContext = isShort && step === 4;
+  const isContext = step === 3;
+  const isDealbreakers = step === 4;
+  const isFullReading = !isShort && step === 5;
+  const isShortDestination = isShort && step === 5;
 
-  const fullContextValid =
-    isFullContext &&
-    departure.trim().length >= 2 &&
-    !!passport &&
-    companyChoice !== null &&
-    spend !== null &&
-    partnerValid && friendsValid && familyValid;
-
-  const shortContextValid =
-    isShortContext &&
+  const contextValid =
+    isContext &&
     departure.trim().length >= 2 &&
     !!passport &&
     companyChoice !== null &&
@@ -322,11 +315,10 @@ const Onboarding = () => {
     (step === 0 && picked.size >= 1) ||
     (step === 1 && pace !== null) ||
     (isPurpose && purpose !== null) ||
-    (isShortDestination && destination.trim().length >= 2) ||
-    fullContextValid ||
-    shortContextValid ||
-    (!isShort && step === 4) ||
-    (!isShort && step === 5);
+    contextValid ||
+    isDealbreakers ||
+    isFullReading ||
+    (isShortDestination && destination.trim().length >= 2);
 
   const persist = () => {
     saveProfile({
