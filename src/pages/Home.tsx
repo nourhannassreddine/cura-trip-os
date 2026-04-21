@@ -76,17 +76,20 @@ const Home = () => {
           <div className="font-serif lowercase text-2xl leading-none tracking-tight">
             cura
           </div>
+        </div>
+        <div className="flex flex-col items-end">
+          <div className="flex items-center" style={{ gap: "12px" }}>
+            <button aria-label="Notifications" className="hover:opacity-70 inline-flex items-center justify-center" style={{ width: "20px", height: "20px" }}>
+              <Bell className="text-foreground" style={{ width: "20px", height: "20px" }} fill="currentColor" stroke="currentColor" strokeWidth={1.5} />
+            </button>
+            <span aria-hidden="true" style={{ width: "1px", height: "16px", backgroundColor: "rgba(26,26,24,0.15)" }} />
+            <Link to="/begin" aria-label="Dream" className="hover:opacity-70 inline-flex items-center justify-center" style={{ width: "20px", height: "20px" }}>
+              <span className="inline-flex items-center justify-center text-foreground" style={{ fontSize: "20px", lineHeight: 1 }}>✦</span>
+            </Link>
+          </div>
           <div className="editorial-eyebrow text-muted-foreground mt-1.5">
             Tuesday · 4:12 pm
           </div>
-        </div>
-        <div className="flex items-center" style={{ gap: "12px" }}>
-          <button aria-label="Notifications" className="hover:opacity-70 inline-flex items-center justify-center" style={{ width: "20px", height: "20px" }}>
-            <Bell className="text-foreground" style={{ width: "20px", height: "20px" }} fill="currentColor" stroke="currentColor" strokeWidth={1.5} />
-          </button>
-          <Link to="/begin" aria-label="Dream" className="hover:opacity-70 inline-flex items-center justify-center" style={{ width: "20px", height: "20px" }}>
-            <span className="inline-flex items-center justify-center text-foreground" style={{ fontSize: "20px", lineHeight: 1 }}>✦</span>
-          </Link>
         </div>
       </header>
 
