@@ -86,25 +86,7 @@ const Welcome = () => {
 
       {/* Everything below the image shares the same px-5 rhythm */}
       <div className="flex-1 flex flex-col px-5">
-        {/* Caption sits cleanly under the image, aligned to the same gutter.
-            Eyebrow is a fixed system label; the line below rotates per app open. */}
-        <div className="pt-4 cura-rise">
-          <div className="bg-foreground/[0.03] border-l-2 border-foreground/15 px-4 py-4">
-            <div className="editorial-eyebrow text-muted-foreground">Plate I · A thought before you begin</div>
-            <div
-              aria-hidden
-              className="font-serif text-[36px] leading-none text-foreground/30 mt-2 -mb-1"
-            >
-              “
-            </div>
-            <p className="italic-serif text-[15px] leading-snug text-foreground/80 max-w-[34ch]">
-              {thought}
-            </p>
-            <div className="editorial-eyebrow text-muted-foreground mt-3 text-right">Cura · thought</div>
-          </div>
-        </div>
-
-        <section className="pt-10">
+        <section className="pt-6">
           <div className="editorial-eyebrow text-primary mb-2">A travel operating system</div>
           <h1 className="display-md leading-[0.95]">
             A system <span className="italic-serif">with taste.</span><br />
