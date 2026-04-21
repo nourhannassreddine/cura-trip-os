@@ -206,8 +206,8 @@ const Home = () => {
               </div>
               <div className="mt-2 h-px bg-foreground/15 relative">
                 <div
-                  className="absolute left-0 top-0 h-px bg-primary"
-                  style={{ width: `${primary.readiness}%` }}
+                  className="absolute left-0 top-0 h-px"
+                  style={{ width: `${primary.readiness}%`, background: "#C24E2A" }}
                 />
               </div>
             </div>
@@ -253,9 +253,9 @@ const Home = () => {
         </section>
       )}
 
-      {/* SECONDARY TRIPS — compact list, status sticker on the right */}
+      {/* SECONDARY TRIPS — flex row 38/62 with desaturated image. */}
       {secondary.length > 0 && (
-        <section className="mt-8 px-5">
+        <section className="mt-6 px-5">
           <div className="flex items-baseline justify-between mb-3">
             <div className="editorial-eyebrow text-muted-foreground">Also in motion</div>
             <Link
@@ -265,31 +265,49 @@ const Home = () => {
               All trips
             </Link>
           </div>
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {secondary.map((t) => (
               <li key={t.id}>
                 <Link
                   to={`/trip/${t.id}`}
-                  className="grid grid-cols-[72px_1fr_auto] items-center gap-3 border border-foreground/15 hover:border-foreground transition-colors"
+                  className="flex w-full border border-foreground/15 hover:border-foreground transition-colors min-h-[110px]"
                 >
-                  <div className="relative h-[72px] overflow-hidden">
+                  <div
+                    className="relative overflow-hidden shrink-0"
+                    style={{ width: "38%" }}
+                  >
                     <img
                       src={t.cover}
                       alt={t.city}
                       loading="lazy"
-                      className="h-full w-full object-cover"
+                      className="absolute inset-0 h-full w-full object-cover"
+                      style={{ filter: "saturate(0.75)" }}
                     />
                   </div>
-                  <div className="py-2">
-                    <div className="font-serif text-base leading-none">{t.city}</div>
-                    <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground mt-1">
-                      {t.dates}
+                  <div
+                    className="flex flex-col justify-between p-4"
+                    style={{ width: "62%" }}
+                  >
+                    <div>
+                      <div className="font-serif leading-tight" style={{ fontSize: "18px" }}>
+                        {t.city}
+                      </div>
+                      <div
+                        className="font-sans text-muted-foreground mt-1"
+                        style={{ fontSize: "10px", letterSpacing: "0.04em" }}
+                      >
+                        {t.dates}
+                      </div>
                     </div>
-                  </div>
-                  <div className="pr-3 text-right">
-                    <StatusSticker status={t.status} />
-                    <div className="text-[10px] text-muted-foreground mt-1">
-                      {t.readiness}%
+                    <div className="mt-3">
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 uppercase ${
+                          statusStyles[t.status] ?? statusStyles.planning
+                        }`}
+                        style={{ fontSize: "8px", letterSpacing: "0.18em" }}
+                      >
+                        {t.status}
+                      </span>
                     </div>
                   </div>
                 </Link>
@@ -299,9 +317,15 @@ const Home = () => {
         </section>
       )}
 
-      {/* Field note — wrapped in px-5 to share the page's gutter rhythm */}
+      {/* Field note — linen surface w/ left ink hairline */}
       <section className="mt-12 px-5">
-        <div className="grid grid-cols-5 gap-0 items-stretch border border-foreground/10">
+        <div
+          className="grid grid-cols-5 gap-0 items-stretch"
+          style={{
+            background: "#EFE9DF",
+            borderLeft: "1.5px solid rgba(26,26,24,0.15)",
+          }}
+        >
           <div className="col-span-3 relative h-[200px]">
             <img
               src={fieldnote}
@@ -310,7 +334,7 @@ const Home = () => {
               className="h-full w-full object-cover"
             />
           </div>
-          <div className="col-span-2 bg-paper-deep p-4 flex flex-col justify-between">
+          <div className="col-span-2 p-4 flex flex-col justify-between">
             <div className="editorial-eyebrow text-muted-foreground">Field note</div>
             <p className="italic-serif text-[15px] leading-tight">
               "Pack like you live there, not like you visit."
@@ -327,7 +351,9 @@ const Home = () => {
       {elsewhere.length > 0 && (
         <section className="mt-10">
           <div className="flex items-baseline justify-between mb-3 px-5">
-            <div className="editorial-eyebrow text-muted-foreground">A small list of elsewhere</div>
+            <h2 className="font-serif text-[22px] leading-none">
+              A small list of <span className="italic">elsewhere</span>
+            </h2>
             <Link
               to="/discover"
               className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
@@ -370,7 +396,9 @@ const Home = () => {
       {archive.length > 0 && (
         <section className="mt-10 px-5">
           <div className="flex items-baseline justify-between mb-3">
-            <div className="editorial-eyebrow text-muted-foreground">From the archive</div>
+            <h2 className="font-serif text-[22px] leading-none">
+              From the <span className="italic">archive</span>
+            </h2>
             <Link
               to="/journal"
               className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground"
@@ -378,12 +406,19 @@ const Home = () => {
               Journal
             </Link>
           </div>
-          <ul className="space-y-3">
-            {archive.map((j) => (
-              <li key={j.day}>
+          <ul>
+            {archive.map((j, idx) => (
+              <li
+                key={j.day}
+                style={
+                  idx > 0
+                    ? { borderTop: "0.5px solid hsl(var(--ink) / 0.1)" }
+                    : undefined
+                }
+              >
                 <Link
                   to="/journal"
-                  className="grid grid-cols-[1fr_120px] border border-foreground/15 hover:border-foreground/40 transition-colors overflow-hidden"
+                  className="grid grid-cols-[1fr_120px] hover:bg-foreground/[0.02] transition-colors overflow-hidden"
                 >
                   <div className="p-4 flex flex-col justify-between gap-3">
                     <div className="editorial-eyebrow text-muted-foreground">
