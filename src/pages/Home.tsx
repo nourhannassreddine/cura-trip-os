@@ -81,11 +81,11 @@ const Home = () => {
           </div>
         </div>
         <div className="flex items-center" style={{ gap: "12px" }}>
-          <button aria-label="Notifications" className="hover:opacity-70">
-            <Bell className="h-5 w-5" strokeWidth={1.5} />
+          <button aria-label="Notifications" className="hover:opacity-70 inline-flex items-center justify-center" style={{ width: "20px", height: "20px" }}>
+            <Bell className="text-foreground" style={{ width: "20px", height: "20px" }} fill="currentColor" stroke="currentColor" strokeWidth={1.5} />
           </button>
-          <Link to="/begin" aria-label="Dream" className="hover:opacity-70">
-            <span className="inline-flex items-center justify-center h-5 w-5 text-[20px] leading-none text-foreground">✦</span>
+          <Link to="/begin" aria-label="Dream" className="hover:opacity-70 inline-flex items-center justify-center" style={{ width: "20px", height: "20px" }}>
+            <span className="inline-flex items-center justify-center text-foreground" style={{ fontSize: "20px", lineHeight: 1 }}>✦</span>
           </Link>
         </div>
       </header>
