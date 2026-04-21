@@ -34,22 +34,8 @@ const frames: Frame[] = [
   { src: surreal8, alt: "Three colossal green olives balanced on an empty Mediterranean rooftop, calm sea in the distance" },
 ];
 
-/* Rotating editorial thought - chosen once per app open.
-   These are observations, not motivation. CURA's voice. */
-const thoughts: string[] = [
-  "Most trips are decided before they are planned.",
-  "The good ones happen on purpose.",
-  "Taste is the part of you that does not need a reason.",
-  "A trip is a sequence of small refusals.",
-  "Where you go is rarely the question. How you go is.",
-  "The interesting part of any city is what it asks of you.",
-  "Itineraries are written. Trips are edited.",
-];
-
 const Welcome = () => {
   const [i, setI] = useState(0);
-  // Pick a thought once per mount (i.e. per app open).
-  const [thought] = useState(() => thoughts[Math.floor(Math.random() * thoughts.length)]);
 
   useEffect(() => {
     const id = setInterval(() => setI((n) => (n + 1) % frames.length), 6000);
