@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Plus, X } from "lucide-react";
+import { ArrowRight, Plus, X } from "lucide-react";
 import { TopBar } from "@/components/cura/TopBar";
 import { SearchableSelect } from "@/components/cura/SearchableSelect";
 import { passportNationalities } from "@/data/locations";
+import { cn } from "@/lib/utils";
 
 /* ------------------------------------------------------------------
    Choose — three-question flow for users deciding between places.
@@ -87,16 +88,7 @@ const Choose = () => {
         }
       />
 
-      {step !== 1 && (
-        <button
-          onClick={goBack}
-          aria-label="Back"
-          className="px-5 -mt-1 mb-1 flex items-center gap-1 text-foreground/70 hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
-          <span className="text-[12px]">Back</span>
-        </button>
-      )}
+      {/* Back is rendered in the footer to match the calibration flow */}
 
       <section className="px-5 pt-5 pb-7 cura-rise">
         <div className="flex items-start justify-between gap-4">
@@ -193,21 +185,25 @@ const Choose = () => {
         )}
       </div>
 
-      <div className="px-5 pt-7 pb-5 mt-auto">
+      <footer className="mt-auto border-t border-foreground/15 p-5 flex items-center justify-between bg-background">
+        <button
+          onClick={goBack}
+          className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground"
+        >
+          Back
+        </button>
         <button
           onClick={goNext}
           disabled={!canContinue}
-          className={`group w-full flex items-center justify-between border border-foreground bg-ink text-ink-foreground px-5 py-3.5 transition-opacity ${
-            canContinue ? "opacity-100" : "opacity-50 pointer-events-none"
-          }`}
+          className={cn(
+            "group flex items-center gap-3 border border-foreground bg-ink text-ink-foreground px-5 py-3 transition-opacity",
+            !canContinue && "opacity-40 pointer-events-none"
+          )}
         >
-          <span className="font-sans text-sm tracking-wide">{continueLabel}</span>
-          <ArrowRight
-            className="h-4 w-4 transition-transform group-hover:translate-x-1"
-            strokeWidth={1.5}
-          />
+          <span className="text-sm tracking-wide">{continueLabel}</span>
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" strokeWidth={1.5} />
         </button>
-      </div>
+      </footer>
     </main>
   );
 };
