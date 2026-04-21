@@ -368,11 +368,15 @@ const Home = () => {
                 to="/discover"
                 className="snap-start shrink-0 w-[42%] group"
               >
-                <div className="relative aspect-[3/4] overflow-hidden">
+                <div className="relative overflow-hidden" style={{ height: "220px" }}>
                   <img
                     src={d.cover}
                     alt={`${d.name}, ${d.country}`}
                     loading="lazy"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src =
+                        "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&q=80";
+                    }}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute top-2 left-2 bg-ink text-ink-foreground px-1.5 py-0.5 text-[10px] tracking-[0.12em] uppercase z-10">
