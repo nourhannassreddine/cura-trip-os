@@ -88,16 +88,7 @@ const Choose = () => {
         }
       />
 
-      {step !== 1 && (
-        <button
-          onClick={goBack}
-          aria-label="Back"
-          className="px-5 -mt-1 mb-1 flex items-center gap-1 text-foreground/70 hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
-          <span className="text-[12px]">Back</span>
-        </button>
-      )}
+      {/* Back is rendered in the footer to match the calibration flow */}
 
       <section className="px-5 pt-5 pb-7 cura-rise">
         <div className="flex items-start justify-between gap-4">
