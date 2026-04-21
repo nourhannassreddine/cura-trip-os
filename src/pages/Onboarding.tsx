@@ -975,16 +975,14 @@ const Onboarding = () => {
 
             <div className="mt-7">
               <CuraWhisper variant="inline">
-                {isShort
-                  ? "I'll learn the rest from how you move. Dealbreakers come up when they need to."
-                  : "I won't ask your budget. I'll watch how you spend on day two and adjust."}
+                I won't ask your budget. I'll watch how you spend on day two and adjust.
               </CuraWhisper>
             </div>
           </>
         )}
 
-        {/* ---------- STEP 4 — DEALBREAKERS (full only) ---------- */}
-        {!isShort && step === 4 && (
+        {/* ---------- STEP 4 — DEALBREAKERS (both paths) ---------- */}
+        {isDealbreakers && (
           <>
             <div className="editorial-eyebrow text-muted-foreground mb-3">v. Dealbreakers</div>
             <h2 className="display-lg max-w-[14ch]">
