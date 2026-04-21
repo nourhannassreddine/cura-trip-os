@@ -3,7 +3,7 @@ import { TopBar } from "@/components/cura/TopBar";
 import { BottomNav } from "@/components/cura/BottomNav";
 import { Tag } from "@/components/cura/Tag";
 import { destinations } from "@/data/cura";
-import { CuraWhisper } from "@/components/cura/CuraWhisper";
+
 
 const rows = [
   { key: "visa", label: "Visa effort", get: (d: any) => d.visa, render: (v: string) => <Tag variant={v === "easy" ? "olive" : v === "medium" ? "default" : "outline"}>{v}</Tag> },
@@ -78,10 +78,38 @@ const Compare = () => {
       </section>
 
       <section className="mt-8 px-5">
-        <CuraWhisper>
-          Puglia wins on couple fit and food, but it's the most expensive day-to-day.
-          Marrakech wins on cost — and design. Want me to draft both and you choose at the end?
-        </CuraWhisper>
+        <div
+          style={{
+            background: "#EFE9DF",
+            borderLeft: "2px solid #E36414",
+            padding: "20px 18px",
+          }}
+        >
+          <div
+            style={{
+              color: "#E36414",
+              fontSize: "8px",
+              textTransform: "uppercase",
+              letterSpacing: "0.18em",
+              marginBottom: "8px",
+            }}
+          >
+            ✦ CURA
+          </div>
+          <p
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontStyle: "italic",
+              fontSize: "17px",
+              color: "#1A1A18",
+              lineHeight: 1.6,
+              margin: 0,
+            }}
+          >
+            Puglia wins on couple fit and food, but it's the most expensive day-to-day.
+            Marrakech wins on cost — and design. Want me to draft both and you choose at the end?
+          </p>
+        </div>
       </section>
 
       <section className="mt-8 px-5">
