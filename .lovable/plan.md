@@ -2,110 +2,110 @@
 
 ## Goal
 
-Align the homepage rhythm to the rest of the layout, redesign the **Elsewhere** and **Archive** sections to match the uploaded references, refresh the field note image, and introduce a curated accent palette used tastefully across status identifiers and editorial details.
+Add editorial visual depth to four screens — Trip Workspace, Cura tab, You tab, and Trip Intro — without restructuring layout, copy, or routing. Bones stay; atmosphere arrives.
 
-## 1. Layout alignment
+## Global rules (applied across the four screens touched)
 
-The field note section currently breaks out of the `px-5` rhythm and sits edge-to-edge while every other section is padded. Wrap the field note in `px-5` like everything else so the entire page shares one consistent left/right gutter. Also update the greeting name from "Lia" → **"Nourhan"** to stress-test longer names.
+- Section vertical padding +40% on the four target screens.
+- Body line-height ≥ 1.75 in copy blocks on these screens.
+- Image treatment utility: `filter: saturate(0.85)` + an ivory wash overlay at 8% opacity. Implemented as a reusable `.editorial-img` wrapper class in `src/index.css` (image fills wrapper; absolutely-positioned `::after` paints `hsl(var(--paper) / 0.08)`).
+- All body text remains left-aligned; no border-radius added beyond existing tokens.
 
-## 2. "A small list of elsewhere" — redesigned
+## Screen 1 — Trip Workspace (`src/pages/TripWorkspace.tsx`)
 
-Match the reference: horizontal scrolling row of editorial cards.
+**Header — full-bleed image replaces ink-black block**
+- Container height: `min-h-[260px]`, `relative overflow-hidden`.
+- Background `<img>`: `https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80` (Puglia trulli), `absolute inset-0 w-full h-full object-cover`, with editorial treatment.
+- Gradient overlay: `absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/30 to-transparent`.
+- Text layout (over gradient, all ivory):
+  - Top-right: "UNTIL DEPARTURE" eyebrow + `38 days` in cherry red `#C8102E` (existing `--accent-rust` token reused if it matches; otherwise inline).
+  - Bottom-left: "Puglia" in Playfair 48px, then dates + country below.
+  - Readiness bar pinned to bottom edge of header (`absolute bottom-0 left-0 right-0`), ivory fill on `ivory/20` track — reads as a horizon line. "64% ready" sits just above-right of the bar.
 
-```text
-A small list of elsewhere                     ALL ↗
-─────────────────────────────────────────────────────
-┌──────────────┐  ┌──────────────┐  ┌────────
-│ [3H]         │  │ [3H 40]      │  │ [3H
-│              │  │              │  │
-│   image      │  │   image      │  │  image
-│              │  │              │  │
-│              │  │              │  │
-└──────────────┘  └──────────────┘  └────────
-Puglia            Marrakech          Sant…
-Olive light…      Pink dust…         Blue on…
-```
+**CURA insight (sunflower) — untouched.**
 
-- Horizontal scroll (snap-x), 3 cards visible-ish on mobile.
-- Each card: tall portrait image (~3:4), dark **flight-time chip** top-left (`bg-ink text-ink-foreground`, small, square-ish), serif name + italic tagline below.
-- "ALL ↗" link top-right replaces the current "Discover" eyebrow.
-- Remove the divided-list treatment entirely.
+**Engine grid — Itinerary promoted**
+- `Itinerary` card rendered separately, full-width (`col-span-2`), `h-[120px]`.
+- Background layer: same Puglia image at `opacity-[0.12]` with `filter: blur(2px) saturate(0.85)`, absolutely positioned behind a relative content layer so the foreground text/labels remain crisp (no blur on text).
+- The other 7 engines render in the 2-col grid below, unchanged styling.
 
-## 3. "From the archive" — redesigned
+**Also-in-motion (Marrakech) — image card**
+- Replace plain card with a `flex` row, `h-[90px]`, `border border-foreground/15`.
+- Left 40% (`w-[40%]`): `<img>` `https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=600&q=80`, `object-cover h-full w-full`, with editorial treatment.
+- Right 60%: existing copy block (city, dates, status tag, readiness) — unchanged.
 
-Match the reference: a single bordered editorial card per archived trip, copy on the left, narrow tall image on the right.
+## Screen 2 — Cura tab (`src/pages/Cura.tsx`)
 
-```text
-From the archive
-┌──────────────────────────────────────────────┐
-│ OCT 18 — OCT 24, 2024            ╭─────────╮ │
-│                                  │         │ │
-│ Lisbon                           │  image  │ │
-│                                  │         │ │
-│ "Yellow afternoons. The pasteis  │         │ │
-│  were better the second day."    ╰─────────╯ │
-└──────────────────────────────────────────────┘
-```
+**Top image band**
+- New section above the opening statement: `h-[180px] relative overflow-hidden`.
+- `<img>` `https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80`, editorial treatment.
+- Bottom-left overlay: existing `Asterisk` icon + `CURA` label, ivory, 9px tracked uppercase, `absolute bottom-4 left-5`.
+- Existing top header row (`Asterisk` + "Cura" eyebrow on paper) is removed since the band now carries the mark.
 
-- Card frame: `border border-foreground/15`, padded.
-- Grid: `grid-cols-[1fr_140px]`, image fills the right column edge-to-edge of the card.
-- Date eyebrow → city in serif → italic narrative quote.
-- Requires: each archive entry needs a `city`, `dateRange`, and `cover` image. Extend `journalEntries` in `src/data/cura.ts` with these fields (keep existing fields for compatibility on Journal page).
-- Generate 2 small archive cover images (Lisbon-feel alley, second city-feel) at 600×800 (3:4) into `src/assets/archive-1.jpg`, `src/assets/archive-2.jpg`.
+**Insight cards**
+- Each `<li>` gets `border-l-2` in burnt red `#BA181B` (added as `--accent-burnt` HSL var in `src/index.css`, mapped to `accent-burnt` in `tailwind.config.ts`).
+- Inner left padding bumped to `pl-5` (20px) for breathing room from the rule.
+- Alternating backgrounds via `even:bg-[hsl(var(--paper-soft))]` — add `--paper-soft: 36 24% 90%` (≈ `#EFE9DF`) to `:root` in `src/index.css`.
+- Category eyebrow + body untouched.
 
-## 4. Accent palette — tasteful, restrained
+**Input field**
+- Add `pt-6` above the form.
+- Hairline rule above input: keep existing `border-t` but drop opacity to `border-foreground/15` (0.5px feel via existing 1px hairline + low opacity).
+- Placeholder set in Playfair italic via existing `italic-serif` class — confirm the input element uses `font-serif italic` for placeholder; if the current `italic-serif` class doesn't propagate to placeholder, add `placeholder:font-serif placeholder:italic` explicitly.
 
-Add CSS custom properties to `src/index.css` for the accent set:
+## Screen 3 — You tab (`src/pages/Profile.tsx`)
 
-```text
---accent-rust:    #c1121f   (live / urgent)
---accent-ochre:   #bc6c25   (planning)
---accent-olive:   #606c38   (ready / committed)
---accent-sky:     #90e0ef   (dreaming)
---accent-rose:    #da627d   (memory / archive)
---accent-sun:     #ffc300   (highlight / whisper accent)
-```
+**Portrait header block (replaces current eyebrow + name section)**
+- `relative h-[200px] bg-ink text-ink-foreground overflow-hidden`.
+- Giant initial: `<span>` "N" in Playfair, `text-[140px] leading-none`, `text-[hsl(var(--ink-foreground)/0.08)]`, `absolute right-[-12px] top-1/2 -translate-y-1/2`. Bleeds slightly off right edge.
+- Bottom-left stack (`absolute left-5 bottom-5`):
+  - "YOU" eyebrow, 9px tracked, ivory low-opacity.
+  - "Nourhan" in Playfair 40px, ivory.
+  - Home / Passport rows below in ivory low-opacity, current key/value treatment but recolored for the dark surface.
 
-Map them into Tailwind via existing token system in `tailwind.config.ts` so we can use `bg-accent-rust`, `text-accent-sky`, etc.
+**Spacing**
+- Add 8px gap between header block and the first row of chapters.
+- Existing chapter rows kept exactly as is.
 
-Apply tastefully — not everywhere:
-- **Status stickers + action button** (`statusStyles`, `statusActionStyles`) get repainted with the accents above (planning=ochre, dreaming=sky, ready=olive, live=rust, memory=rose). White text on each. Replaces the current black "live" + raw orange "planning" combo.
-- **Cura whisper** keeps its existing left rule but the rule color shifts to `accent-sun` for a quiet editorial hit.
-- **Elsewhere flight-time chip** stays ink/dark — it's a utility chip, not a status.
-- Body, surfaces, type, borders → unchanged.
+**Footer imprint**
+- Ensure `mt-8` (32px) above the imprint footer.
 
-## 5. Field note image
+## Screen 4 — Trip Intro (`src/pages/TripIntro.tsx`)
 
-Current image isn't selling the editorial mood. Regenerate `src/assets/home-fieldnote.jpg` with:
+**Layered ivory + ghost image**
+- Wrapper `relative overflow-hidden`. Add an absolutely-positioned `<img>` (Puglia URL) at `inset-0 w-full h-full object-cover`, `style={{ opacity: focusing ? 0.15 : 0.06 }}` with a 300ms transition.
+- Above the image, a `bg-[hsl(var(--paper)/0.94)]` layer gives the ivory feel while letting the image bleed through.
+- New state `focusing` flips to `true` ~200ms before `setFadingOut`, so the image gently comes into focus before the crossfade routes to the dashboard.
+- Text reveal animation untouched.
 
-> "Overhead flat-lay on warm sun-faded stone of a cool fashionable outfit laid out: oversized cream linen shirt, wide-leg sand trousers, woven leather belt, tortoise sunglasses, small gold hoop earrings, leather mules, a folded silk scarf in muted rust. Soft natural side light, painterly editorial fashion magazine still life, low saturation, no text, no logos, no brand names anywhere."
-
-Generated at 1024×1280 with the high-quality image model.
-
-## 6. Files touched
+## Tokens & utilities (`src/index.css`, `tailwind.config.ts`)
 
 ```text
-src/pages/Home.tsx
-├── Greeting: "Lia" → "Nourhan"
-├── Field note section: wrap in px-5 to align with the rest
-├── Elsewhere section: rewritten as horizontal snap-scroll cards w/ flight chip
-├── Archive section: rewritten as bordered card grid w/ image right
-└── Status maps: repointed to new accent tokens
+:root {
+  --paper-soft: 36 24% 90%;     /* #EFE9DF */
+  --accent-burnt: 359 81% 41%;  /* #BA181B */
+}
 
-src/data/cura.ts
-└── journalEntries: add city, dateRange, cover per entry (keep day/narrative)
-
-src/index.css
-└── Add --accent-* CSS variables (HSL) under :root
-
-tailwind.config.ts
-└── Extend colors with accent-{rust,ochre,olive,sky,rose,sun}
-
-src/assets/
-├── home-fieldnote.jpg   → regenerate (flat-lay outfit, no brands)
-├── archive-1.jpg        → new (Lisbon-feel alley, 3:4)
-└── archive-2.jpg        → new (second archive city, 3:4)
+.editorial-img { position: relative; overflow: hidden; }
+.editorial-img > img { filter: saturate(0.85); width: 100%; height: 100%; object-fit: cover; }
+.editorial-img::after {
+  content: ""; position: absolute; inset: 0;
+  background: hsl(var(--paper) / 0.08); pointer-events: none;
+}
 ```
 
-No changes to routing, hero, primary/secondary trip cards' structure, footer, or other pages.
+Tailwind `theme.extend.colors` gains `'paper-soft'` and `'accent-burnt'` mapped to the new vars.
+
+## Files touched
+
+```text
+src/index.css                  → add --paper-soft, --accent-burnt, .editorial-img utility
+tailwind.config.ts             → map new color tokens
+src/pages/TripWorkspace.tsx    → image header, promoted Itinerary card, Marrakech image card
+src/pages/Cura.tsx             → top image band, left-rule insight cards w/ alt bg, refined input
+src/pages/Profile.tsx          → ink portrait header w/ giant "N", spacing tweaks
+src/pages/TripIntro.tsx        → ghost image layer + focus-in transition
+```
+
+No other files, routes, copy, or navigation touched.
 
