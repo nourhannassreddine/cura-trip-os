@@ -13,7 +13,8 @@ import fieldnote from "@/assets/home-fieldnote.jpg";
    - live     → rust  (the trip is now)
    - memory   → rose  (past, archived) */
 const statusStyles: Record<string, string> = {
-  dreaming: "bg-accent-sky text-foreground",
+  // DREAMING — aqua bg #4FB6C8, ivory text #F5F0E8, no border
+  dreaming: "bg-[#4FB6C8] text-[#F5F0E8]",
   planning: "bg-accent-ochre text-white",
   ready: "bg-accent-olive text-white",
   live: "bg-accent-rust text-white",
