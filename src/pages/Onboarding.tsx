@@ -568,11 +568,11 @@ const Onboarding = () => {
           </>
         )}
 
-        {/* ---------- CONTEXT (full step 3  ·  short step 4) ---------- */}
-        {(isFullContext || isShortContext) && (
+        {/* ---------- STEP 3 — CONTEXT (both paths) ---------- */}
+        {isContext && (
           <>
             <div className="editorial-eyebrow text-muted-foreground mb-3">
-              {isShort ? "v." : "iv."} Context
+              iv. Context
             </div>
             <h2 className="display-lg max-w-[14ch]">
               The <span className="italic-serif">facts</span> of how you move.
