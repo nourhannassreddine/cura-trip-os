@@ -99,10 +99,6 @@ const Welcome = () => {
           <p className="italic-serif text-[15px] leading-snug text-foreground/80 max-w-[34ch]">
             {thought}
           </p>
-          <div className="mt-2 flex items-center justify-end gap-2">
-            <div className="h-px w-6 bg-foreground/30" />
-            <span className="editorial-eyebrow text-muted-foreground">— Cura</span>
-          </div>
         </div>
 
         <section className="pt-5">
