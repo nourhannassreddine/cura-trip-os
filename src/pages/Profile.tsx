@@ -3,90 +3,177 @@ import { ArrowRight } from "lucide-react";
 import { BottomNav } from "@/components/cura/BottomNav";
 
 /**
- * You — a quiet profile surface.
- * Sections read like chapters of a person, not settings rows.
- * No forms, no editing UI yet — those come in a later prompt.
+ * You — quiet profile surface.
+ * Header: ink black. Linen avatar circle (no ghost initial), name in ivory Playfair.
+ * Then a paper-toned CURA intro, then 8 chapter rows that each route to their own screen.
  */
 
 const chapters = [
-  { label: "How you move", hint: "Travel preferences" },
-  { label: "Your cycle", hint: "Period & energy tracking" },
-  { label: "What you watch", hint: "Entertainment profile" },
-  { label: "Where you've been", hint: "Travel history" },
-  { label: "Your subscription", hint: "Plan & billing" },
+  {
+    title: "How you travel",
+    sub: "THE PACE, THE PEOPLE, THE NON-NEGOTIABLES.",
+    to: "/profile/how-you-travel",
+  },
+  {
+    title: "What you travel for",
+    sub: "THE MOODS AND FEELINGS THAT SHAPE WHERE YOU GO.",
+    to: "/profile/what-you-travel-for",
+  },
+  {
+    title: "What travel means to you",
+    sub: "THE REASON UNDERNEATH EVERY TRIP.",
+    to: "/profile/what-travel-means",
+  },
+  {
+    title: "Your rhythm",
+    sub: "YOUR CYCLE, YOUR ENERGY — MAPPED TO YOUR TRIPS.",
+    to: "/profile/your-rhythm",
+  },
+  {
+    title: "In transit",
+    sub: "WHAT YOU WATCH, READ, AND LISTEN TO BETWEEN HERE AND THERE.",
+    to: "/profile/in-transit",
+  },
+  {
+    title: "Where you've been",
+    sub: "EVERY PLACE YOU'VE LANDED. WHAT YOU THOUGHT OF IT.",
+    to: "/profile/where-youve-been",
+  },
+  {
+    title: "What Cura knows",
+    sub: "A READ OF YOU, BASED ON EVERYTHING SO FAR.",
+    to: "/profile/what-cura-knows",
+  },
+  {
+    title: "Your plan",
+    sub: "HOW YOU ACCESS CURA.",
+    to: "/profile/your-plan",
+  },
 ];
 
 const Profile = () => {
   return (
     <main className="app-shell pb-24">
-      {/* Portrait header — ink black with giant ghost initial */}
+      {/* Portrait header — ink black, linen avatar, ivory name */}
       <header
-        className="relative overflow-hidden"
+        className="px-5 pt-8 pb-7"
         style={{
-          height: "200px",
           backgroundColor: "hsl(var(--ink))",
           color: "hsl(var(--ink-foreground))",
         }}
       >
-        <span
-          aria-hidden
-          className="font-serif absolute top-1/2 -translate-y-1/2 leading-none select-none pointer-events-none"
+        <div
+          className="text-[10px] tracking-[0.24em] uppercase"
+          style={{ color: "hsl(var(--ink-foreground) / 0.55)" }}
+        >
+          You
+        </div>
+
+        {/* Avatar placeholder — linen circle with "Add your look" caption */}
+        <button
+          type="button"
+          aria-label="Add your look"
+          className="block mt-5 hover:opacity-90 transition-opacity"
           style={{
-            right: "-12px",
-            fontSize: "140px",
-            color: "hsl(var(--ink-foreground) / 0.08)",
+            width: "64px",
+            height: "64px",
+            borderRadius: "9999px",
+            backgroundColor: "#EFE9DF",
+            border: "0.5px solid rgba(26,26,24,0.15)",
           }}
         >
-          N
-        </span>
+          <span
+            className="font-sans uppercase"
+            style={{
+              fontSize: "8px",
+              letterSpacing: "0.18em",
+              color: "rgba(26,26,24,0.4)",
+              fontWeight: 500,
+              display: "block",
+              textAlign: "center",
+              lineHeight: 1.2,
+              padding: "0 6px",
+            }}
+          >
+            Add your look
+          </span>
+        </button>
 
-        <div className="absolute left-5 bottom-5 right-5">
-          <div
-            className="text-[9px] tracking-[0.24em] uppercase"
-            style={{ color: "hsl(var(--ink-foreground) / 0.55)" }}
-          >
-            You
+        <h1
+          className="font-serif leading-[0.95] tracking-tight mt-5"
+          style={{ fontSize: "36px" }}
+        >
+          Nourhan
+        </h1>
+
+        <div
+          className="mt-4 space-y-1 text-[12px] tracking-[0.04em]"
+          style={{ color: "hsl(var(--ink-foreground) / 0.7)" }}
+        >
+          <div className="flex justify-between">
+            <span style={{ color: "hsl(var(--ink-foreground) / 0.45)" }}>Home</span>
+            <span>Cairo</span>
           </div>
-          <h1
-            className="font-serif leading-[0.95] tracking-tight mt-1"
-            style={{ fontSize: "40px" }}
-          >
-            Nourhan
-          </h1>
-          <div
-            className="mt-3 space-y-1 text-[12px] tracking-[0.04em]"
-            style={{ color: "hsl(var(--ink-foreground) / 0.7)" }}
-          >
-            <div className="flex justify-between">
-              <span style={{ color: "hsl(var(--ink-foreground) / 0.45)" }}>Home</span>
-              <span>Cairo</span>
-            </div>
-            <div className="flex justify-between">
-              <span style={{ color: "hsl(var(--ink-foreground) / 0.45)" }}>Passport</span>
-              <span>Egyptian</span>
-            </div>
+          <div className="flex justify-between">
+            <span style={{ color: "hsl(var(--ink-foreground) / 0.45)" }}>Passport</span>
+            <span>Egyptian</span>
           </div>
         </div>
       </header>
 
-      {/* Chapters — tappable rows, label + arrow. Routes nowhere yet. */}
-      <section className="mt-2">
-        <ul className="border-t border-foreground/15">
+      {/* CURA intro block — paper bg, italic Playfair */}
+      <section
+        style={{
+          backgroundColor: "hsl(var(--paper))",
+          padding: "20px 22px",
+        }}
+      >
+        <p
+          className="italic-serif"
+          style={{
+            fontSize: "15px",
+            lineHeight: 1.5,
+            color: "hsl(var(--foreground) / 0.65)",
+          }}
+        >
+          I've been paying attention. This is what I know about how you travel. Tell me where I'm wrong.
+        </p>
+      </section>
+      <div style={{ height: "0.5px", backgroundColor: "hsl(var(--foreground) / 0.1)" }} />
+
+      {/* Chapter rows */}
+      <section>
+        <ul>
           {chapters.map((c) => (
-            <li key={c.label} className="border-b border-foreground/15">
+            <li
+              key={c.to}
+              style={{ borderBottom: "0.5px solid hsl(var(--foreground) / 0.1)" }}
+            >
               <Link
-                to="#"
-                className="flex items-center justify-between px-5 py-5 hover:bg-foreground/[0.03] transition-colors"
+                to={c.to}
+                className="flex items-center justify-between hover:bg-foreground/[0.03] transition-colors"
+                style={{ padding: "18px 22px" }}
               >
-                <div>
-                  <div className="font-serif text-[17px] leading-none">
-                    {c.label}
+                <div className="min-w-0 pr-3">
+                  <div
+                    className="font-serif"
+                    style={{ fontSize: "17px", lineHeight: 1.15, color: "hsl(var(--foreground))" }}
+                  >
+                    {c.title}
                   </div>
-                  <div className="editorial-eyebrow text-muted-foreground mt-1.5">
-                    {c.hint}
+                  <div
+                    className="font-sans uppercase mt-1.5"
+                    style={{
+                      fontSize: "9px",
+                      letterSpacing: "0.22em",
+                      color: "hsl(var(--foreground) / 0.35)",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {c.sub}
                   </div>
                 </div>
-                <ArrowRight className="h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
+                <ArrowRight className="h-4 w-4 shrink-0" strokeWidth={1.5} style={{ color: "hsl(var(--foreground) / 0.45)" }} />
               </Link>
             </li>
           ))}
