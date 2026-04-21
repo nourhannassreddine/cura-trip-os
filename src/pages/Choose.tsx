@@ -185,21 +185,25 @@ const Choose = () => {
         )}
       </div>
 
-      <div className="px-5 pt-7 pb-5 mt-auto">
+      <footer className="mt-auto border-t border-foreground/15 p-5 flex items-center justify-between bg-background">
+        <button
+          onClick={goBack}
+          className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground"
+        >
+          Back
+        </button>
         <button
           onClick={goNext}
           disabled={!canContinue}
-          className={`group w-full flex items-center justify-between border border-foreground bg-ink text-ink-foreground px-5 py-3.5 transition-opacity ${
-            canContinue ? "opacity-100" : "opacity-50 pointer-events-none"
-          }`}
+          className={cn(
+            "group flex items-center gap-3 border border-foreground bg-ink text-ink-foreground px-5 py-3 transition-opacity",
+            !canContinue && "opacity-40 pointer-events-none"
+          )}
         >
-          <span className="font-sans text-sm tracking-wide">{continueLabel}</span>
-          <ArrowRight
-            className="h-4 w-4 transition-transform group-hover:translate-x-1"
-            strokeWidth={1.5}
-          />
+          <span className="text-sm tracking-wide">{continueLabel}</span>
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" strokeWidth={1.5} />
         </button>
-      </div>
+      </footer>
     </main>
   );
 };
