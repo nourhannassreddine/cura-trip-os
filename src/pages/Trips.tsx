@@ -1,76 +1,107 @@
 import { Link } from "react-router-dom";
-import { TopBar } from "@/components/cura/TopBar";
+import { Plus } from "lucide-react";
 import { BottomNav } from "@/components/cura/BottomNav";
-import { Tag } from "@/components/cura/Tag";
 import { CuraWhisper } from "@/components/cura/CuraWhisper";
 import { trips } from "@/data/cura";
-import { Plus } from "lucide-react";
+
+/**
+ * Trips — clean list of all trips.
+ * Each row: destination · dates · status tag · readiness%.
+ * Tap → trip workspace. No image-heavy cards here; that's Home's job.
+ */
+
+const statusLabel: Record<string, string> = {
+  dreaming: "DREAMING",
+  planning: "PLANNING",
+  ready: "READY",
+  live: "ACTIVE",
+  memory: "PAST",
+};
+
+const statusStyles: Record<string, string> = {
+  dreaming: "bg-accent-sky text-foreground",
+  planning: "bg-accent-ochre text-white",
+  ready: "bg-accent-olive text-white",
+  live: "bg-accent-rust text-white",
+  memory: "bg-accent-rose text-white",
+};
 
 const Trips = () => {
-  const upcoming = trips.filter((t) => t.status !== "memory");
-  const past = trips.filter((t) => t.status === "memory");
+  const sorted = [...trips].sort((a, b) => {
+    // future first, past last
+    const aPast = a.status === "memory" ? 1 : 0;
+    const bPast = b.status === "memory" ? 1 : 0;
+    if (aPast !== bPast) return aPast - bPast;
+    return a.daysOut - b.daysOut;
+  });
+
+  // Empty state — CURA voice, single CTA.
+  if (trips.length === 0) {
+    return (
+      <main className="app-shell pb-20 flex flex-col">
+        <header className="px-5 pt-6 pb-2">
+          <div className="editorial-eyebrow text-muted-foreground">Trips</div>
+        </header>
+        <section className="flex-1 flex flex-col items-center justify-center px-8 text-center">
+          <h1 className="font-serif text-[32px] leading-[1.05] max-w-[16ch]">
+            No trips yet. The first one is the hardest to name.
+          </h1>
+          <Link
+            to="/begin"
+            className="mt-8 inline-flex items-center gap-2 border border-foreground px-6 py-3 text-sm tracking-[0.12em] uppercase hover:bg-foreground hover:text-background transition-colors"
+          >
+            Begin
+          </Link>
+        </section>
+        <BottomNav />
+      </main>
+    );
+  }
 
   return (
     <main className="app-shell pb-20">
-      <TopBar
-        eyebrow="Trips"
-        title="All your worlds"
-        right={
-          <Link to="/trip/new" aria-label="New trip" className="p-2 hover:opacity-70">
-            <Plus className="h-5 w-5" strokeWidth={1.5} />
-          </Link>
-        }
-      />
-
-      {/* Editorial header */}
-      <section className="px-5 pt-2 cura-rise">
-        <div className="flex items-end justify-between">
-          <h1 className="display-lg max-w-[10ch] leading-[0.92]">
-            <span className="italic-serif">Three</span><br />
-            in motion.
+      <header className="px-5 pt-6 pb-2 flex items-start justify-between">
+        <div>
+          <div className="editorial-eyebrow text-muted-foreground">Trips</div>
+          <h1 className="font-serif text-[40px] leading-[0.95] tracking-tight mt-1">
+            All of them
           </h1>
-          <div className="text-right text-[10px] tracking-[0.22em] uppercase text-muted-foreground pb-2">
-            Index<br />of journeys
-          </div>
         </div>
-      </section>
+      </header>
 
       <section className="px-5 mt-5">
-        <CuraWhisper>
-          Puglia is the only one ready to push on. Marrakech is still a feeling. Lisbon is finished — but I'm still learning from it.
+        <CuraWhisper variant="block">
+          One in motion, one still a feeling, one finished. That's a healthy shelf.
         </CuraWhisper>
       </section>
 
-      {/* Active trips — large editorial cards */}
+      {/* Trip list — vertical, hairline divided. */}
       <section className="mt-8">
-        <div className="px-5 editorial-eyebrow text-muted-foreground mb-3">In motion</div>
-        <ul className="space-y-px bg-foreground/15">
-          {upcoming.map((t, i) => (
-            <li key={t.id} className="bg-background">
-              <Link to={`/trip/${t.id}`} className="group block">
-                <div className="grid grid-cols-[160px_1fr]">
-                  <div className="relative h-[180px] overflow-hidden">
-                    <img src={t.cover} alt={t.city} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                    <div className="absolute top-2 left-2">
-                      <Tag variant="ink">№ {String(i + 1).padStart(2, "0")}</Tag>
-                    </div>
+        <ul className="border-t border-foreground/15">
+          {sorted.map((t) => (
+            <li key={t.id} className="border-b border-foreground/15">
+              <Link
+                to={`/trip/${t.id}`}
+                className="flex items-center justify-between gap-4 px-5 py-5 hover:bg-foreground/[0.03] transition-colors"
+              >
+                <div className="min-w-0">
+                  <div className="font-serif text-[24px] leading-none truncate">
+                    {t.city}
                   </div>
-                  <div className="p-4 flex flex-col justify-between">
-                    <div>
-                      <div className="editorial-eyebrow text-muted-foreground">{t.country}</div>
-                      <div className="font-serif text-[26px] leading-none mt-1">{t.city}</div>
-                      <div className="text-xs text-muted-foreground mt-1">{t.dates}</div>
-                      <div className="italic-serif text-[12px] text-foreground/60 mt-1">{t.travelers.join(" · ")}</div>
-                    </div>
-                    <div>
-                      <div className="flex items-center justify-between text-[10px] tracking-[0.16em] uppercase text-muted-foreground">
-                        <span>{t.status}</span>
-                        <span>{t.daysOut > 0 ? `${t.daysOut} days out` : "past"}</span>
-                      </div>
-                      <div className="mt-2 h-px bg-foreground/15 relative">
-                        <div className="absolute left-0 top-0 h-px bg-primary" style={{ width: `${t.readiness}%` }} />
-                      </div>
-                    </div>
+                  <div className="editorial-eyebrow text-muted-foreground mt-2">
+                    {t.dates}
+                  </div>
+                </div>
+                <div className="text-right shrink-0">
+                  <span
+                    className={`inline-flex items-center px-2 py-0.5 text-[10px] tracking-[0.16em] uppercase ${
+                      statusStyles[t.status] ?? statusStyles.planning
+                    }`}
+                  >
+                    {statusLabel[t.status] ?? t.status}
+                  </span>
+                  <div className="text-[11px] text-muted-foreground mt-2">
+                    {t.readiness}% ready
                   </div>
                 </div>
               </Link>
@@ -79,43 +110,25 @@ const Trips = () => {
         </ul>
       </section>
 
-      {/* Past */}
-      {past.length > 0 && (
-        <section className="mt-10 px-5">
-          <div className="editorial-eyebrow text-muted-foreground mb-3">Archive</div>
-          <ul className="space-y-2">
-            {past.map((t) => (
-              <li key={t.id}>
-                <Link to="/journal" className="block border border-foreground/15 grid grid-cols-[80px_1fr] hover:border-foreground">
-                  <div className="relative h-[80px] overflow-hidden">
-                    <img src={t.cover} alt={t.city} loading="lazy" className="h-full w-full object-cover" />
-                  </div>
-                  <div className="p-3 flex items-center justify-between">
-                    <div>
-                      <div className="font-serif text-base leading-none">{t.city}</div>
-                      <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground mt-1">{t.dates}</div>
-                    </div>
-                    <Tag variant="outline">memory</Tag>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {/* CTA — start new */}
-      <section className="mt-10 px-5">
-        <Link to="/trip/new" className="block border border-foreground bg-ink text-ink-foreground p-5">
-          <div className="editorial-eyebrow opacity-70 mb-2">Begin</div>
-          <div className="font-serif text-2xl leading-tight">
-            Start a <span className="italic-serif">fourth</span>.
-          </div>
-          <p className="text-xs opacity-70 mt-2">Tell me a feeling, or a place. I'll do the rest.</p>
+      {/* New trip — subtle, not a loud button. */}
+      <section className="px-5 mt-6">
+        <Link
+          to="/trip/new"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <Plus className="h-4 w-4" strokeWidth={1.5} />
+          New trip
         </Link>
       </section>
 
-      <div className="h-10" />
+      <footer
+        aria-label="Edition imprint"
+        className="px-5 pt-10 pb-4 flex justify-between text-[10px] tracking-[0.22em] uppercase text-foreground/35 select-none"
+      >
+        <span>No. 001</span>
+        <span>Vol. I · Spring</span>
+      </footer>
+
       <BottomNav />
     </main>
   );

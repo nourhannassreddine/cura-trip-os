@@ -1,75 +1,77 @@
-import { TopBar } from "@/components/cura/TopBar";
-import { BottomNav } from "@/components/cura/BottomNav";
-import { Tag } from "@/components/cura/Tag";
-import { trips } from "@/data/cura";
 import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import { BottomNav } from "@/components/cura/BottomNav";
+
+/**
+ * You — a quiet profile surface.
+ * Sections read like chapters of a person, not settings rows.
+ * No forms, no editing UI yet — those come in a later prompt.
+ */
+
+const chapters = [
+  { label: "How you move", hint: "Travel preferences" },
+  { label: "Your cycle", hint: "Period & energy tracking" },
+  { label: "What you watch", hint: "Entertainment profile" },
+  { label: "Where you've been", hint: "Travel history" },
+  { label: "Your subscription", hint: "Plan & billing" },
+];
 
 const Profile = () => {
   return (
     <main className="app-shell pb-20">
-      <TopBar eyebrow="You" title="Travel identity" />
+      <header className="px-5 pt-6 pb-2">
+        <div className="editorial-eyebrow text-muted-foreground">You</div>
+      </header>
 
-      <section className="px-5 pt-3 cura-rise">
-        <div className="editorial-eyebrow text-muted-foreground">Lia Moretti</div>
-        <h1 className="display-lg max-w-[12ch]">
-          Slow, design-<span className="italic-serif">forward</span>.
+      {/* Identity block — three short lines, serif name. */}
+      <section className="px-5 pt-4 pb-8 cura-rise">
+        <h1 className="font-serif text-[40px] leading-[0.95] tracking-tight">
+          Nourhan
         </h1>
-        <p className="text-sm text-muted-foreground mt-3 max-w-[34ch]">
-          You travel for atmosphere, not landmarks. You over-pack outfits, under-pack shoes. You don't like rushed mornings.
-        </p>
+        <div className="mt-4 space-y-1 text-sm">
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Home</span>
+            <span>Cairo</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Passport</span>
+            <span>Egyptian</span>
+          </div>
+        </div>
       </section>
 
-      <section className="mt-7 px-5">
-        <div className="editorial-eyebrow text-muted-foreground mb-2">Patterns CURA learned</div>
-        <ul className="border border-foreground/15">
-          {[
-            "Books dinner before activities",
-            "Always brings a slip dress",
-            "Skips breakfast, late lunches",
-            "Prefers masserias & ryokans over hotels",
-          ].map((p) => (
-            <li key={p} className="px-4 py-3 border-b border-foreground/10 last:border-0 flex items-center justify-between">
-              <span className="font-serif text-[15px]">{p}</span>
-              <Tag variant="outline">learned</Tag>
+      {/* Chapters — tappable rows, label + arrow. Routes nowhere yet. */}
+      <section>
+        <ul className="border-t border-foreground/15">
+          {chapters.map((c) => (
+            <li key={c.label} className="border-b border-foreground/15">
+              <Link
+                to="#"
+                className="flex items-center justify-between px-5 py-4 hover:bg-foreground/[0.03] transition-colors"
+              >
+                <div>
+                  <div className="font-serif text-[17px] leading-none">
+                    {c.label}
+                  </div>
+                  <div className="editorial-eyebrow text-muted-foreground mt-1.5">
+                    {c.hint}
+                  </div>
+                </div>
+                <ArrowRight className="h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
+              </Link>
             </li>
           ))}
         </ul>
       </section>
 
-      <section className="mt-7 px-5 grid grid-cols-3 gap-px bg-foreground/15 border border-foreground/15">
-        {[
-          { l: "Trips", v: "14" },
-          { l: "Countries", v: "11" },
-          { l: "Days away", v: "82" },
-        ].map((x) => (
-          <div key={x.l} className="bg-background p-3">
-            <div className="editorial-eyebrow text-muted-foreground">{x.l}</div>
-            <div className="font-serif text-xl mt-1">{x.v}</div>
-          </div>
-        ))}
-      </section>
+      <footer
+        aria-label="Edition imprint"
+        className="px-5 pt-8 pb-4 flex justify-between text-[10px] tracking-[0.22em] uppercase text-foreground/35 select-none"
+      >
+        <span>No. 001</span>
+        <span>Vol. I · Spring</span>
+      </footer>
 
-      <section className="mt-9 px-5">
-        <h2 className="font-serif text-xl mb-3">Archive</h2>
-        <div className="space-y-2">
-          {trips.map((t) => (
-            <Link key={t.id} to={t.status === "memory" ? "/journal" : `/trip/${t.id}`} className="border border-foreground/15 grid grid-cols-[80px_1fr] hover:border-foreground">
-              <div className="relative h-[80px] overflow-hidden">
-                <img src={t.cover} alt={t.city} loading="lazy" className="h-full w-full object-cover" />
-              </div>
-              <div className="p-3 flex items-center justify-between">
-                <div>
-                  <div className="font-serif text-base leading-none">{t.city}</div>
-                  <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground mt-1">{t.dates}</div>
-                </div>
-                <Tag variant="outline">{t.status}</Tag>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <div className="h-10" />
       <BottomNav />
     </main>
   );
