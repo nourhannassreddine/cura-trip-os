@@ -84,8 +84,8 @@ const Home = () => {
           <button aria-label="Notifications" className="p-2 hover:opacity-70">
             <Bell className="h-5 w-5" strokeWidth={1.5} />
           </button>
-          <Link to="/trip/new" aria-label="New trip" className="p-2 hover:opacity-70">
-            <Plus className="h-5 w-5" strokeWidth={1.5} />
+          <Link to="/begin" aria-label="Dream" className="p-2 hover:opacity-70">
+            <span className="inline-flex items-center justify-center h-5 w-5 text-[18px] leading-none text-foreground">✦</span>
           </Link>
         </div>
       </header>
