@@ -3,7 +3,7 @@ import { TopBar } from "@/components/cura/TopBar";
 import { BottomNav } from "@/components/cura/BottomNav";
 import { Tag } from "@/components/cura/Tag";
 import { destinations } from "@/data/cura";
-import { CuraWhisper } from "@/components/cura/CuraWhisper";
+
 
 const rows = [
   { key: "visa", label: "Visa effort", get: (d: any) => d.visa, render: (v: string) => <Tag variant={v === "easy" ? "olive" : v === "medium" ? "default" : "outline"}>{v}</Tag> },
