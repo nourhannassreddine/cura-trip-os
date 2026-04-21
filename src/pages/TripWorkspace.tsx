@@ -76,60 +76,79 @@ const TripWorkspace = () => {
     (t) => t.id !== trip.id && t.status !== "memory",
   );
 
+  const headerImg =
+    "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80";
+
+  const itinerary = engines.find((e) => e.key === "itinerary")!;
+  const otherEngines = engines.filter((e) => e.key !== "itinerary");
+
   return (
     <main className="app-shell pb-24">
-      {/* HEADER — ink black */}
+      {/* HEADER — full-bleed editorial image */}
       <header
-        className="px-5 pt-10 pb-0 relative"
-        style={{
-          backgroundColor: "hsl(var(--ink))",
-          color: "hsl(var(--ink-foreground))",
-          minHeight: "140px",
-        }}
+        className="relative overflow-hidden"
+        style={{ minHeight: "260px", color: "hsl(var(--ink-foreground))" }}
       >
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <h1
-              className="font-serif leading-[0.95] tracking-tight"
-              style={{ fontSize: "42px" }}
-            >
-              {trip.city}
-            </h1>
-            <div
-              className="text-[12px] tracking-[0.14em] mt-3"
-              style={{ color: "hsl(var(--ink-foreground) / 0.55)" }}
-            >
-              {trip.dates}
-            </div>
-            <div
-              className="text-[12px] tracking-[0.14em] mt-1"
-              style={{ color: "hsl(var(--ink-foreground) / 0.4)" }}
-            >
-              {trip.country}
-            </div>
-          </div>
+        <div className="editorial-img absolute inset-0">
+          <img src={headerImg} alt={`${trip.city} — editorial header`} />
+        </div>
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to top, hsl(var(--ink) / 0.7), hsl(var(--ink) / 0.3) 55%, transparent)",
+          }}
+        />
 
-          <div className="text-right shrink-0">
-            <div
-              className="text-[10px] tracking-[0.18em] uppercase"
-              style={{ color: "hsl(var(--ink-foreground) / 0.45)" }}
-            >
-              Until departure
-            </div>
-            <div
-              className="font-serif mt-1"
-              style={{ color: "hsl(var(--accent-rust))", fontSize: "22px", lineHeight: 1 }}
-            >
-              {trip.daysOut > 0 ? `${trip.daysOut} days` : trip.daysOut === 0 ? "today" : "—"}
-            </div>
+        {/* Top-right: countdown */}
+        <div className="absolute top-6 right-5 text-right">
+          <div
+            className="text-[10px] tracking-[0.18em] uppercase"
+            style={{ color: "hsl(var(--ink-foreground) / 0.7)" }}
+          >
+            Until departure
+          </div>
+          <div
+            className="font-serif mt-1"
+            style={{ color: "hsl(var(--accent-rust))", fontSize: "22px", lineHeight: 1 }}
+          >
+            {trip.daysOut > 0 ? `${trip.daysOut} days` : trip.daysOut === 0 ? "today" : "—"}
           </div>
         </div>
 
-        {/* Readiness bar — ivory on ink */}
-        <div className="mt-7 pb-3">
+        {/* Bottom-left: name + dates + country */}
+        <div className="absolute left-5 right-5 bottom-10">
+          <h1
+            className="font-serif leading-[0.95] tracking-tight"
+            style={{ fontSize: "48px" }}
+          >
+            {trip.city}
+          </h1>
+          <div
+            className="text-[12px] tracking-[0.14em] mt-3"
+            style={{ color: "hsl(var(--ink-foreground) / 0.75)" }}
+          >
+            {trip.dates}
+          </div>
+          <div
+            className="text-[12px] tracking-[0.14em] mt-1"
+            style={{ color: "hsl(var(--ink-foreground) / 0.55)" }}
+          >
+            {trip.country}
+          </div>
+        </div>
+
+        {/* Readiness — horizon line at very bottom */}
+        <div className="absolute left-0 right-0 bottom-0 px-5 pb-2">
+          <div
+            className="text-[10px] tracking-[0.18em] mb-1.5 text-right"
+            style={{ color: "hsl(var(--ink-foreground) / 0.7)" }}
+          >
+            {trip.readiness}% ready
+          </div>
           <div
             className="h-[2px] w-full relative"
-            style={{ backgroundColor: "hsl(var(--ink-foreground) / 0.18)" }}
+            style={{ backgroundColor: "hsl(var(--ink-foreground) / 0.2)" }}
           >
             <div
               className="absolute left-0 top-0 h-full"
@@ -139,18 +158,12 @@ const TripWorkspace = () => {
               }}
             />
           </div>
-          <div
-            className="text-[10px] tracking-[0.18em] mt-2 text-right"
-            style={{ color: "hsl(var(--ink-foreground) / 0.55)" }}
-          >
-            {trip.readiness}% ready
-          </div>
         </div>
       </header>
 
       {/* CURA INSIGHT — sunflower bleed */}
       <section
-        className="px-5 py-4"
+        className="px-5 py-5"
         style={{
           backgroundColor: "hsl(var(--accent-sun))",
           color: "hsl(var(--ink))",
@@ -162,15 +175,53 @@ const TripWorkspace = () => {
         >
           Cura
         </div>
-        <p className="italic-serif mt-1.5" style={{ fontSize: "16px", lineHeight: 1.35 }}>
+        <p
+          className="italic-serif mt-1.5"
+          style={{ fontSize: "16px", lineHeight: 1.75 }}
+        >
           {insightFor(trip.city)}
         </p>
       </section>
 
       {/* ENGINE GRID */}
-      <section className="px-4 pt-4">
+      <section className="px-4 pt-6">
+        {/* Itinerary — promoted, full width, ghost image */}
+        <Link
+          to={`/trip/${trip.id}/engine/${itinerary.key}`}
+          className="relative overflow-hidden border border-foreground/15 bg-background flex flex-col justify-between hover:bg-foreground/[0.03] transition-colors mb-[10px]"
+          style={{ height: "120px" }}
+        >
+          <img
+            src={headerImg}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+            style={{ opacity: 0.12, filter: "blur(2px) saturate(0.85)" }}
+          />
+          <div className="relative p-4 flex flex-col justify-between h-full">
+            <div className="text-[11px] tracking-[0.16em] uppercase font-medium">
+              {itinerary.name}
+            </div>
+            <div
+              className="text-[12px] text-foreground/70"
+              style={{ lineHeight: 1.75 }}
+            >
+              {itinerary.status}
+            </div>
+            <div className="flex items-end justify-between">
+              <div
+                className="text-[10px] leading-tight max-w-[80%]"
+                style={{ color: "hsl(var(--accent-rust))" }}
+              >
+                {itinerary.action}
+              </div>
+              <StateDot state={itinerary.state} />
+            </div>
+          </div>
+        </Link>
+
         <div className="grid grid-cols-2 gap-[10px]">
-          {engines.map((e) => (
+          {otherEngines.map((e) => (
             <Link
               key={e.key}
               to={`/trip/${trip.id}/engine/${e.key}`}
@@ -182,7 +233,10 @@ const TripWorkspace = () => {
                   {e.name}
                 </div>
               </div>
-              <div className="text-[12px] text-foreground/65 leading-snug mt-2">
+              <div
+                className="text-[12px] text-foreground/65 mt-2"
+                style={{ lineHeight: 1.75 }}
+              >
                 {e.status}
               </div>
               <div className="flex items-end justify-between mt-2">
