@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Plus, X } from "lucide-react";
+import { ArrowRight, Plus, X } from "lucide-react";
 import { TopBar } from "@/components/cura/TopBar";
 import { SearchableSelect } from "@/components/cura/SearchableSelect";
 import { passportNationalities } from "@/data/locations";
+import { cn } from "@/lib/utils";
 
 /* ------------------------------------------------------------------
    Choose — three-question flow for users deciding between places.
