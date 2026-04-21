@@ -90,7 +90,36 @@ const Home = () => {
         </div>
       </header>
 
-      {/* Hero — greeting + days-to header. Tight, an entry not the focus. */}
+      {/* CURA insight strip — Type B: no surface, sits on ivory page bg.
+          First element of scroll body after fixed header. */}
+      <section className="px-5" style={{ paddingTop: "28px", paddingBottom: "24px" }}>
+        <div
+          className="font-sans uppercase"
+          style={{
+            fontSize: "8px",
+            letterSpacing: "0.18em",
+            color: "hsl(var(--ink) / 0.35)",
+          }}
+        >
+          ✦ Cura
+        </div>
+        <p
+          className="font-serif italic mt-2"
+          style={{
+            fontSize: "22px",
+            lineHeight: 1.35,
+            color: "hsl(var(--ink))",
+          }}
+        >
+          {curaWhispers[0]}
+        </p>
+        <div
+          className="mt-5 w-full"
+          style={{ height: "0.5px", background: "hsl(var(--ink) / 0.1)" }}
+        />
+      </section>
+
+      {/* Hero — greeting + days-to header. */}
       <section className="px-5 pt-3 pb-4 cura-rise">
         <div className="flex items-end justify-between">
           <h1 className="font-serif text-[40px] leading-[0.95] max-w-[12ch]">
@@ -102,13 +131,6 @@ const Home = () => {
               <div>to {primary.city}</div>
             </div>
           )}
-        </div>
-        {/* Cura whisper — elevated. More breathing room, slightly heavier
-            typographic weight. The first thing felt, not the last noticed. */}
-        <div className="mt-7 mb-2">
-          <CuraWhisper variant="block" className="text-[16px]">
-            {curaWhispers[0]}
-          </CuraWhisper>
         </div>
       </section>
 
