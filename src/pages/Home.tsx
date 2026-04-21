@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Plus, Bell, ArrowRight, Sparkles, AlertCircle } from "lucide-react";
 import { BottomNav } from "@/components/cura/BottomNav";
-import { CuraWhisper } from "@/components/cura/CuraWhisper";
+
 import { trips, curaWhispers, packing, destinations, journalEntries } from "@/data/cura";
 import fieldnote from "@/assets/home-fieldnote.jpg";
 
