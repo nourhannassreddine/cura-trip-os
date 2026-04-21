@@ -37,8 +37,8 @@
     --sky-foreground: 25 30% 12%;
     --sky-soft: 205 50% 90%;
 
-    --ink: 25 35% 14%;                   /* deep brown ink */
-    --ink-foreground: 40 38% 97%;
+    --ink: 60 6% 9%;                     /* #1A1A18 — true ink black */
+    --ink-foreground: 36 30% 93%;        /* #F5F0E8 — ivory */
 
     --secondary: 36 30% 90%;
     --secondary-foreground: 25 30% 12%;

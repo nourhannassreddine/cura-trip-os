@@ -22,6 +22,7 @@ import Journal from "./pages/Journal";
 import Profile from "./pages/Profile";
 import NewTrip from "./pages/NewTrip";
 import TripImport from "./pages/TripImport";
+import Cura from "./pages/Cura";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -54,6 +55,7 @@ const App = () => (
           <Route path="/during" element={<During />} />
           <Route path="/journal" element={<Journal />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/cura" element={<Cura />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

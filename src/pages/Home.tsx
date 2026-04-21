@@ -102,15 +102,53 @@ const Home = () => {
             </div>
           )}
         </div>
-        {/* Cura whisper — the original block treatment with the orange rule
-            on the left. Reads as an editor's margin note, not inline copy. */}
-        <div className="mt-5">
-          <CuraWhisper variant="block">{curaWhispers[0]}</CuraWhisper>
+        {/* Cura whisper — elevated. More breathing room, slightly heavier
+            typographic weight. The first thing felt, not the last noticed. */}
+        <div className="mt-7 mb-2">
+          <CuraWhisper variant="block" className="text-[16px]">
+            {curaWhispers[0]}
+          </CuraWhisper>
         </div>
       </section>
 
-      {/* PRIMARY TRIP — control center focal point */}
-      {primary && (
+      {/* STATE 1 — no active trips. Single editorial empty state, CURA voice. */}
+      {!primary && (
+        <section className="mt-2 px-5">
+          <div className="border border-foreground/15 px-5 py-10 text-center">
+            <h2 className="font-serif text-[26px] leading-[1.1] max-w-[18ch] mx-auto">
+              Nothing planned. Which is its own kind of plan.
+            </h2>
+            <Link
+              to="/begin"
+              className="mt-6 inline-flex items-center gap-2 border border-foreground px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase hover:bg-foreground hover:text-background transition-colors"
+            >
+              Begin
+            </Link>
+          </div>
+        </section>
+      )}
+
+      {/* STATE 3 — trip is live. Stub: "today's plan is loading." */}
+      {primary && primary.status === "live" && (
+        <section className="mt-2 px-5">
+          <div className="editorial-eyebrow text-muted-foreground mb-2">Live now</div>
+          <Link
+            to={`/trip/${primary.id}`}
+            className="block border border-foreground bg-background p-5"
+          >
+            <div className="editorial-eyebrow text-accent-rust">In motion</div>
+            <div className="font-serif text-[34px] leading-none mt-2">
+              Today in {primary.city}
+            </div>
+            <p className="text-sm text-muted-foreground mt-3">
+              Your day is loading. Tap to open today's view.
+            </p>
+          </Link>
+        </section>
+      )}
+
+      {/* STATE 2 — default. Active planning trip as the focal point. */}
+      {primary && primary.status !== "live" && (
         <section className="mt-2 px-5">
           <div className="editorial-eyebrow text-muted-foreground mb-2">Your trip</div>
 
