@@ -255,40 +255,49 @@ const TripWorkspace = () => {
 
       {/* ALSO IN MOTION */}
       {alsoInMotion && (
-        <section className="px-5 mt-10">
+        <section className="px-5 mt-14">
           <div className="editorial-eyebrow text-foreground/45 mb-3">
             Also in motion
           </div>
           <Link
             to={`/trip/${alsoInMotion.id}`}
-            className="border border-foreground/15 px-4 py-4 flex items-center justify-between hover:bg-foreground/[0.03] transition-colors"
+            className="border border-foreground/15 flex items-stretch hover:bg-foreground/[0.03] transition-colors overflow-hidden"
+            style={{ height: "90px" }}
           >
-            <div className="min-w-0">
-              <div className="font-serif text-[20px] leading-none truncate">
-                {alsoInMotion.city}
-              </div>
-              <div className="editorial-eyebrow text-foreground/55 mt-2">
-                {alsoInMotion.dates}
-              </div>
+            <div className="editorial-img w-[40%] shrink-0">
+              <img
+                src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=600&q=80"
+                alt={`${alsoInMotion.city}`}
+              />
             </div>
-            <div className="text-right shrink-0">
-              <span
-                className="inline-flex items-center px-2 py-0.5 text-[9px] tracking-[0.18em] uppercase"
-                style={{
-                  backgroundColor:
-                    alsoInMotion.status === "dreaming"
-                      ? "hsl(var(--accent-sky))"
-                      : "hsl(var(--accent-ochre))",
-                  color:
-                    alsoInMotion.status === "dreaming"
-                      ? "hsl(var(--foreground))"
-                      : "white",
-                }}
-              >
-                {alsoInMotion.status}
-              </span>
-              <div className="text-[10px] text-foreground/55 mt-1.5">
-                {alsoInMotion.readiness}% ready
+            <div className="flex-1 px-4 py-3 flex items-center justify-between min-w-0">
+              <div className="min-w-0">
+                <div className="font-serif text-[20px] leading-none truncate">
+                  {alsoInMotion.city}
+                </div>
+                <div className="editorial-eyebrow text-foreground/55 mt-2">
+                  {alsoInMotion.dates}
+                </div>
+              </div>
+              <div className="text-right shrink-0 ml-3">
+                <span
+                  className="inline-flex items-center px-2 py-0.5 text-[9px] tracking-[0.18em] uppercase"
+                  style={{
+                    backgroundColor:
+                      alsoInMotion.status === "dreaming"
+                        ? "hsl(var(--accent-sky))"
+                        : "hsl(var(--accent-ochre))",
+                    color:
+                      alsoInMotion.status === "dreaming"
+                        ? "hsl(var(--foreground))"
+                        : "white",
+                  }}
+                >
+                  {alsoInMotion.status}
+                </span>
+                <div className="text-[10px] text-foreground/55 mt-1.5">
+                  {alsoInMotion.readiness}% ready
+                </div>
               </div>
             </div>
           </Link>
