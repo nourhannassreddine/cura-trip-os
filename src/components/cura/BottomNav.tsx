@@ -173,7 +173,9 @@ export const BottomNav = () => {
                     }}
                   />
                 )}
-                <Icon className="h-5 w-5" />
+                <span style={{ opacity: active ? 0.95 : 0.65, display: "inline-flex" }}>
+                  <Icon className="h-5 w-5" />
+                </span>
                 <span
                   className="text-[9px] tracking-[0.08em] uppercase"
                   style={{ opacity: active ? 1 : 0.45 }}
