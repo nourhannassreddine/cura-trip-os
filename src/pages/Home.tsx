@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Sparkles, AlertCircle, Bell, ArrowUpRight, ListChecks } from "lucide-react";
+import { ArrowRight, Sparkles, AlertCircle, Bell, ArrowUpRight, CircleCheck } from "lucide-react";
 import { BottomNav } from "@/components/cura/BottomNav";
 
 import { trips, curaWhispers, packing, destinations, journalEntries } from "@/data/cura";
@@ -216,7 +216,7 @@ const Home = () => {
                   {/* Status pill — bottom left over image */}
                   <div className="absolute bottom-3 left-3">
                     <span
-                      className="inline-flex items-center font-sans uppercase"
+                      className="inline-flex items-center justify-center font-sans uppercase"
                       style={{
                         borderRadius: "99px",
                         background: primaryColor.hex,
@@ -224,6 +224,7 @@ const Home = () => {
                         fontSize: "9px",
                         letterSpacing: "0.18em",
                         padding: "4px 10px",
+                        minWidth: "76px",
                       }}
                     >
                       {primary.status}
@@ -293,21 +294,27 @@ const Home = () => {
                   }}
                 >
                   <Sparkles className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
-                  View itinerary
+                  <div className="flex flex-col items-start leading-none">
+                    <span className="text-[12px] tracking-wide">View itinerary</span>
+                    <span
+                      className="font-sans mt-1"
+                      style={{ fontSize: "9px", color: "rgba(26,26,24,0.40)" }}
+                    >
+                      day by day
+                    </span>
+                  </div>
                 </Link>
                 <Link
                   to="/pack"
-                  className="flex items-start justify-start gap-1.5 px-3 transition-colors"
+                  className="flex items-center justify-start gap-1.5 px-3 transition-colors"
                   style={{
                     borderRadius: "20px",
                     border: "0.5px solid rgba(26,26,24,0.30)",
                     color: "#1A1A18",
                     height: "44px",
-                    paddingTop: "6px",
-                    paddingBottom: "6px",
                   }}
                 >
-                  <ListChecks className="h-3.5 w-3.5 shrink-0 mt-[2px]" strokeWidth={1.5} />
+                  <CircleCheck className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
                   <div className="flex flex-col items-start leading-none">
                     <span className="text-[12px] tracking-wide whitespace-nowrap">See what's missing</span>
                     <span
@@ -381,23 +388,13 @@ const Home = () => {
                     <div className="relative shrink-0" style={{ width: "40%", padding: "10px" }}>
                       <div
                         className="relative h-full w-full overflow-hidden"
-                        style={{ clipPath: blob, WebkitClipPath: blob, minHeight: "100px" }}
+                        style={{ borderRadius: "12px", minHeight: "100px" }}
                       >
                         <img
                           src={imgSrc}
                           alt={t.city}
                           loading="lazy"
                           className="absolute inset-0 h-full w-full object-cover"
-                        />
-                        {/* Color wash — uses status color for this trip */}
-                        <div
-                          aria-hidden
-                          className="absolute inset-0 pointer-events-none"
-                          style={{
-                            background: `rgba(${c.rgb},0.22)`,
-                            clipPath: wash,
-                            WebkitClipPath: wash,
-                          }}
                         />
                       </div>
                     </div>
@@ -415,14 +412,15 @@ const Home = () => {
                       </div>
                       <div className="mt-3">
                         <span
-                          className="inline-flex items-center uppercase"
+                          className="inline-flex items-center justify-center uppercase"
                           style={{
                             borderRadius: "99px",
                             background: c.hex,
                             color: "#F5F0E8",
                             fontSize: "9px",
                             letterSpacing: "0.18em",
-                            padding: "3px 10px",
+                            padding: "4px 10px",
+                            minWidth: "76px",
                           }}
                         >
                           {t.status}
@@ -524,15 +522,7 @@ const Home = () => {
                         }}
                         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      <div
-                        aria-hidden
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                          background: washes[idx % washes.length],
-                          clipPath: wash,
-                          WebkitClipPath: wash,
-                        }}
-                      />
+                      {/* Color wash removed — clean rounded rectangle image */}
                       {/* Flight-time pill (top-left) */}
                       <div
                         className="absolute top-3 left-3 uppercase z-10"
