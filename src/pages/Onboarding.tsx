@@ -374,7 +374,7 @@ const Onboarding = () => {
       : `Take me to ${reading.pick}`;
 
   return (
-    <main className="app-shell flex flex-col">
+    <main className="app-shell flex flex-col" style={{ backgroundColor: "#F5F0E8" }}>
       <TopBar
         eyebrow={`MOVEMENT ${step + 1} · OF ${stepCount}`}
         title={`Calibration · ${
@@ -1079,7 +1079,7 @@ const Onboarding = () => {
         )}
       </section>
 
-      <footer className="border-t border-foreground/15 p-5 flex items-center justify-between bg-background">
+      <footer className="border-t border-foreground/15 p-5 flex items-center justify-between" style={{ backgroundColor: "#F5F0E8" }}>
         <button
           onClick={() => setStep((s) => Math.max(0, s - 1))}
           className={cn("text-[11px] tracking-[0.18em] uppercase", step === 0 ? "opacity-30 pointer-events-none" : "hover:text-foreground")}
