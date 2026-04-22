@@ -83,10 +83,10 @@ const Welcome = () => {
           </p>
         </section>
 
-        <section className="mt-auto pt-5 flex flex-col items-center">
+        <section className="mt-auto pt-5 flex flex-col items-stretch">
           <Link
             to="/identify"
-            className="group inline-flex items-center justify-center gap-2 text-ink-foreground"
+            className="group flex w-full items-center justify-center gap-2 text-ink-foreground"
             style={{
               backgroundColor: "#C24E2A",
               color: "#F5F0E8",
