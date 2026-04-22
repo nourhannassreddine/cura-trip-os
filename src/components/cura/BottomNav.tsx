@@ -88,12 +88,16 @@ const MirrorIcon = ({ className }: IconProps) => (
     className={className}
     aria-hidden
   >
-    {/* mirror head — larger, ~60% of icon height */}
-    <circle cx="12" cy="8" r="6" />
-    {/* subtle reflective oval inside */}
-    <ellipse cx="10" cy="6" rx="1.6" ry="0.8" opacity="0.55" />
-    {/* tapered handle — ~40% of icon height */}
-    <path d="M10.8 14 L10.2 22 L13.8 22 L13.2 14" />
+    {/* botanical sprig — thin vertical stem */}
+    <line x1="12" y1="3.5" x2="12" y2="21" />
+    {/* small bud at the top */}
+    <path d="M12 3.5c-0.9 0.4 -1.4 1.2 -1.4 2.1c0.9 -0.2 1.4 -0.9 1.4 -2.1z" />
+    {/* leaf — upper right */}
+    <path d="M12 8c1.6 -0.4 3 -1.4 3.6 -2.9c-1.6 0.1 -3 0.9 -3.6 2.9z" />
+    {/* leaf — middle left */}
+    <path d="M12 12.5c-1.6 -0.4 -3 -1.4 -3.6 -2.9c1.6 0.1 3 0.9 3.6 2.9z" />
+    {/* leaf — lower right */}
+    <path d="M12 17c1.6 -0.4 3 -1.4 3.6 -2.9c-1.6 0.1 -3 0.9 -3.6 2.9z" />
   </svg>
 );
 
