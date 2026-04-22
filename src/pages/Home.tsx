@@ -493,9 +493,9 @@ const Home = () => {
             <Link
               to="/discover"
               className="text-[10px] tracking-[0.18em] uppercase inline-flex items-center gap-1 hover:opacity-80"
-              style={{ color: "#C24E2A" }}
+              style={{ color: "rgba(26,26,24,0.40)" }}
             >
-              All <ArrowRight className="h-3 w-3 -rotate-45" strokeWidth={1.5} />
+              All <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} />
             </Link>
           </div>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-5 pb-1">
