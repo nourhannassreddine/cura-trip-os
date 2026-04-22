@@ -51,10 +51,10 @@ export const BottomNav = () => {
       className="sticky bottom-0 left-0 right-0 z-40"
       style={{
         paddingBottom: "env(safe-area-inset-bottom)",
-        background: "#4FB6C8",
+        background: "rgba(26,26,24,0.94)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
-        borderTop: "0.5px solid rgba(79,182,200,0.4)",
+        borderTop: "1px solid rgba(79,182,200,0.30)",
       }}
       aria-label="Primary"
     >
@@ -85,8 +85,8 @@ export const BottomNav = () => {
                     }}
                   />
                 )}
-                <Icon className="h-5 w-5" strokeWidth={1.5} style={{ opacity: 0.9 }} />
-                <span className="text-[9px] tracking-[0.08em] uppercase" style={{ opacity: active ? 1 : 0.55 }}>{label}</span>
+                <Icon className="h-5 w-5" strokeWidth={1.5} style={{ opacity: active ? 0.95 : 0.65 }} />
+                <span className="text-[9px] tracking-[0.08em] uppercase" style={{ opacity: active ? 1 : 0.45 }}>{label}</span>
               </Link>
             </li>
           );
