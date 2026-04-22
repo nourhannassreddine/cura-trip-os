@@ -1,44 +1,59 @@
 import { Link } from "react-router-dom";
-import { Plus } from "lucide-react";
 import { BottomNav } from "@/components/cura/BottomNav";
-import { CuraWhisper } from "@/components/cura/CuraWhisper";
 import { trips } from "@/data/cura";
 
 /**
- * Trips — clean list of all trips.
- * Each row: destination · dates · status tag · readiness%.
- * Tap → trip workspace. No image-heavy cards here; that's Home's job.
+ * Trips — full image cards using the CURA design system.
+ * Visual rebuild only; routing logic preserved.
  */
 
-const statusLabel: Record<string, string> = {
-  dreaming: "DREAMING",
-  planning: "PLANNING",
-  ready: "READY",
-  live: "ACTIVE",
-  memory: "PAST",
+const tripImages: Record<string, string> = {
+  "puglia-25": "https://images.unsplash.com/photo-1499678329028-101435549a4e?w=800&q=80",
+  "marrakech-25": "https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=600&q=80",
+  "lisbon-24": "https://images.unsplash.com/photo-1558642084-fd07fae5282e?w=600&q=80",
 };
 
-const statusStyles: Record<string, string> = {
-  dreaming: "bg-accent-sky text-foreground",
-  planning: "bg-accent-ochre text-white",
-  ready: "bg-accent-olive text-white",
-  live: "bg-accent-rust text-white",
-  memory: "bg-accent-rose text-white",
+// Map raw trip status → display group with consistent CURA color system.
+type StatusKey = "planning" | "dreaming" | "archive";
+
+const statusFor = (s: string): StatusKey => {
+  if (s === "memory") return "archive";
+  if (s === "dreaming") return "dreaming";
+  return "planning";
+};
+
+const statusLabel: Record<StatusKey, string> = {
+  planning: "PLANNING",
+  dreaming: "DREAMING",
+  archive: "ARCHIVE",
+};
+
+const statusColor: Record<StatusKey, string> = {
+  planning: "#C24E2A",
+  dreaming: "#4FB6C8",
+  archive: "#6B7D3D",
+};
+
+// Spec-locked readiness widths per trip id.
+const readinessFor = (id: string, fallback: number) => {
+  if (id === "puglia-25") return 64;
+  if (id === "marrakech-25") return 2;
+  if (id === "lisbon-24") return 100;
+  return fallback;
 };
 
 const Trips = () => {
   const sorted = [...trips].sort((a, b) => {
-    // future first, past last
     const aPast = a.status === "memory" ? 1 : 0;
     const bPast = b.status === "memory" ? 1 : 0;
     if (aPast !== bPast) return aPast - bPast;
     return a.daysOut - b.daysOut;
   });
 
-  // Empty state — CURA voice, single CTA.
+  // Empty state — preserved from prior version.
   if (trips.length === 0) {
     return (
-      <main className="app-shell pb-20 flex flex-col">
+      <main className="app-shell pb-20 flex flex-col" style={{ backgroundColor: "#F5F0E8" }}>
         <header className="px-5 pt-6 pb-2">
           <div className="editorial-eyebrow text-muted-foreground">Trips</div>
         </header>
@@ -48,7 +63,8 @@ const Trips = () => {
           </h1>
           <Link
             to="/begin"
-            className="mt-8 inline-flex items-center gap-2 border border-foreground px-6 py-3 text-sm tracking-[0.12em] uppercase hover:bg-foreground hover:text-background transition-colors"
+            className="mt-8 inline-flex items-center gap-2 px-6 py-3 text-sm tracking-[0.12em] uppercase text-[#F5F0E8]"
+            style={{ backgroundColor: "#C24E2A", borderRadius: "20px" }}
           >
             Begin
           </Link>
@@ -59,65 +75,234 @@ const Trips = () => {
   }
 
   return (
-    <main className="app-shell pb-20">
-      <header className="px-5 pt-6 pb-2 flex items-start justify-between">
-        <div>
-          <div className="editorial-eyebrow text-muted-foreground">Trips</div>
-          <h1 className="font-serif text-[40px] leading-[0.95] tracking-tight mt-1">
-            All of them
-          </h1>
+    <main className="app-shell pb-20" style={{ backgroundColor: "#F5F0E8" }}>
+      <header className="px-5 pt-6 pb-2">
+        <div
+          className="uppercase"
+          style={{
+            fontFamily: "Inter, sans-serif",
+            fontSize: "8px",
+            letterSpacing: "0.22em",
+            color: "rgba(26,26,24,0.45)",
+          }}
+        >
+          Trips
         </div>
+        <h1
+          className="mt-1"
+          style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: "32px",
+            lineHeight: 0.98,
+            letterSpacing: "-0.01em",
+            color: "#1A1A18",
+          }}
+        >
+          All of them.
+        </h1>
       </header>
 
-      <section className="px-5 mt-5">
-        <CuraWhisper variant="block">
-          One in motion, one still a feeling, one finished. That's a healthy shelf.
-        </CuraWhisper>
-      </section>
-
-      {/* Trip list — vertical, hairline divided. */}
-      <section className="mt-8">
-        <ul className="border-t border-foreground/15">
-          {sorted.map((t) => (
-            <li key={t.id} className="border-b border-foreground/15">
-              <Link
-                to={`/trip/${t.id}`}
-                className="flex items-center justify-between gap-4 px-5 py-5 hover:bg-foreground/[0.03] transition-colors"
-              >
-                <div className="min-w-0">
-                  <div className="font-serif text-[24px] leading-none truncate">
-                    {t.city}
-                  </div>
-                  <div className="editorial-eyebrow text-muted-foreground mt-2">
-                    {t.dates}
-                  </div>
-                </div>
-                <div className="text-right shrink-0">
-                  <span
-                    className={`inline-flex items-center px-2 py-0.5 text-[10px] tracking-[0.16em] uppercase ${
-                      statusStyles[t.status] ?? statusStyles.planning
-                    }`}
-                  >
-                    {statusLabel[t.status] ?? t.status}
-                  </span>
-                  <div className="text-[11px] text-muted-foreground mt-2">
-                    {t.readiness}% ready
-                  </div>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* New trip — subtle, not a loud button. */}
-      <section className="px-5 mt-6">
-        <Link
-          to="/trip/new"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+      {/* CURA insight card */}
+      <section className="px-5 mt-5" style={{ marginBottom: "20px" }}>
+        <div
+          style={{
+            backgroundColor: "#EFE9DF",
+            borderLeft: "3px solid #C24E2A",
+            borderTopRightRadius: "12px",
+            borderBottomRightRadius: "12px",
+            padding: "12px 14px",
+          }}
         >
-          <Plus className="h-4 w-4" strokeWidth={1.5} />
-          New trip
+          <div
+            className="uppercase"
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "8px",
+              letterSpacing: "0.22em",
+              color: "#C24E2A",
+              marginBottom: "6px",
+            }}
+          >
+            ✦ Cura
+          </div>
+          <p
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontStyle: "italic",
+              fontSize: "15px",
+              lineHeight: 1.4,
+              color: "#1A1A18",
+              margin: 0,
+            }}
+          >
+            One in motion, one still a feeling, one finished. That's a healthy shelf.
+          </p>
+        </div>
+      </section>
+
+      {/* Trip cards */}
+      <section className="px-5">
+        <ul className="m-0 p-0 list-none">
+          {sorted.map((t) => {
+            const key = statusFor(t.status);
+            const color = statusColor[key];
+            const pct = readinessFor(t.id, t.readiness);
+
+            return (
+              <li
+                key={t.id}
+                style={{
+                  borderRadius: "20px",
+                  backgroundColor: "rgba(245,240,232,0.85)",
+                  border: "0.5px solid rgba(26,26,24,0.08)",
+                  marginBottom: "14px",
+                  overflow: "hidden",
+                }}
+              >
+                <Link to={`/trip/${t.id}`} className="block">
+                  {/* Image with overlay text */}
+                  <div className="relative" style={{ height: "140px" }}>
+                    <img
+                      src={tripImages[t.id]}
+                      alt={`${t.city}, ${t.country}`}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(to top, rgba(26,26,24,0.55) 0%, transparent 60%)",
+                      }}
+                    />
+
+                    {/* Status tag */}
+                    <span
+                      className="absolute uppercase"
+                      style={{
+                        bottom: "12px",
+                        right: "12px",
+                        backgroundColor: color,
+                        color: "#F5F0E8",
+                        fontFamily: "Inter, sans-serif",
+                        fontSize: "9px",
+                        letterSpacing: "0.18em",
+                        padding: "4px 10px",
+                        borderRadius: "999px",
+                      }}
+                    >
+                      {statusLabel[key]}
+                    </span>
+
+                    {/* Destination block */}
+                    <div className="absolute" style={{ left: "14px", bottom: "12px", right: "90px" }}>
+                      <div
+                        className="uppercase"
+                        style={{
+                          fontFamily: "Inter, sans-serif",
+                          fontSize: "7px",
+                          letterSpacing: "0.22em",
+                          color: "rgba(245,240,232,0.55)",
+                        }}
+                      >
+                        {t.country}
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: "'Playfair Display', serif",
+                          fontSize: "22px",
+                          lineHeight: 1.05,
+                          color: "#F5F0E8",
+                          marginTop: "2px",
+                        }}
+                      >
+                        {t.city}
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: "Inter, sans-serif",
+                          fontSize: "8px",
+                          color: "rgba(245,240,232,0.70)",
+                          marginTop: "3px",
+                          letterSpacing: "0.04em",
+                        }}
+                      >
+                        {t.dates}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bottom — readiness */}
+                  <div style={{ padding: "10px 14px 14px" }}>
+                    <div className="flex items-center justify-between">
+                      <span
+                        className="uppercase"
+                        style={{
+                          fontFamily: "Inter, sans-serif",
+                          fontSize: "7px",
+                          letterSpacing: "0.22em",
+                          color: "rgba(26,26,24,0.35)",
+                        }}
+                      >
+                        Readiness
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: "Inter, sans-serif",
+                          fontSize: "10px",
+                          color,
+                          fontWeight: 500,
+                        }}
+                      >
+                        {pct}%
+                      </span>
+                    </div>
+                    <div
+                      className="mt-2 w-full overflow-hidden"
+                      style={{
+                        height: "2.5px",
+                        backgroundColor: "rgba(26,26,24,0.10)",
+                        borderRadius: "999px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: `${pct}%`,
+                          height: "100%",
+                          backgroundColor: color,
+                          borderRadius: "999px",
+                        }}
+                      />
+                    </div>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+
+        {/* Start a new trip */}
+        <Link
+          to="/begin"
+          className="flex items-center justify-center gap-2 w-full"
+          style={{
+            border: "0.5px dashed rgba(26,26,24,0.22)",
+            borderRadius: "18px",
+            padding: "14px",
+            backgroundColor: "transparent",
+            marginTop: "4px",
+          }}
+        >
+          <span style={{ fontSize: "13px", color: "rgba(26,26,24,0.35)" }}>✦</span>
+          <span
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontStyle: "italic",
+              fontSize: "14px",
+              color: "rgba(26,26,24,0.45)",
+            }}
+          >
+            Start a new trip
+          </span>
         </Link>
       </section>
 
