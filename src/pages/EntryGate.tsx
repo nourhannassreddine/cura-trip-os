@@ -38,7 +38,10 @@ const paths = [
 
 const EntryGate = () => {
   return (
-    <main className="app-shell flex flex-col bg-background">
+    <main
+      className="app-shell flex flex-col"
+      style={{ backgroundColor: "#F5F0E8" }}
+    >
       <TopBar back="/" eyebrow="Entry" title="Begin" />
 
       <section className="px-5 pt-5 pb-7 cura-rise">
@@ -54,12 +57,17 @@ const EntryGate = () => {
       {/* Options share the same px-5 gutter as the heading.
           Numerals sit in a fixed-width column so all titles
           AND subs left-align to the same vertical line. */}
-      <ul className="border-t border-foreground/15">
+      <ul className="px-5 flex flex-col gap-2.5">
         {paths.map((p) => (
-          <li key={p.n} className="border-b border-foreground/15">
+          <li key={p.n}>
             <Link
               to={p.to}
-              className="group flex items-center justify-between gap-4 px-5 py-5 transition-colors hover:bg-foreground/[0.03]"
+              className="cura-option-row group flex items-center justify-between gap-4 px-4 py-4 transition-colors"
+              style={{
+                backgroundColor: "rgba(239,233,223,0.60)",
+                border: "0.5px solid rgba(26,26,24,0.10)",
+                borderRadius: "16px",
+              }}
             >
               <div className="flex items-start gap-3 min-w-0">
                 <span className="font-serif italic text-sm text-muted-foreground w-6 shrink-0 pt-0.5">
