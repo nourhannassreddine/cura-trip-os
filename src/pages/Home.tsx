@@ -204,16 +204,6 @@ const Home = () => {
                     loading="eager"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  {/* Translucent ochre wash drifting from upper-right */}
-                  <div
-                    aria-hidden
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background: `rgba(194,78,42,0.25)`,
-                      clipPath: washShapes[0],
-                      WebkitClipPath: washShapes[0],
-                    }}
-                  />
                   {/* Bottom gradient for legibility */}
                   <div
                     aria-hidden
