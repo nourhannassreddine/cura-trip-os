@@ -79,7 +79,10 @@ const Choose = () => {
   };
 
   return (
-    <main className="app-shell flex flex-col bg-background">
+    <main
+      className="app-shell flex flex-col"
+      style={{ backgroundColor: "#F5F0E8" }}
+    >
       <TopBar
         back={step === 1 ? "/begin" : undefined}
         eyebrow={`MOVEMENT ${step} · OF 3`}
