@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Sparkles, AlertCircle, Bell } from "lucide-react";
+import { ArrowRight, Sparkles, AlertCircle, Bell, ArrowUpRight, ListChecks } from "lucide-react";
 import { BottomNav } from "@/components/cura/BottomNav";
 
 import { trips, curaWhispers, packing, destinations, journalEntries } from "@/data/cura";
