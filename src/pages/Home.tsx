@@ -418,9 +418,8 @@ const Home = () => {
                           className="inline-flex items-center uppercase"
                           style={{
                             borderRadius: "99px",
-                            background: `rgba(${c.rgb},0.18)`,
-                            color: t.status === "dreaming" ? "#2d8a99" : c.hex,
-                            border: `0.5px solid rgba(${c.rgb},0.40)`,
+                            background: c.hex,
+                            color: "#F5F0E8",
                             fontSize: "9px",
                             letterSpacing: "0.18em",
                             padding: "3px 10px",
