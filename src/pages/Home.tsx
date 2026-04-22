@@ -103,16 +103,19 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CURA INSIGHT — rounded ochre-wash card. */}
+      {/* CURA INSIGHT — linen surface with ochre left border. */}
       <section className="px-5" style={{ paddingTop: "12px", paddingBottom: "20px" }}>
         <Link
           to="/cura"
           className="block"
           style={{
-            borderRadius: "20px",
-            background: "rgba(194,78,42,0.10)",
-            border: "0.5px solid rgba(194,78,42,0.22)",
-            padding: "16px 18px",
+            background: "#EFE9DF",
+            borderLeft: "3px solid #C24E2A",
+            borderTopRightRadius: "12px",
+            borderBottomRightRadius: "12px",
+            borderTopLeftRadius: "0px",
+            borderBottomLeftRadius: "0px",
+            padding: "14px 16px",
           }}
         >
           <div
@@ -123,7 +126,7 @@ const Home = () => {
           </div>
           <p
             className="font-serif italic"
-            style={{ fontSize: "18px", lineHeight: 1.35, color: "#1A1A18", marginTop: "8px" }}
+            style={{ fontSize: "18px", lineHeight: 1.45, color: "#1A1A18", marginTop: "8px" }}
           >
             {curaWhispers[0]}
           </p>
@@ -183,7 +186,7 @@ const Home = () => {
               overflow: "hidden",
             }}
           >
-            {/* Hero image with organic blob clip + color wash */}
+            {/* Hero image — clean rounded rectangle crop */}
             <Link to={`/trip/${primary.id}`} className="group block relative" style={{ height: "200px" }}>
               <div
                 className="relative h-full w-full overflow-hidden"
@@ -192,12 +195,11 @@ const Home = () => {
                 <div
                   className="relative h-full w-full overflow-hidden"
                   style={{
-                    clipPath: blobShapes[0],
-                    WebkitClipPath: blobShapes[0],
+                    borderRadius: "16px",
                   }}
                 >
                   <img
-                    src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80"
+                    src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=800&q=80"
                     alt={`${primary.city}, ${primary.country}`}
                     loading="eager"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -274,15 +276,16 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Action layer — colored pill CTA + ghost rounded secondary actions */}
+            {/* Action layer — colored CTA + ghost secondary actions, all rounded to match card */}
             <div className="p-4 pt-3">
               <Link
                 to={`/trip/${primary.id}`}
-                className="group flex items-center justify-between px-5 py-3"
+                className="group flex items-center justify-between px-5"
                 style={{
-                  borderRadius: "99px",
+                  borderRadius: "20px",
                   background: primaryColor.hex,
                   color: "#F5F0E8",
+                  height: "44px",
                 }}
               >
                 <span className="font-sans text-sm tracking-wide">{statusVerb[primary.status] ?? "Open trip"}</span>
@@ -291,11 +294,12 @@ const Home = () => {
               <div className="grid grid-cols-2 gap-2 mt-2">
                 <Link
                   to={`/trip/${primary.id}/itinerary`}
-                  className="flex items-center justify-center gap-1.5 px-3 py-2.5 text-[12px] tracking-wide transition-colors"
+                  className="flex items-center justify-center gap-1.5 px-3 text-[12px] tracking-wide transition-colors"
                   style={{
-                    borderRadius: "99px",
+                    borderRadius: "20px",
                     border: "0.5px solid rgba(26,26,24,0.30)",
                     color: "#1A1A18",
+                    height: "44px",
                   }}
                 >
                   <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
@@ -303,16 +307,21 @@ const Home = () => {
                 </Link>
                 <Link
                   to="/pack"
-                  className="flex items-center justify-center gap-1.5 px-3 py-2.5 text-[12px] tracking-wide transition-colors"
+                  className="flex flex-col items-center justify-center px-3 transition-colors"
                   style={{
-                    borderRadius: "99px",
+                    borderRadius: "20px",
                     border: "0.5px solid rgba(26,26,24,0.30)",
                     color: "#1A1A18",
+                    height: "44px",
                   }}
                 >
-                  <AlertCircle className="h-3.5 w-3.5" strokeWidth={1.5} />
-                  See what's missing
-                  {missingCount > 0 && <span className="text-muted-foreground">· {missingCount}</span>}
+                  <span className="text-[12px] tracking-wide leading-none whitespace-nowrap">See what's missing</span>
+                  <span
+                    className="font-sans leading-none mt-0.5"
+                    style={{ fontSize: "10px", color: "rgba(26,26,24,0.45)" }}
+                  >
+                    {missingCount} of {packing.length} complete
+                  </span>
                 </Link>
               </div>
             </div>
@@ -348,7 +357,7 @@ const Home = () => {
             <Link
               to="/trips"
               className="text-[10px] tracking-[0.18em] uppercase hover:opacity-80"
-              style={{ color: "#C24E2A" }}
+              style={{ color: "rgba(26,26,24,0.40)" }}
             >
               All trips
             </Link>
@@ -503,7 +512,6 @@ const Home = () => {
           </div>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-5 pb-1">
             {elsewhere.map((d, idx) => {
-              const blob = blobShapes[idx % blobShapes.length];
               const wash = washShapes[idx % washShapes.length];
               // Rotate color wash through aqua, ochre, olive
               const washes = [
@@ -516,7 +524,7 @@ const Home = () => {
                   <div className="relative" style={{ height: "220px" }}>
                     <div
                       className="relative h-full w-full overflow-hidden"
-                      style={{ clipPath: blob, WebkitClipPath: blob }}
+                      style={{ borderRadius: "16px" }}
                     >
                       <img
                         src={d.cover}
