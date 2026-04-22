@@ -216,7 +216,7 @@ const Home = () => {
                   {/* Status pill — bottom left over image */}
                   <div className="absolute bottom-3 left-3">
                     <span
-                      className="inline-flex items-center font-sans uppercase"
+                      className="inline-flex items-center justify-center font-sans uppercase"
                       style={{
                         borderRadius: "99px",
                         background: primaryColor.hex,
@@ -224,6 +224,7 @@ const Home = () => {
                         fontSize: "9px",
                         letterSpacing: "0.18em",
                         padding: "4px 10px",
+                        minWidth: "76px",
                       }}
                     >
                       {primary.status}
