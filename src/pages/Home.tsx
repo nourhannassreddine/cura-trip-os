@@ -351,10 +351,10 @@ const Home = () => {
             <div className="editorial-eyebrow text-muted-foreground">Also in motion</div>
             <Link
               to="/trips"
-              className="text-[10px] tracking-[0.18em] uppercase hover:opacity-80"
+              className="text-[10px] tracking-[0.18em] uppercase hover:opacity-80 inline-flex items-center gap-1"
               style={{ color: "rgba(26,26,24,0.40)" }}
             >
-              All trips
+              All trips <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} />
             </Link>
           </div>
           <ul className="space-y-3">
