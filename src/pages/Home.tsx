@@ -387,23 +387,13 @@ const Home = () => {
                     <div className="relative shrink-0" style={{ width: "40%", padding: "10px" }}>
                       <div
                         className="relative h-full w-full overflow-hidden"
-                        style={{ clipPath: blob, WebkitClipPath: blob, minHeight: "100px" }}
+                        style={{ borderRadius: "12px", minHeight: "100px" }}
                       >
                         <img
                           src={imgSrc}
                           alt={t.city}
                           loading="lazy"
                           className="absolute inset-0 h-full w-full object-cover"
-                        />
-                        {/* Color wash — uses status color for this trip */}
-                        <div
-                          aria-hidden
-                          className="absolute inset-0 pointer-events-none"
-                          style={{
-                            background: `rgba(${c.rgb},0.22)`,
-                            clipPath: wash,
-                            WebkitClipPath: wash,
-                          }}
                         />
                       </div>
                     </div>
@@ -421,14 +411,15 @@ const Home = () => {
                       </div>
                       <div className="mt-3">
                         <span
-                          className="inline-flex items-center uppercase"
+                          className="inline-flex items-center justify-center uppercase"
                           style={{
                             borderRadius: "99px",
                             background: c.hex,
                             color: "#F5F0E8",
                             fontSize: "9px",
                             letterSpacing: "0.18em",
-                            padding: "3px 10px",
+                            padding: "4px 10px",
+                            minWidth: "76px",
                           }}
                         >
                           {t.status}
