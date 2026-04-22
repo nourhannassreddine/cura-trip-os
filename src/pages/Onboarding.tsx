@@ -431,9 +431,9 @@ const Onboarding = () => {
                     >
                       <div>
                         <div className="font-serif text-base leading-tight">{m.label}</div>
-                        <div className={cn("text-xs mt-0.5", on ? "text-ink-foreground/70" : "text-muted-foreground")}>{m.note}</div>
+                        <div className={cn("text-xs mt-0.5", "text-muted-foreground")}>{m.note}</div>
                       </div>
-                      {on && <Check className="h-4 w-4" strokeWidth={1.5} />}
+                      {on && <Check className="h-4 w-4 shrink-0" strokeWidth={1.5} style={{ color: "#C24E2A" }} />}
                     </button>
                   </li>
                 );
@@ -469,9 +469,9 @@ const Onboarding = () => {
                     >
                       <div>
                         <div className="font-serif text-lg leading-tight">{p.label}</div>
-                        <div className={cn("text-xs mt-0.5", on ? "text-ink-foreground/70" : "text-muted-foreground")}>{p.note}</div>
+                        <div className={cn("text-xs mt-0.5", "text-muted-foreground")}>{p.note}</div>
                       </div>
-                      {on && <Check className="h-4 w-4" strokeWidth={1.5} />}
+                      {on && <Check className="h-4 w-4 shrink-0" strokeWidth={1.5} style={{ color: "#C24E2A" }} />}
                     </button>
                   </li>
                 );
@@ -511,9 +511,9 @@ const Onboarding = () => {
                     >
                       <div>
                         <div className="font-serif text-[15px] leading-tight">{p.label}</div>
-                        <div className={cn("text-[11px] mt-0.5", on ? "text-ink-foreground/70" : "text-muted-foreground")}>{p.note}</div>
+                        <div className={cn("text-[11px] mt-0.5", "text-muted-foreground")}>{p.note}</div>
                       </div>
-                      {on && <Check className="h-4 w-4" strokeWidth={1.5} />}
+                      {on && <Check className="h-4 w-4 shrink-0" strokeWidth={1.5} style={{ color: "#C24E2A" }} />}
                     </button>
                   </li>
                 );
@@ -603,7 +603,7 @@ const Onboarding = () => {
                       )}
                     >
                       <div className="font-serif text-[15px] leading-tight">{c.label}</div>
-                      <div className={cn("text-[11px] mt-0.5", on ? "text-ink-foreground/70" : "text-muted-foreground")}>{c.note}</div>
+                      <div className={cn("text-[11px] mt-0.5", "text-muted-foreground")}>{c.note}</div>
                     </button>
                   );
                 })}
@@ -963,9 +963,9 @@ const Onboarding = () => {
                       >
                         <div>
                           <div className="font-serif text-[15px] leading-tight">{s.label}</div>
-                          <div className={cn("text-[11px] mt-0.5", on ? "text-ink-foreground/70" : "text-muted-foreground")}>{s.note}</div>
+                          <div className={cn("text-[11px] mt-0.5", "text-muted-foreground")}>{s.note}</div>
                         </div>
-                        {on && <Check className="h-4 w-4" strokeWidth={1.5} />}
+                        {on && <Check className="h-4 w-4 shrink-0" strokeWidth={1.5} style={{ color: "#C24E2A" }} />}
                       </button>
                     </li>
                   );
