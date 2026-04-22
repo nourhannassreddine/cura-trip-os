@@ -402,7 +402,7 @@ const Onboarding = () => {
       <div className="px-5">
         <div className="grid gap-1.5 grid-cols-6">
           {Array.from({ length: stepCount }).map((_, i) => (
-            <div key={i} className={cn("h-px", i <= step ? "bg-primary" : "bg-foreground/20")} />
+            <div key={i} className="h-px cura-progress-seg" data-state={i === step ? "active" : i < step ? "completed" : "idle"} />
           ))}
         </div>
       </div>
@@ -425,8 +425,7 @@ const Onboarding = () => {
                     <button
                       onClick={() => toggle(m.id)}
                       className={cn(
-                        "w-full flex items-center justify-between border px-4 py-3.5 text-left transition-colors",
-                        on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                        "w-full flex items-center justify-between cura-card px-4 py-3.5 text-left transition-colors"
                       )}
                     >
                       <div>
@@ -463,8 +462,7 @@ const Onboarding = () => {
                     <button
                       onClick={() => setPace(p.id)}
                       className={cn(
-                        "w-full flex items-center justify-between border px-4 py-4 text-left transition-colors",
-                        on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                        "w-full flex items-center justify-between cura-card px-4 py-4 text-left transition-colors"
                       )}
                     >
                       <div>
@@ -505,8 +503,7 @@ const Onboarding = () => {
                     <button
                       onClick={() => setPurpose(p.id)}
                       className={cn(
-                        "w-full flex items-center justify-between border px-4 py-3 text-left transition-colors",
-                        on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                        "w-full flex items-center justify-between cura-card px-4 py-3 text-left transition-colors"
                       )}
                     >
                       <div>
@@ -597,9 +594,9 @@ const Onboarding = () => {
                     <button
                       key={c.id}
                       onClick={() => setCompanyChoice(c.id)}
+                      data-selected={on}
                       className={cn(
-                        "border px-3 py-3 text-left transition-colors",
-                        on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                "cura-card px-3 py-3 text-left transition-colors"
                       )}
                     >
                       <div className="font-serif text-[15px] leading-tight">{c.label}</div>
@@ -651,9 +648,9 @@ const Onboarding = () => {
                           <button
                             key={String(o.v)}
                             onClick={() => setPartnerSameDeparture(o.v)}
+                            data-selected={on}
                             className={cn(
-                              "border px-3 py-2.5 text-sm transition-colors",
-                              on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                "cura-card px-3 py-2.5 text-sm transition-colors"
                             )}
                           >
                             {o.label}
@@ -762,8 +759,7 @@ const Onboarding = () => {
                               key={String(o.v)}
                               onClick={() => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, sameDeparture: o.v } : x))}
                               className={cn(
-                                "border px-3 py-2.5 text-sm transition-colors",
-                                on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                                "cura-card px-3 py-2.5 text-sm transition-colors"
                               )}
                             >
                               {o.label}
@@ -881,9 +877,9 @@ const Onboarding = () => {
                         <button
                           key={String(o.v)}
                           onClick={() => setFamilySameDeparture(o.v)}
+                          data-selected={on}
                           className={cn(
-                            "border px-3 py-2.5 text-sm transition-colors",
-                            on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                "cura-card px-3 py-2.5 text-sm transition-colors"
                           )}
                         >
                           {o.label}
@@ -957,8 +953,7 @@ const Onboarding = () => {
                       <button
                         onClick={() => setSpend(s.id)}
                         className={cn(
-                          "w-full flex items-center justify-between border px-4 py-3 text-left transition-colors",
-                          on ? "border-foreground bg-ink text-ink-foreground" : "border-foreground/20 hover:border-foreground/50"
+                          "w-full flex items-center justify-between cura-card px-4 py-3 text-left transition-colors"
                         )}
                       >
                         <div>
@@ -999,12 +994,18 @@ const Onboarding = () => {
                   <button
                     key={d.id}
                     onClick={() => toggleBreaker(d.id)}
+                    style={{
+                      borderRadius: "999px",
+                      border: on ? "1.5px solid #C24E2A" : "0.5px solid rgba(26,26,24,0.20)",
+                      backgroundColor: on ? "rgba(194,78,42,0.10)" : "rgba(245,240,232,0.60)",
+                      color: on ? "#C24E2A" : "rgba(26,26,24,0.75)",
+                    }}
                     className={cn(
-                      "px-3.5 border text-sm transition-colors",
+                      "px-3.5 text-sm transition-colors",
                       i % 3 === 0 ? "py-3" : i % 3 === 1 ? "py-2" : "py-2.5",
                       on
-                        ? "border-foreground bg-foreground text-background"
-                        : "border-foreground/25 text-foreground/75 hover:border-foreground/60"
+                        ? "text-ink-foreground"
+                        : "text-foreground/75"
                     )}
                   >
                     <span className={cn("font-serif", on ? "italic" : "")}>{d.label}</span>
@@ -1076,16 +1077,23 @@ const Onboarding = () => {
       <footer className="border-t border-foreground/15 p-5 flex items-center justify-between bg-background">
         <button
           onClick={() => setStep((s) => Math.max(0, s - 1))}
-          className={cn("text-[11px] tracking-[0.18em] uppercase", step === 0 ? "opacity-30 pointer-events-none" : "text-muted-foreground hover:text-foreground")}
+          className={cn("text-[11px] tracking-[0.18em] uppercase", step === 0 ? "opacity-30 pointer-events-none" : "hover:text-foreground")}
+          style={{ color: step === 0 ? undefined : "rgba(26,26,24,0.40)" }}
         >
           Back
         </button>
         <button
           onClick={handleContinue}
           disabled={!canContinue}
+          style={{
+            backgroundColor: canContinue ? "#C24E2A" : "rgba(26,26,24,0.10)",
+            color: canContinue ? "#F5F0E8" : "rgba(26,26,24,0.45)",
+            borderRadius: "20px",
+            padding: "12px 22px",
+          }}
           className={cn(
-            "group flex items-center gap-3 border border-foreground bg-ink text-ink-foreground px-5 py-3 transition-opacity",
-            !canContinue && "opacity-40 pointer-events-none"
+            "group inline-flex items-center justify-center gap-2 transition-opacity",
+            !canContinue && "pointer-events-none"
           )}
         >
           <span className="text-sm tracking-wide">{finalLabel}</span>
