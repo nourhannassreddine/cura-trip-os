@@ -265,3 +265,38 @@
   50%      { opacity: 1; }
 }
 .cura-pulse { animation: cura-pulse 2.4s ease-in-out infinite; }
+
+/* CURA design system inputs — focus border ochre */
+.cura-input:focus,
+.cura-input:focus-visible {
+  border-color: #C24E2A !important;
+  outline: none;
+}
+
+/* CURA option rows on /begin and /onboarding — hover/focus state */
+.cura-option-row:hover,
+.cura-option-row:focus-visible {
+  border-color: #C24E2A !important;
+  background-color: rgba(194,78,42,0.06) !important;
+}
+
+/* CURA selectable cards on /onboarding — selected & hover */
+.cura-card {
+  background-color: rgba(245,240,232,0.80);
+  border: 0.5px solid rgba(26,26,24,0.12);
+  border-radius: 16px;
+  transition: background-color .15s, border-color .15s;
+}
+.cura-card:hover {
+  border-color: #C24E2A;
+}
+.cura-card[data-selected="true"] {
+  background-color: rgba(194,78,42,0.08);
+  border: 1.5px solid #C24E2A;
+}
+
+/* CURA progress bar segments */
+.cura-progress-seg { background-color: rgba(26,26,24,0.12); }
+.cura-progress-seg[data-state="completed"] { background-color: rgba(194,78,42,0.35); }
+.cura-progress-seg[data-state="active"] { background-color: #C24E2A; }
+
