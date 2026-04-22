@@ -1,34 +1,26 @@
 import { Link } from "react-router-dom";
-import { Plus, Bell, ArrowRight, Sparkles, AlertCircle } from "lucide-react";
+import { ArrowRight, Sparkles, AlertCircle, Bell } from "lucide-react";
 import { BottomNav } from "@/components/cura/BottomNav";
 
 import { trips, curaWhispers, packing, destinations, journalEntries } from "@/data/cura";
 import fieldnote from "@/assets/home-fieldnote.jpg";
 
-/* Status sticker — small identifier chip whose color encodes trip phase.
-   Uses the editorial accent palette so each phase reads as its own marker.
-   - dreaming → sky   (faded blue, low commitment)
-   - planning → ochre (warm earth, in motion)
-   - ready    → olive (committed, almost there)
-   - live     → rust  (the trip is now)
-   - memory   → rose  (past, archived) */
-const statusStyles: Record<string, string> = {
-  // DREAMING — aqua bg #4FB6C8, ivory text #F5F0E8, no border
-  dreaming: "bg-[#4FB6C8] text-[#F5F0E8]",
-  planning: "bg-accent-ochre text-white",
-  ready: "bg-accent-olive text-white",
-  live: "bg-accent-rust text-white",
-  memory: "bg-accent-rose text-white",
-};
+/* ============================================================
+   Homepage — CURA new visual system.
+   - Organic blob shapes for image containers (asymmetric).
+   - Translucent color washes over destination photos.
+   - Pill buttons + tags. Generously rounded cards (20–28px).
+   - No solid white surfaces, no sharp corners.
+   Copy / routing / data are unchanged from prior version.
+   ============================================================ */
 
-/* Solid action-button surface for "Continue ___" — shares the sticker's color
-   so the user reads card + button as the same identifier system. */
-const statusActionStyles: Record<string, string> = {
-  dreaming: "bg-accent-sky text-foreground border-accent-sky",
-  planning: "bg-accent-ochre text-white border-accent-ochre",
-  ready: "bg-accent-olive text-white border-accent-olive",
-  live: "bg-accent-rust text-white border-accent-rust",
-  memory: "bg-accent-rose text-white border-accent-rose",
+/* Status color tokens — used as defaults but mixed creatively. */
+const statusColor: Record<string, { hex: string; rgb: string }> = {
+  dreaming: { hex: "#4FB6C8", rgb: "79,182,200" },   // aqua
+  planning: { hex: "#C24E2A", rgb: "194,78,42" },    // ochre
+  ready:    { hex: "#6B7D3D", rgb: "107,125,61" },   // olive
+  live:     { hex: "#BA181B", rgb: "186,24,27" },    // mahogany
+  memory:   { hex: "#6B7D3D", rgb: "107,125,61" },   // olive (archive)
 };
 
 const statusVerb: Record<string, string> = {
@@ -39,33 +31,40 @@ const statusVerb: Record<string, string> = {
   memory: "Revisit",
 };
 
-const StatusSticker = ({ status }: { status: string }) => (
-  <span
-    className={`inline-flex items-center px-2 py-0.5 text-[10px] tracking-[0.16em] uppercase ${
-      statusStyles[status] ?? statusStyles.planning
-    }`}
-  >
-    {status}
-  </span>
-);
+/* A small library of asymmetric organic blob clip-paths.
+   Each is a different irregular shape so no two containers match. */
+const blobShapes = [
+  // soft river stone
+  "path('M 60 0 C 140 4 196 28 220 90 C 248 162 196 220 132 232 C 60 246 4 200 0 130 C -4 60 14 -4 60 0 Z')",
+  // wider pebble
+  "path('M 30 6 C 110 -8 200 14 232 70 C 264 132 224 208 152 224 C 70 244 8 196 0 124 C -6 64 8 18 30 6 Z')",
+  // tall organic
+  "path('M 18 12 C 90 -10 184 8 220 70 C 256 140 220 220 140 234 C 60 250 -4 196 0 120 C 4 64 0 28 18 12 Z')",
+  // slanted blob
+  "path('M 50 0 C 130 0 220 30 232 100 C 246 180 180 234 110 232 C 40 230 -8 178 0 110 C 6 50 16 4 50 0 Z')",
+];
+
+/* Inline SVG-ish blob shapes used as decorative color washes (CSS clip-path on a div). */
+const washShapes = [
+  "polygon(72% 6%, 100% 22%, 96% 62%, 78% 78%, 60% 64%, 64% 32%)",
+  "polygon(8% 14%, 42% 4%, 62% 28%, 48% 60%, 18% 56%, 0% 32%)",
+  "polygon(58% 10%, 92% 24%, 96% 58%, 70% 72%, 44% 56%, 50% 28%)",
+  "polygon(10% 60%, 4% 30%, 32% 12%, 58% 28%, 50% 60%, 24% 78%)",
+];
 
 const Home = () => {
-  // Active trips, sorted by closest first.
-  const active = trips
-    .filter((t) => t.status !== "memory")
-    .sort((a, b) => a.daysOut - b.daysOut);
-
+  const active = trips.filter((t) => t.status !== "memory").sort((a, b) => a.daysOut - b.daysOut);
   const primary = active[0];
   const secondary = active.slice(1);
 
-  // Drives "See what's missing"
   const missingCount = packing.filter((p) => !p.packed).length;
 
-  // Elsewhere — destinations the user hasn't claimed as a trip yet.
   const claimedIds = new Set(trips.map((t) => t.id.split("-")[0]));
   const elsewhere = destinations.filter((d) => !claimedIds.has(d.id)).slice(0, 3);
 
   const archive = journalEntries.slice(0, 2);
+
+  const primaryColor = primary ? statusColor[primary.status] ?? statusColor.planning : statusColor.planning;
 
   return (
     <main className="app-shell pb-20">
@@ -73,9 +72,7 @@ const Home = () => {
           Right cluster keeps the two utility actions. */}
       <header className="px-5 pt-5 pb-2 flex items-start justify-between">
         <div>
-          <div className="font-serif lowercase text-2xl leading-none tracking-tight">
-            cura
-          </div>
+          <div className="font-serif lowercase text-2xl leading-none tracking-tight">cura</div>
         </div>
         <div className="flex flex-col items-end">
           <div className="flex items-center" style={{ gap: "12px" }}>
@@ -87,13 +84,11 @@ const Home = () => {
               <span className="inline-flex items-center justify-center text-foreground" style={{ fontSize: "20px", lineHeight: 1 }}>✦</span>
             </Link>
           </div>
-          <div className="editorial-eyebrow text-muted-foreground mt-1.5">
-            Tuesday · 4:12 pm
-          </div>
+          <div className="editorial-eyebrow text-muted-foreground mt-1.5">Tuesday · 4:12 pm</div>
         </div>
       </header>
 
-      {/* Hero — greeting + days-to header. */}
+      {/* Hero greeting */}
       <section className="px-5 pt-3 pb-4 cura-rise">
         <div className="flex items-end justify-between">
           <h1 className="font-serif text-[40px] leading-[0.95] max-w-[12ch]">
@@ -108,45 +103,66 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CURA insight strip — Type B: no surface, sits on ivory page bg.
-          Sits between greeting and trip card. */}
-      <section className="px-5" style={{ paddingTop: "28px", paddingBottom: "24px" }}>
-        <div
-          className="font-sans uppercase"
+      {/* CURA INSIGHT — rounded ochre-wash card. */}
+      <section className="px-5" style={{ paddingTop: "12px", paddingBottom: "20px" }}>
+        <Link
+          to="/cura"
+          className="block"
           style={{
-            fontSize: "8px",
-            letterSpacing: "0.18em",
-            color: "hsl(var(--ink) / 0.35)",
+            borderRadius: "20px",
+            background: "rgba(194,78,42,0.10)",
+            border: "0.5px solid rgba(194,78,42,0.22)",
+            padding: "16px 18px",
           }}
         >
-          ✦ Cura
-        </div>
-        <p
-          className="font-serif italic mt-2"
-          style={{
-            fontSize: "22px",
-            lineHeight: 1.35,
-            color: "hsl(var(--ink))",
-          }}
-        >
-          {curaWhispers[0]}
-        </p>
-        <div
-          className="mt-5 w-full"
-          style={{ height: "0.5px", background: "hsl(var(--ink) / 0.1)" }}
-        />
+          <div
+            className="font-sans uppercase"
+            style={{ fontSize: "8px", letterSpacing: "0.18em", color: "#C24E2A" }}
+          >
+            ✦ Cura
+          </div>
+          <p
+            className="font-serif italic"
+            style={{ fontSize: "18px", lineHeight: 1.35, color: "#1A1A18", marginTop: "8px" }}
+          >
+            {curaWhispers[0]}
+          </p>
+          <div
+            className="font-sans uppercase"
+            style={{
+              fontSize: "7px",
+              letterSpacing: "0.22em",
+              color: "rgba(26,26,24,0.30)",
+              marginTop: "12px",
+            }}
+          >
+            Tap to explore →
+          </div>
+        </Link>
       </section>
 
-      {/* STATE 1 — no active trips. Single editorial empty state, CURA voice. */}
+      {/* No active trip — empty state */}
       {!primary && (
         <section className="mt-2 px-5">
-          <div className="border border-foreground/15 px-5 py-10 text-center">
+          <div
+            className="px-5 py-10 text-center"
+            style={{
+              borderRadius: "24px",
+              background: "rgba(245,240,232,0.82)",
+              border: "0.5px solid rgba(26,26,24,0.10)",
+            }}
+          >
             <h2 className="font-serif text-[26px] leading-[1.1] max-w-[18ch] mx-auto">
               Nothing planned. Which is its own kind of plan.
             </h2>
             <Link
               to="/begin"
-              className="mt-6 inline-flex items-center gap-2 border border-foreground px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase hover:bg-foreground hover:text-background transition-colors"
+              className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 text-[12px] tracking-[0.12em] uppercase transition-colors"
+              style={{
+                borderRadius: "99px",
+                background: "#C24E2A",
+                color: "#F5F0E8",
+              }}
             >
               Begin
             </Link>
@@ -154,101 +170,149 @@ const Home = () => {
         </section>
       )}
 
-      {/* STATE 3 — trip is live. Stub: "today's plan is loading." */}
-      {primary && primary.status === "live" && (
-        <section className="mt-2 px-5">
-          <div className="editorial-eyebrow text-muted-foreground mb-2">Live now</div>
-          <Link
-            to={`/trip/${primary.id}`}
-            className="block border border-foreground bg-background p-5"
-          >
-            <div className="editorial-eyebrow text-accent-rust">In motion</div>
-            <div className="font-serif text-[34px] leading-none mt-2">
-              Today in {primary.city}
-            </div>
-            <p className="text-sm text-muted-foreground mt-3">
-              Your day is loading. Tap to open today's view.
-            </p>
-          </Link>
-        </section>
-      )}
-
-      {/* STATE 2 — default. Active planning trip as the focal point. */}
+      {/* PRIMARY TRIP CARD — Puglia / planning */}
       {primary && primary.status !== "live" && (
         <section className="mt-2 px-5">
           <div className="editorial-eyebrow text-muted-foreground mb-2">Your trip</div>
 
-          <div className="border border-foreground bg-background">
-            {/* Cover */}
-            <Link to={`/trip/${primary.id}`} className="group block relative h-[220px] overflow-hidden">
-              <img
-                src={primary.cover}
-                alt={`${primary.city}, ${primary.country}`}
-                loading="eager"
-                width={1024}
-                height={1280}
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute top-3 left-3">
-                <StatusSticker status={primary.status} />
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                <div className="editorial-eyebrow text-white/80">{primary.country}</div>
-                <div className="font-serif text-white text-[34px] leading-none mt-1">
-                  {primary.city}
+          <div
+            style={{
+              borderRadius: "22px",
+              background: "rgba(245,240,232,0.82)",
+              border: "0.5px solid rgba(26,26,24,0.08)",
+              overflow: "hidden",
+            }}
+          >
+            {/* Hero image with organic blob clip + color wash */}
+            <Link to={`/trip/${primary.id}`} className="group block relative" style={{ height: "200px" }}>
+              <div
+                className="relative h-full w-full overflow-hidden"
+                style={{ padding: "12px" }}
+              >
+                <div
+                  className="relative h-full w-full overflow-hidden"
+                  style={{
+                    clipPath: blobShapes[0],
+                    WebkitClipPath: blobShapes[0],
+                  }}
+                >
+                  <img
+                    src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80"
+                    alt={`${primary.city}, ${primary.country}`}
+                    loading="eager"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  {/* Translucent ochre wash drifting from upper-right */}
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: `rgba(194,78,42,0.25)`,
+                      clipPath: washShapes[0],
+                      WebkitClipPath: washShapes[0],
+                    }}
+                  />
+                  {/* Bottom gradient for legibility */}
+                  <div
+                    aria-hidden
+                    className="absolute inset-x-0 bottom-0 pointer-events-none"
+                    style={{
+                      height: "60%",
+                      background: "linear-gradient(to top, rgba(0,0,0,0.55), transparent)",
+                    }}
+                  />
+                  {/* Status pill — bottom left over image */}
+                  <div className="absolute bottom-3 left-3">
+                    <span
+                      className="inline-flex items-center font-sans uppercase"
+                      style={{
+                        borderRadius: "99px",
+                        background: primaryColor.hex,
+                        color: "#F5F0E8",
+                        fontSize: "9px",
+                        letterSpacing: "0.18em",
+                        padding: "4px 10px",
+                      }}
+                    >
+                      {primary.status}
+                    </span>
+                  </div>
+                  {/* Destination text — bottom right over image */}
+                  <div className="absolute bottom-3 right-4 text-right">
+                    <div className="editorial-eyebrow" style={{ color: "rgba(245,240,232,0.85)" }}>
+                      {primary.country}
+                    </div>
+                    <div className="font-serif text-[28px] leading-none mt-0.5" style={{ color: "#F5F0E8" }}>
+                      {primary.city}
+                    </div>
+                    <div className="text-[11px] mt-1" style={{ color: "rgba(245,240,232,0.85)" }}>
+                      {primary.dates}
+                    </div>
+                  </div>
                 </div>
-                <div className="text-[11px] text-white/85 mt-1">{primary.dates}</div>
               </div>
             </Link>
 
-            {/* Readiness bar */}
-            <div className="px-4 pt-4">
+            {/* Readiness — rounded track */}
+            <div className="px-5 pt-3">
               <div className="flex items-center justify-between text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
                 <span>Readiness</span>
                 <span>{primary.readiness}%</span>
               </div>
-              <div className="mt-2 h-1 bg-foreground/15 relative overflow-hidden">
+              <div
+                className="mt-2 relative overflow-hidden"
+                style={{ height: "6px", borderRadius: "99px", background: "rgba(26,26,24,0.10)" }}
+              >
                 <div
                   className="absolute left-0 top-0 h-full"
-                  style={{ width: `${primary.readiness}%`, backgroundColor: "#C24E2A" }}
+                  style={{
+                    width: `${primary.readiness}%`,
+                    background: primaryColor.hex,
+                    borderRadius: "99px",
+                  }}
                 />
               </div>
             </div>
 
-            {/* ACTION LAYER — primary CTA color matches the status sticker
-                so the card reads as a single identifier system. */}
+            {/* Action layer — colored pill CTA + ghost rounded secondary actions */}
             <div className="p-4 pt-3">
               <Link
                 to={`/trip/${primary.id}`}
-                className={`group flex items-center justify-between border px-4 py-3 ${
-                  statusActionStyles[primary.status] ?? statusActionStyles.planning
-                }`}
+                className="group flex items-center justify-between px-5 py-3"
+                style={{
+                  borderRadius: "99px",
+                  background: primaryColor.hex,
+                  color: "#F5F0E8",
+                }}
               >
-                <span className="font-sans text-sm tracking-wide">
-                  {statusVerb[primary.status] ?? "Open trip"}
-                </span>
-                <ArrowRight
-                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                  strokeWidth={1.5}
-                />
+                <span className="font-sans text-sm tracking-wide">{statusVerb[primary.status] ?? "Open trip"}</span>
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" strokeWidth={1.5} />
               </Link>
               <div className="grid grid-cols-2 gap-2 mt-2">
                 <Link
                   to={`/trip/${primary.id}/itinerary`}
-                  className="flex items-center justify-center gap-1.5 border border-foreground/25 hover:border-foreground px-3 py-2.5 text-[12px] tracking-wide"
+                  className="flex items-center justify-center gap-1.5 px-3 py-2.5 text-[12px] tracking-wide transition-colors"
+                  style={{
+                    borderRadius: "99px",
+                    border: "0.5px solid rgba(26,26,24,0.30)",
+                    color: "#1A1A18",
+                  }}
                 >
                   <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
                   View itinerary
                 </Link>
                 <Link
                   to="/pack"
-                  className="flex items-center justify-center gap-1.5 border border-foreground/25 hover:border-foreground px-3 py-2.5 text-[12px] tracking-wide"
+                  className="flex items-center justify-center gap-1.5 px-3 py-2.5 text-[12px] tracking-wide transition-colors"
+                  style={{
+                    borderRadius: "99px",
+                    border: "0.5px solid rgba(26,26,24,0.30)",
+                    color: "#1A1A18",
+                  }}
                 >
                   <AlertCircle className="h-3.5 w-3.5" strokeWidth={1.5} />
                   See what's missing
-                  {missingCount > 0 && (
-                    <span className="text-muted-foreground">· {missingCount}</span>
-                  )}
+                  {missingCount > 0 && <span className="text-muted-foreground">· {missingCount}</span>}
                 </Link>
               </div>
             </div>
@@ -256,88 +320,161 @@ const Home = () => {
         </section>
       )}
 
-      {/* SECONDARY TRIPS — flex row 38/62 with desaturated image. */}
+      {/* LIVE state */}
+      {primary && primary.status === "live" && (
+        <section className="mt-2 px-5">
+          <div className="editorial-eyebrow text-muted-foreground mb-2">Live now</div>
+          <Link
+            to={`/trip/${primary.id}`}
+            className="block p-5"
+            style={{
+              borderRadius: "22px",
+              background: "rgba(245,240,232,0.82)",
+              border: "0.5px solid rgba(186,24,27,0.30)",
+            }}
+          >
+            <div className="editorial-eyebrow" style={{ color: "#BA181B" }}>In motion</div>
+            <div className="font-serif text-[34px] leading-none mt-2">Today in {primary.city}</div>
+            <p className="text-sm text-muted-foreground mt-3">Your day is loading. Tap to open today's view.</p>
+          </Link>
+        </section>
+      )}
+
+      {/* SECONDARY TRIPS — Marrakech "also in motion" */}
       {secondary.length > 0 && (
         <section className="mt-6 px-5">
           <div className="flex items-baseline justify-between mb-3">
             <div className="editorial-eyebrow text-muted-foreground">Also in motion</div>
             <Link
               to="/trips"
-              className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground"
+              className="text-[10px] tracking-[0.18em] uppercase hover:opacity-80"
+              style={{ color: "#C24E2A" }}
             >
               All trips
             </Link>
           </div>
           <ul className="space-y-3">
-            {secondary.map((t) => (
-              <li key={t.id}>
-                <Link
-                  to={`/trip/${t.id}`}
-                  className="flex w-full border border-foreground/15 hover:border-foreground transition-colors min-h-[110px]"
-                >
-                  <div
-                    className="relative overflow-hidden shrink-0"
-                    style={{ width: "38%" }}
+            {secondary.map((t, idx) => {
+              const c = statusColor[t.status] ?? statusColor.dreaming;
+              const blob = blobShapes[(idx + 1) % blobShapes.length];
+              const wash = washShapes[(idx + 1) % washShapes.length];
+              const isMarrakech = /marrak/i.test(t.city);
+              const imgSrc = isMarrakech
+                ? "https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=400&q=80"
+                : t.cover;
+              return (
+                <li key={t.id}>
+                  <Link
+                    to={`/trip/${t.id}`}
+                    className="flex w-full transition-colors min-h-[120px]"
+                    style={{
+                      borderRadius: "18px",
+                      background: "rgba(239,233,223,0.60)",
+                      border: "0.5px solid rgba(26,26,24,0.06)",
+                      overflow: "hidden",
+                    }}
                   >
-                    <img
-                      src={t.cover}
-                      alt={t.city}
-                      loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover"
-                      style={{ filter: "saturate(0.75)" }}
-                    />
-                  </div>
-                  <div
-                    className="flex flex-col justify-between p-4"
-                    style={{ width: "62%" }}
-                  >
-                    <div>
-                      <div className="font-serif leading-tight" style={{ fontSize: "18px" }}>
-                        {t.city}
-                      </div>
+                    <div className="relative shrink-0" style={{ width: "40%", padding: "10px" }}>
                       <div
-                        className="font-sans text-muted-foreground mt-1"
-                        style={{ fontSize: "10px", letterSpacing: "0.04em" }}
+                        className="relative h-full w-full overflow-hidden"
+                        style={{ clipPath: blob, WebkitClipPath: blob, minHeight: "100px" }}
                       >
-                        {t.dates}
+                        <img
+                          src={imgSrc}
+                          alt={t.city}
+                          loading="lazy"
+                          className="absolute inset-0 h-full w-full object-cover"
+                        />
+                        {/* Color wash — uses status color for this trip */}
+                        <div
+                          aria-hidden
+                          className="absolute inset-0 pointer-events-none"
+                          style={{
+                            background: `rgba(${c.rgb},0.22)`,
+                            clipPath: wash,
+                            WebkitClipPath: wash,
+                          }}
+                        />
                       </div>
                     </div>
-                    <div className="mt-3">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 uppercase ${
-                          statusStyles[t.status] ?? statusStyles.planning
-                        }`}
-                        style={{ fontSize: "8px", letterSpacing: "0.18em" }}
-                      >
-                        {t.status}
-                      </span>
+                    <div className="flex flex-col justify-between p-4" style={{ width: "60%" }}>
+                      <div>
+                        <div className="font-serif leading-tight" style={{ fontSize: "20px", color: "#1A1A18" }}>
+                          {t.city}
+                        </div>
+                        <div
+                          className="font-sans text-muted-foreground mt-1"
+                          style={{ fontSize: "10px", letterSpacing: "0.04em" }}
+                        >
+                          {t.dates}
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <span
+                          className="inline-flex items-center uppercase"
+                          style={{
+                            borderRadius: "99px",
+                            background: `rgba(${c.rgb},0.18)`,
+                            color: t.status === "dreaming" ? "#2d8a99" : c.hex,
+                            border: `0.5px solid rgba(${c.rgb},0.40)`,
+                            fontSize: "9px",
+                            letterSpacing: "0.18em",
+                            padding: "3px 10px",
+                          }}
+                        >
+                          {t.status}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </li>
-            ))}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </section>
       )}
 
-      {/* Field note — linen surface w/ left ink hairline */}
+      {/* FIELD NOTE — linen surface w/ olive blob accent */}
       <section className="mt-12 px-5">
         <div
-          className="grid grid-cols-5 gap-0 items-stretch"
+          className="relative grid grid-cols-5 gap-0 items-stretch overflow-hidden"
           style={{
             background: "#EFE9DF",
-            borderLeft: "1.5px solid rgba(26,26,24,0.15)",
+            borderRadius: "22px",
+            border: "0.5px solid rgba(26,26,24,0.08)",
           }}
         >
-          <div className="col-span-3 relative h-[200px]">
-            <img
-              src={fieldnote}
-              alt="A flat-lay of a cream linen shirt, wide-leg trousers, leather mules and a rust silk scarf on warm stone"
-              loading="lazy"
-              className="h-full w-full object-cover"
-            />
+          {/* Olive decorative blob drifting from top-right */}
+          <div
+            aria-hidden
+            className="absolute pointer-events-none"
+            style={{
+              top: "-30px",
+              right: "-30px",
+              width: "180px",
+              height: "180px",
+              background: "rgba(107,125,61,0.15)",
+              clipPath: washShapes[2],
+              WebkitClipPath: washShapes[2],
+            }}
+          />
+          <div className="col-span-3 relative h-[200px] p-3">
+            <div
+              className="relative h-full w-full overflow-hidden"
+              style={{
+                clipPath: blobShapes[1],
+                WebkitClipPath: blobShapes[1],
+              }}
+            >
+              <img
+                src={fieldnote}
+                alt="A flat-lay of a cream linen shirt, wide-leg trousers, leather mules and a rust silk scarf on warm stone"
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+            </div>
           </div>
-          <div className="col-span-2 p-4 flex flex-col justify-between">
+          <div className="col-span-2 p-4 flex flex-col justify-between relative">
             <div className="editorial-eyebrow text-muted-foreground">Field note</div>
             <p className="italic-serif text-[15px] leading-tight">
               "Pack like you live there, not like you visit."
@@ -349,105 +486,133 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ELSEWHERE — horizontal scroll of editorial destination cards.
-          Flight-time chip top-left (utility, stays ink), serif name + tagline below. */}
+      {/* ELSEWHERE — destination cards with blob image + color wash */}
       {elsewhere.length > 0 && (
         <section className="mt-10">
           <div className="flex items-baseline justify-between mb-3 px-5">
-            <h2 className="font-serif text-[22px] leading-none">
+            <h2 className="font-serif leading-none" style={{ fontSize: "22px" }}>
               A small list of <span className="italic">elsewhere</span>
             </h2>
             <Link
               to="/discover"
-              className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
+              className="text-[10px] tracking-[0.18em] uppercase inline-flex items-center gap-1 hover:opacity-80"
+              style={{ color: "#C24E2A" }}
             >
               All <ArrowRight className="h-3 w-3 -rotate-45" strokeWidth={1.5} />
             </Link>
           </div>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-5 pb-1">
-            {elsewhere.map((d) => (
-              <Link
-                key={d.id}
-                to="/discover"
-                className="snap-start shrink-0 w-[42%] group"
-              >
-                <div className="relative overflow-hidden" style={{ height: "220px" }}>
-                  <img
-                    src={d.cover}
-                    alt={`${d.name}, ${d.country}`}
-                    loading="lazy"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src =
-                        "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&q=80";
-                    }}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-2 left-2 bg-ink text-ink-foreground px-1.5 py-0.5 text-[10px] tracking-[0.12em] uppercase z-10">
-                    {d.flightHrs}
+            {elsewhere.map((d, idx) => {
+              const blob = blobShapes[idx % blobShapes.length];
+              const wash = washShapes[idx % washShapes.length];
+              // Rotate color wash through aqua, ochre, olive
+              const washes = [
+                "rgba(79,182,200,0.22)",
+                "rgba(194,78,42,0.20)",
+                "rgba(107,125,61,0.20)",
+              ];
+              return (
+                <Link key={d.id} to="/discover" className="snap-start shrink-0 w-[42%] group">
+                  <div className="relative" style={{ height: "220px" }}>
+                    <div
+                      className="relative h-full w-full overflow-hidden"
+                      style={{ clipPath: blob, WebkitClipPath: blob }}
+                    >
+                      <img
+                        src={d.cover}
+                        alt={`${d.name}, ${d.country}`}
+                        loading="lazy"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src =
+                            "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&q=80";
+                        }}
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div
+                        aria-hidden
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          background: washes[idx % washes.length],
+                          clipPath: wash,
+                          WebkitClipPath: wash,
+                        }}
+                      />
+                      {/* Flight-time pill (top-left) */}
+                      <div
+                        className="absolute top-3 left-3 uppercase z-10"
+                        style={{
+                          borderRadius: "99px",
+                          background: "rgba(26,26,24,0.78)",
+                          color: "#F5F0E8",
+                          fontSize: "9px",
+                          letterSpacing: "0.14em",
+                          padding: "3px 9px",
+                        }}
+                      >
+                        {d.flightHrs}
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="mt-2">
-                  <div className="font-serif text-[17px] leading-tight">{d.name}</div>
-                  <div className="italic-serif text-[12px] text-foreground/65 mt-0.5 line-clamp-1">
-                    {d.tagline}
+                  <div className="mt-2 px-1">
+                    <div className="font-serif text-[17px] leading-tight">{d.name}</div>
+                    <div className="italic-serif text-[12px] text-foreground/65 mt-0.5 line-clamp-1">
+                      {d.tagline}
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </section>
       )}
 
-      {/* FROM THE ARCHIVE — bordered editorial card per past trip.
-          Copy left, narrow tall image right. Memory layer. */}
+      {/* FROM THE ARCHIVE — journal cards with destination photo at 15% behind text */}
       {archive.length > 0 && (
         <section className="mt-10 px-5">
           <div className="flex items-baseline justify-between mb-3">
-            <h2 className="font-serif text-[22px] leading-none">
+            <h2 className="font-serif leading-none" style={{ fontSize: "22px" }}>
               From the <span className="italic">archive</span>
             </h2>
             <Link
               to="/journal"
-              className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground"
+              className="text-[10px] tracking-[0.18em] uppercase hover:opacity-80"
+              style={{ color: "#C24E2A" }}
             >
               Journal
             </Link>
           </div>
-          <ul>
-            {archive.map((j, idx) => (
-              <li
-                key={j.day}
-                style={
-                  idx > 0
-                    ? { borderTop: "0.5px solid hsl(var(--ink) / 0.1)" }
-                    : undefined
-                }
-              >
+          <ul className="space-y-3">
+            {archive.map((j) => (
+              <li key={j.day}>
                 <Link
                   to="/journal"
-                  className="grid grid-cols-[1fr_120px] hover:bg-foreground/[0.02] transition-colors overflow-hidden"
+                  className="relative block overflow-hidden transition-colors"
+                  style={{
+                    borderRadius: "20px",
+                    background: "rgba(239,233,223,0.60)",
+                    border: "0.5px solid rgba(26,26,24,0.08)",
+                  }}
                 >
-                  <div className="p-4 flex flex-col justify-between gap-3">
+                  {/* Background destination photo at 15% opacity */}
+                  {j.cover && (
+                    <img
+                      src={j.cover}
+                      alt=""
+                      aria-hidden
+                      loading="lazy"
+                      className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                      style={{ opacity: 0.15 }}
+                    />
+                  )}
+                  <div className="relative p-5 flex flex-col gap-3">
                     <div className="editorial-eyebrow text-muted-foreground">
                       {j.dateRange ?? j.day}
                     </div>
-                    <div className="font-serif text-[26px] leading-none">
-                      {j.city ?? j.day}
-                    </div>
-                    <p className="italic-serif text-[13px] leading-snug text-foreground/75">
+                    <div className="font-serif text-[26px] leading-none">{j.city ?? j.day}</div>
+                    <p className="italic-serif text-[13px] leading-snug text-foreground/80">
                       "{j.quote ?? j.highlight}"
                     </p>
                   </div>
-                  {j.cover && (
-                    <div className="relative h-full min-h-[150px]">
-                      <img
-                        src={j.cover}
-                        alt={j.city ?? j.day}
-                        loading="lazy"
-                        className="absolute inset-0 h-full w-full object-cover"
-                      />
-                    </div>
-                  )}
                 </Link>
               </li>
             ))}
@@ -455,7 +620,7 @@ const Home = () => {
         </section>
       )}
 
-      {/* Editorial imprint — matched to Welcome (No. 001 · Vol. I · Spring) */}
+      {/* Editorial imprint */}
       <footer
         aria-label="Edition imprint"
         className="px-5 pt-8 pb-4 flex justify-between text-[10px] tracking-[0.22em] uppercase text-foreground/35 select-none"

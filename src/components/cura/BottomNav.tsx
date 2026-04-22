@@ -1,11 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { Dot, Compass, Layers, Asterisk, Circle } from "lucide-react";
+import { Dot, Compass, Layers, Asterisk, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
- * CURA bottom nav — 5 tabs on ink black.
- * Active state is a pure color shift to ivory; no pill, no border, no shadow.
- * Container has zero radius. Height ~64px including iOS safe-area inset.
+ * CURA bottom nav — translucent aqua glass.
+ * Backdrop blurred, ivory icons + labels, small ivory dot above active label.
  */
 const items = [
   {
@@ -40,7 +39,7 @@ const items = [
   {
     to: "/profile",
     label: "You",
-    Icon: Circle,
+    Icon: User,
     match: (p: string) => p.startsWith("/profile"),
   },
 ];
@@ -49,8 +48,14 @@ export const BottomNav = () => {
   const { pathname } = useLocation();
   return (
     <nav
-      className="sticky bottom-0 left-0 right-0 z-40 bg-ink text-ink-foreground"
-      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      className="sticky bottom-0 left-0 right-0 z-40"
+      style={{
+        paddingBottom: "env(safe-area-inset-bottom)",
+        background: "rgba(79,182,200,0.15)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        borderTop: "0.5px solid rgba(79,182,200,0.25)",
+      }}
       aria-label="Primary"
     >
       <ul className="grid grid-cols-5 h-16">
@@ -61,11 +66,25 @@ export const BottomNav = () => {
               <Link
                 to={to}
                 className={cn(
-                  "flex-1 flex flex-col items-center justify-center gap-1.5 transition-colors",
-                  active ? "text-ink-foreground" : "text-ink-foreground/40 hover:text-ink-foreground/70"
+                  "flex-1 flex flex-col items-center justify-center gap-1 transition-opacity relative"
                 )}
+                style={{ color: "#F5F0E8", opacity: active ? 1 : 0.4 }}
                 aria-current={active ? "page" : undefined}
               >
+                {/* active indicator dot */}
+                {active && (
+                  <span
+                    aria-hidden
+                    className="absolute"
+                    style={{
+                      top: "6px",
+                      width: "3px",
+                      height: "3px",
+                      borderRadius: "99px",
+                      background: "#F5F0E8",
+                    }}
+                  />
+                )}
                 <Icon className="h-5 w-5" strokeWidth={1.5} />
                 <span className="text-[9px] tracking-[0.08em] uppercase">{label}</span>
               </Link>
