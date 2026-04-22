@@ -522,15 +522,7 @@ const Home = () => {
                         }}
                         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      <div
-                        aria-hidden
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                          background: washes[idx % washes.length],
-                          clipPath: wash,
-                          WebkitClipPath: wash,
-                        }}
-                      />
+                      {/* Color wash removed — clean rounded rectangle image */}
                       {/* Flight-time pill (top-left) */}
                       <div
                         className="absolute top-3 left-3 uppercase z-10"
