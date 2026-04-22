@@ -51,10 +51,10 @@ export const BottomNav = () => {
       className="sticky bottom-0 left-0 right-0 z-40"
       style={{
         paddingBottom: "env(safe-area-inset-bottom)",
-        background: "rgba(79,182,200,0.15)",
+        background: "#4FB6C8",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
-        borderTop: "0.5px solid rgba(79,182,200,0.25)",
+        borderTop: "0.5px solid rgba(79,182,200,0.4)",
       }}
       aria-label="Primary"
     >
@@ -68,7 +68,7 @@ export const BottomNav = () => {
                 className={cn(
                   "flex-1 flex flex-col items-center justify-center gap-1 transition-opacity relative"
                 )}
-                style={{ color: "#F5F0E8", opacity: active ? 1 : 0.4 }}
+                style={{ color: "#F5F0E8", opacity: active ? 1 : 0.55 }}
                 aria-current={active ? "page" : undefined}
               >
                 {/* active indicator dot */}
@@ -85,7 +85,7 @@ export const BottomNav = () => {
                     }}
                   />
                 )}
-                <Icon className="h-5 w-5" strokeWidth={1.5} />
+                <Icon className="h-5 w-5" strokeWidth={1.5} style={{ opacity: 0.9 }} />
                 <span className="text-[9px] tracking-[0.08em] uppercase">{label}</span>
               </Link>
             </li>

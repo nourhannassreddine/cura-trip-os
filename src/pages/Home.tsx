@@ -512,7 +512,6 @@ const Home = () => {
           </div>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-5 pb-1">
             {elsewhere.map((d, idx) => {
-              const blob = blobShapes[idx % blobShapes.length];
               const wash = washShapes[idx % washShapes.length];
               // Rotate color wash through aqua, ochre, olive
               const washes = [
@@ -525,7 +524,7 @@ const Home = () => {
                   <div className="relative" style={{ height: "220px" }}>
                     <div
                       className="relative h-full w-full overflow-hidden"
-                      style={{ clipPath: blob, WebkitClipPath: blob }}
+                      style={{ borderRadius: "16px" }}
                     >
                       <img
                         src={d.cover}
