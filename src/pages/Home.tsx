@@ -284,7 +284,7 @@ const Home = () => {
               <div className="grid grid-cols-2 gap-2 mt-2">
                 <Link
                   to={`/trip/${primary.id}/itinerary`}
-                  className="flex items-center justify-center gap-1.5 px-3 text-[12px] tracking-wide transition-colors"
+                  className="flex items-center justify-start gap-1.5 px-3 text-[12px] tracking-wide transition-colors"
                   style={{
                     borderRadius: "20px",
                     border: "0.5px solid rgba(26,26,24,0.30)",
@@ -292,26 +292,31 @@ const Home = () => {
                     height: "44px",
                   }}
                 >
-                  <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
+                  <Sparkles className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
                   View itinerary
                 </Link>
                 <Link
                   to="/pack"
-                  className="flex flex-col items-center justify-center px-3 transition-colors"
+                  className="flex items-start justify-start gap-1.5 px-3 transition-colors"
                   style={{
                     borderRadius: "20px",
                     border: "0.5px solid rgba(26,26,24,0.30)",
                     color: "#1A1A18",
                     height: "44px",
+                    paddingTop: "6px",
+                    paddingBottom: "6px",
                   }}
                 >
-                  <span className="text-[12px] tracking-wide leading-none whitespace-nowrap">See what's missing</span>
-                  <span
-                    className="font-sans leading-none mt-0.5"
-                    style={{ fontSize: "10px", color: "rgba(26,26,24,0.45)" }}
-                  >
-                    {missingCount} of {packing.length} complete
-                  </span>
+                  <ListChecks className="h-3.5 w-3.5 shrink-0 mt-[2px]" strokeWidth={1.5} />
+                  <div className="flex flex-col items-start leading-none">
+                    <span className="text-[12px] tracking-wide whitespace-nowrap">See what's missing</span>
+                    <span
+                      className="font-sans mt-1"
+                      style={{ fontSize: "10px", color: "rgba(26,26,24,0.45)" }}
+                    >
+                      {missingCount} of {packing.length} complete
+                    </span>
+                  </div>
                 </Link>
               </div>
             </div>
