@@ -68,7 +68,7 @@ export const BottomNav = () => {
                 className={cn(
                   "flex-1 flex flex-col items-center justify-center gap-1 transition-opacity relative"
                 )}
-                style={{ color: "#F5F0E8", opacity: active ? 1 : 0.55 }}
+                style={{ color: "#F5F0E8" }}
                 aria-current={active ? "page" : undefined}
               >
                 {/* active indicator dot */}
@@ -86,7 +86,7 @@ export const BottomNav = () => {
                   />
                 )}
                 <Icon className="h-5 w-5" strokeWidth={1.5} style={{ opacity: 0.9 }} />
-                <span className="text-[9px] tracking-[0.08em] uppercase">{label}</span>
+                <span className="text-[9px] tracking-[0.08em] uppercase" style={{ opacity: active ? 1 : 0.55 }}>{label}</span>
               </Link>
             </li>
           );
