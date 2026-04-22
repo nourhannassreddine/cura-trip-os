@@ -199,7 +199,7 @@ const Home = () => {
                   }}
                 >
                   <img
-                    src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80"
+                    src="https://images.unsplash.com/photo-1499678329028-101435549a4e?w=800&q=80"
                     alt={`${primary.city}, ${primary.country}`}
                     loading="eager"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
