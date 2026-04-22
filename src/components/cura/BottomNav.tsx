@@ -36,6 +36,8 @@ const EyeLashIcon = ({ className }: IconProps) => (
   >
     {/* almond eye */}
     <path d="M3 13c2.5 -4 6 -6 9 -6s6.5 2 9 6c-2.5 4 -6 6 -9 6s-6.5 -2 -9 -6z" />
+    {/* pupil — filled */}
+    <circle cx="12" cy="13" r="1.7" fill="currentColor" stroke="none" />
     {/* lashes radiating from upper lid */}
     <line x1="7" y1="7.6" x2="6" y2="5.4" />
     <line x1="9.6" y1="6.6" x2="9" y2="4.2" />
