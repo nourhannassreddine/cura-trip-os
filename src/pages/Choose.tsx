@@ -72,7 +72,11 @@ const Choose = () => {
   const continueLabel = step === 3 ? "Lay them on the table" : "Continue";
 
   const inputClass =
-    "w-full bg-transparent border-0 border-b border-foreground/30 focus:border-foreground rounded-none px-0 py-2 text-[16px] font-serif placeholder:font-serif placeholder:italic placeholder:text-foreground/40 focus:outline-none";
+    "cura-input w-full bg-transparent px-3 py-2.5 text-[16px] font-serif placeholder:font-serif placeholder:italic placeholder:text-foreground/40 focus:outline-none";
+  const inputStyle: React.CSSProperties = {
+    border: "0.5px solid rgba(26,26,24,0.20)",
+    borderRadius: "12px",
+  };
 
   return (
     <main className="app-shell flex flex-col bg-background">
