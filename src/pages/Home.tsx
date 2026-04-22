@@ -293,21 +293,27 @@ const Home = () => {
                   }}
                 >
                   <Sparkles className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
-                  View itinerary
+                  <div className="flex flex-col items-start leading-none">
+                    <span className="text-[12px] tracking-wide">View itinerary</span>
+                    <span
+                      className="font-sans mt-1"
+                      style={{ fontSize: "9px", color: "rgba(26,26,24,0.40)" }}
+                    >
+                      day by day
+                    </span>
+                  </div>
                 </Link>
                 <Link
                   to="/pack"
-                  className="flex items-start justify-start gap-1.5 px-3 transition-colors"
+                  className="flex items-center justify-start gap-1.5 px-3 transition-colors"
                   style={{
                     borderRadius: "20px",
                     border: "0.5px solid rgba(26,26,24,0.30)",
                     color: "#1A1A18",
                     height: "44px",
-                    paddingTop: "6px",
-                    paddingBottom: "6px",
                   }}
                 >
-                  <ListChecks className="h-3.5 w-3.5 shrink-0 mt-[2px]" strokeWidth={1.5} />
+                  <CircleCheck className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
                   <div className="flex flex-col items-start leading-none">
                     <span className="text-[12px] tracking-wide whitespace-nowrap">See what's missing</span>
                     <span
