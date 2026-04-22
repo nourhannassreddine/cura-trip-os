@@ -424,6 +424,7 @@ const Onboarding = () => {
                   <li key={m.id}>
                     <button
                       onClick={() => toggle(m.id)}
+                      data-selected={on}
                       className={cn(
                         "w-full flex items-center justify-between cura-card px-4 py-3.5 text-left transition-colors"
                       )}
@@ -461,6 +462,7 @@ const Onboarding = () => {
                   <li key={p.id}>
                     <button
                       onClick={() => setPace(p.id)}
+                      data-selected={on}
                       className={cn(
                         "w-full flex items-center justify-between cura-card px-4 py-4 text-left transition-colors"
                       )}
@@ -502,6 +504,7 @@ const Onboarding = () => {
                   <li key={p.id}>
                     <button
                       onClick={() => setPurpose(p.id)}
+                      data-selected={on}
                       className={cn(
                         "w-full flex items-center justify-between cura-card px-4 py-3 text-left transition-colors"
                       )}
@@ -758,6 +761,7 @@ const Onboarding = () => {
                             <button
                               key={String(o.v)}
                               onClick={() => setFriendsData((prev) => prev.map((x, idx) => idx === i ? { ...x, sameDeparture: o.v } : x))}
+                              data-selected={on}
                               className={cn(
                                 "cura-card px-3 py-2.5 text-sm transition-colors"
                               )}
@@ -952,6 +956,7 @@ const Onboarding = () => {
                     <li key={s.id}>
                       <button
                         onClick={() => setSpend(s.id)}
+                        data-selected={on}
                         className={cn(
                           "w-full flex items-center justify-between cura-card px-4 py-3 text-left transition-colors"
                         )}
