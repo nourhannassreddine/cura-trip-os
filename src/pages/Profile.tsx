@@ -126,6 +126,7 @@ const Profile = () => {
         style={{
           backgroundColor: "hsl(var(--paper))",
           padding: "20px 22px",
+          borderBottom: "0.5px solid rgba(26,26,24,0.10)",
         }}
       >
         <p
@@ -139,7 +140,6 @@ const Profile = () => {
           I've been paying attention. This is what I know about how you travel. Tell me where I'm wrong.
         </p>
       </section>
-      <div style={{ height: "0.5px", backgroundColor: "hsl(var(--foreground) / 0.1)" }} />
 
       {/* Chapter rows */}
       <section>

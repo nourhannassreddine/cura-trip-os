@@ -64,10 +64,10 @@ const YourRhythm = () => {
 
   const lastPeriodDate = r.lastPeriod ? parseISO(r.lastPeriod) : undefined;
 
-  // Build a 60-day window starting from today for the calendar strip
+  // Build a 56-day (8 weeks) window starting from today for the calendar strip
   const days = useMemo(() => {
     const today = startOfDay(new Date());
-    return Array.from({ length: 60 }, (_, i) => addDays(today, i - 7));
+    return Array.from({ length: 56 }, (_, i) => addDays(today, i));
   }, []);
 
   const isPeriodDay = (d: Date) => {
@@ -166,8 +166,8 @@ const YourRhythm = () => {
           <section className="mt-8">
             <FieldLabel>Next 8 weeks</FieldLabel>
             <div
-              className="mt-3 flex gap-1.5 overflow-x-auto scrollbar-hide pb-2"
-              style={{ scrollSnapType: "x mandatory" }}
+              className="mt-3 flex gap-1.5 pb-2"
+              style={{ scrollSnapType: "x mandatory", overflowX: "scroll", WebkitOverflowScrolling: "touch" }}
             >
               {days.map((d) => {
                 const today = isToday(d);

@@ -13,7 +13,7 @@ export const CuraNoteA = ({ children, accent = "hsl(var(--accent-ochre))" }: Pro
     <div
       className="px-4 py-4 mt-6"
       style={{
-        backgroundColor: "hsl(var(--paper-soft))",
+        backgroundColor: "#EFE9DF",
         borderLeft: `2px solid ${accent}`,
       }}
     >
