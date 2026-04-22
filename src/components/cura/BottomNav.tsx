@@ -36,6 +36,8 @@ const EyeLashIcon = ({ className }: IconProps) => (
   >
     {/* almond eye */}
     <path d="M3 13c2.5 -4 6 -6 9 -6s6.5 2 9 6c-2.5 4 -6 6 -9 6s-6.5 -2 -9 -6z" />
+    {/* pupil — filled */}
+    <circle cx="12" cy="13" r="1.7" fill="currentColor" stroke="none" />
     {/* lashes radiating from upper lid */}
     <line x1="7" y1="7.6" x2="6" y2="5.4" />
     <line x1="9.6" y1="6.6" x2="9" y2="4.2" />
@@ -86,12 +88,12 @@ const MirrorIcon = ({ className }: IconProps) => (
     className={className}
     aria-hidden
   >
-    {/* mirror head */}
-    <circle cx="12" cy="9.5" r="5.5" />
+    {/* mirror head — larger, ~60% of icon height */}
+    <circle cx="12" cy="8" r="6" />
     {/* subtle reflective oval inside */}
-    <ellipse cx="10.5" cy="8" rx="1.4" ry="0.7" opacity="0.55" />
-    {/* tapered handle */}
-    <path d="M11.2 15 L10.6 21 L13.4 21 L12.8 15" />
+    <ellipse cx="10" cy="6" rx="1.6" ry="0.8" opacity="0.55" />
+    {/* tapered handle — ~40% of icon height */}
+    <path d="M10.8 14 L10.2 22 L13.8 22 L13.2 14" />
   </svg>
 );
 
