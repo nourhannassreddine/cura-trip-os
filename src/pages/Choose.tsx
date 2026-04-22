@@ -72,10 +72,17 @@ const Choose = () => {
   const continueLabel = step === 3 ? "Lay them on the table" : "Continue";
 
   const inputClass =
-    "w-full bg-transparent border-0 border-b border-foreground/30 focus:border-foreground rounded-none px-0 py-2 text-[16px] font-serif placeholder:font-serif placeholder:italic placeholder:text-foreground/40 focus:outline-none";
+    "cura-input w-full bg-transparent px-3 py-2.5 text-[16px] font-serif placeholder:font-serif placeholder:italic placeholder:text-foreground/40 focus:outline-none";
+  const inputStyle: React.CSSProperties = {
+    border: "0.5px solid rgba(26,26,24,0.20)",
+    borderRadius: "12px",
+  };
 
   return (
-    <main className="app-shell flex flex-col bg-background">
+    <main
+      className="app-shell flex flex-col"
+      style={{ backgroundColor: "#F5F0E8" }}
+    >
       <TopBar
         back={step === 1 ? "/begin" : undefined}
         eyebrow={`MOVEMENT ${step} · OF 3`}
@@ -133,6 +140,7 @@ const Choose = () => {
                   onChange={(e) => updateDestination(idx, e.target.value)}
                   placeholder={placeholders[idx]}
                   className={inputClass}
+                  style={inputStyle}
                 />
                 {destinations.length > 1 && (
                   <button
@@ -180,24 +188,35 @@ const Choose = () => {
               onChange={(e) => setFrom(e.target.value)}
               placeholder="e.g. Toronto, Cairo, Berlin"
               className={`mt-2 ${inputClass}`}
+              style={inputStyle}
             />
           </label>
         )}
       </div>
 
-      <footer className="mt-auto border-t border-foreground/15 p-5 flex items-center justify-between bg-background">
+      <footer
+        className="mt-auto border-t border-foreground/15 p-5 flex items-center justify-between"
+        style={{ backgroundColor: "#F5F0E8" }}
+      >
         <button
           onClick={goBack}
-          className="text-[11px] tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground"
+          className="text-[11px] tracking-[0.18em] uppercase hover:text-foreground"
+          style={{ color: "rgba(26,26,24,0.40)" }}
         >
           Back
         </button>
         <button
           onClick={goNext}
           disabled={!canContinue}
+          style={{
+            backgroundColor: canContinue ? "#C24E2A" : "rgba(26,26,24,0.10)",
+            color: canContinue ? "#F5F0E8" : "rgba(26,26,24,0.45)",
+            borderRadius: "20px",
+            padding: "12px 22px",
+          }}
           className={cn(
-            "group flex items-center gap-3 border border-foreground bg-ink text-ink-foreground px-5 py-3 transition-opacity",
-            !canContinue && "opacity-40 pointer-events-none"
+            "group inline-flex items-center justify-center gap-2 transition-opacity",
+            !canContinue && "pointer-events-none"
           )}
         >
           <span className="text-sm tracking-wide">{continueLabel}</span>

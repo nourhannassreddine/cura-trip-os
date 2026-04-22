@@ -55,7 +55,11 @@ const Identify = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="a name, a nickname, anything"
-            className="mt-2 w-full bg-transparent border-0 border-b border-foreground/30 focus:border-foreground rounded-none px-0 py-2 text-[16px] font-serif placeholder:font-serif placeholder:italic placeholder:text-foreground/40 focus:outline-none"
+            className="cura-input mt-2 w-full bg-transparent px-3 py-2.5 text-[16px] font-serif placeholder:font-serif placeholder:italic placeholder:text-foreground/40 focus:outline-none"
+            style={{
+              border: "0.5px solid rgba(26,26,24,0.20)",
+              borderRadius: "12px",
+            }}
           />
         </label>
 
@@ -68,16 +72,26 @@ const Identify = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@somewhere.com"
-            className="mt-2 w-full bg-transparent border-0 border-b border-foreground/30 focus:border-foreground rounded-none px-0 py-2 text-[16px] font-sans placeholder:font-serif placeholder:italic placeholder:text-foreground/40 focus:outline-none"
+            className="cura-input mt-2 w-full bg-transparent px-3 py-2.5 text-[16px] font-sans placeholder:font-serif placeholder:italic placeholder:text-foreground/40 focus:outline-none"
+            style={{
+              border: "0.5px solid rgba(26,26,24,0.20)",
+              borderRadius: "12px",
+            }}
           />
         </label>
 
         <button
           type="submit"
           disabled={!valid}
-          className={`group mt-2 flex items-center justify-between border border-foreground bg-ink text-ink-foreground px-5 py-3.5 transition-opacity ${
+          className={`group mt-2 inline-flex items-center justify-center gap-2 transition-opacity ${
             valid ? "opacity-100" : "opacity-50 pointer-events-none"
           }`}
+          style={{
+            backgroundColor: valid ? "#C24E2A" : "rgba(26,26,24,0.10)",
+            color: valid ? "#F5F0E8" : "rgba(26,26,24,0.50)",
+            borderRadius: "20px",
+            padding: "14px 24px",
+          }}
         >
           <span className="font-sans text-sm tracking-wide">Take me in</span>
           <ArrowRight
@@ -88,11 +102,24 @@ const Identify = () => {
       </form>
 
       <div className="px-5 pt-7 pb-5 mt-auto">
-        <p className="italic-serif text-[13px] text-foreground/60 max-w-[32ch]">
-          "I'll only ask once. After this, I just remember."
-        </p>
-        <div className="editorial-eyebrow text-muted-foreground mt-2">
-          Cura · note
+        <div
+          style={{
+            backgroundColor: "#EFE9DF",
+            borderLeft: "3px solid #C24E2A",
+            borderTopRightRadius: "12px",
+            borderBottomRightRadius: "12px",
+            padding: "14px 16px",
+          }}
+        >
+          <p className="italic-serif text-[13px] text-foreground/80 max-w-[32ch]">
+            "I'll only ask once. After this, I just remember."
+          </p>
+          <div
+            className="editorial-eyebrow mt-2"
+            style={{ color: "#C24E2A", fontSize: "8px" }}
+          >
+            ✦ Cura · note
+          </div>
         </div>
       </div>
     </main>

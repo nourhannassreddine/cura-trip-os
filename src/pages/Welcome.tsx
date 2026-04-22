@@ -83,10 +83,16 @@ const Welcome = () => {
           </p>
         </section>
 
-        <section className="mt-auto pt-5">
+        <section className="mt-auto pt-5 flex flex-col items-center">
           <Link
             to="/identify"
-            className="group flex items-center justify-between border border-foreground bg-ink text-ink-foreground px-5 py-3.5"
+            className="group inline-flex items-center justify-center gap-2 text-ink-foreground"
+            style={{
+              backgroundColor: "#C24E2A",
+              color: "#F5F0E8",
+              borderRadius: "20px",
+              padding: "15px 40px",
+            }}
           >
             <span className="font-sans text-sm tracking-wide">I'm new here, show me cura</span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" strokeWidth={1.5} />
