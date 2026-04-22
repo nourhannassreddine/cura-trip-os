@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Sparkles, AlertCircle, Bell } from "lucide-react";
+import { ArrowRight, Sparkles, AlertCircle, Bell, ArrowUpRight, ListChecks } from "lucide-react";
 import { BottomNav } from "@/components/cura/BottomNav";
 
 import { trips, curaWhispers, packing, destinations, journalEntries } from "@/data/cura";
@@ -204,16 +204,6 @@ const Home = () => {
                     loading="eager"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  {/* Translucent ochre wash drifting from upper-right */}
-                  <div
-                    aria-hidden
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background: `rgba(194,78,42,0.25)`,
-                      clipPath: washShapes[0],
-                      WebkitClipPath: washShapes[0],
-                    }}
-                  />
                   {/* Bottom gradient for legibility */}
                   <div
                     aria-hidden
@@ -294,7 +284,7 @@ const Home = () => {
               <div className="grid grid-cols-2 gap-2 mt-2">
                 <Link
                   to={`/trip/${primary.id}/itinerary`}
-                  className="flex items-center justify-center gap-1.5 px-3 text-[12px] tracking-wide transition-colors"
+                  className="flex items-center justify-start gap-1.5 px-3 text-[12px] tracking-wide transition-colors"
                   style={{
                     borderRadius: "20px",
                     border: "0.5px solid rgba(26,26,24,0.30)",
@@ -302,26 +292,31 @@ const Home = () => {
                     height: "44px",
                   }}
                 >
-                  <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
+                  <Sparkles className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
                   View itinerary
                 </Link>
                 <Link
                   to="/pack"
-                  className="flex flex-col items-center justify-center px-3 transition-colors"
+                  className="flex items-start justify-start gap-1.5 px-3 transition-colors"
                   style={{
                     borderRadius: "20px",
                     border: "0.5px solid rgba(26,26,24,0.30)",
                     color: "#1A1A18",
                     height: "44px",
+                    paddingTop: "6px",
+                    paddingBottom: "6px",
                   }}
                 >
-                  <span className="text-[12px] tracking-wide leading-none whitespace-nowrap">See what's missing</span>
-                  <span
-                    className="font-sans leading-none mt-0.5"
-                    style={{ fontSize: "10px", color: "rgba(26,26,24,0.45)" }}
-                  >
-                    {missingCount} of {packing.length} complete
-                  </span>
+                  <ListChecks className="h-3.5 w-3.5 shrink-0 mt-[2px]" strokeWidth={1.5} />
+                  <div className="flex flex-col items-start leading-none">
+                    <span className="text-[12px] tracking-wide whitespace-nowrap">See what's missing</span>
+                    <span
+                      className="font-sans mt-1"
+                      style={{ fontSize: "10px", color: "rgba(26,26,24,0.45)" }}
+                    >
+                      {missingCount} of {packing.length} complete
+                    </span>
+                  </div>
                 </Link>
               </div>
             </div>
@@ -356,10 +351,10 @@ const Home = () => {
             <div className="editorial-eyebrow text-muted-foreground">Also in motion</div>
             <Link
               to="/trips"
-              className="text-[10px] tracking-[0.18em] uppercase hover:opacity-80"
+              className="text-[10px] tracking-[0.18em] uppercase hover:opacity-80 inline-flex items-center gap-1"
               style={{ color: "rgba(26,26,24,0.40)" }}
             >
-              All trips
+              All trips <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} />
             </Link>
           </div>
           <ul className="space-y-3">
@@ -423,9 +418,8 @@ const Home = () => {
                           className="inline-flex items-center uppercase"
                           style={{
                             borderRadius: "99px",
-                            background: `rgba(${c.rgb},0.18)`,
-                            color: t.status === "dreaming" ? "#2d8a99" : c.hex,
-                            border: `0.5px solid rgba(${c.rgb},0.40)`,
+                            background: c.hex,
+                            color: "#F5F0E8",
                             fontSize: "9px",
                             letterSpacing: "0.18em",
                             padding: "3px 10px",
@@ -443,37 +437,23 @@ const Home = () => {
         </section>
       )}
 
-      {/* FIELD NOTE — linen surface w/ olive blob accent */}
+      {/* FIELD NOTE — left-border insight card, soft olive wash */}
       <section className="mt-12 px-5">
         <div
           className="relative grid grid-cols-5 gap-0 items-stretch overflow-hidden"
           style={{
-            background: "#EFE9DF",
-            borderRadius: "22px",
-            border: "0.5px solid rgba(26,26,24,0.08)",
+            background: "rgba(107,125,61,0.10)",
+            borderLeft: "3px solid #6B7D3D",
+            borderTopRightRadius: "12px",
+            borderBottomRightRadius: "12px",
+            borderTopLeftRadius: "0px",
+            borderBottomLeftRadius: "0px",
           }}
         >
-          {/* Olive decorative blob drifting from top-right */}
-          <div
-            aria-hidden
-            className="absolute pointer-events-none"
-            style={{
-              top: "-30px",
-              right: "-30px",
-              width: "180px",
-              height: "180px",
-              background: "rgba(107,125,61,0.15)",
-              clipPath: washShapes[2],
-              WebkitClipPath: washShapes[2],
-            }}
-          />
-          <div className="col-span-3 relative h-[200px] p-3">
+          <div className="col-span-2 relative h-[140px] p-3">
             <div
               className="relative h-full w-full overflow-hidden"
-              style={{
-                clipPath: blobShapes[1],
-                WebkitClipPath: blobShapes[1],
-              }}
+              style={{ borderRadius: "12px" }}
             >
               <img
                 src={fieldnote}
@@ -483,12 +463,20 @@ const Home = () => {
               />
             </div>
           </div>
-          <div className="col-span-2 p-4 flex flex-col justify-between relative">
-            <div className="editorial-eyebrow text-muted-foreground">Field note</div>
-            <p className="italic-serif text-[15px] leading-tight">
+          <div className="col-span-3 p-4 flex flex-col justify-center gap-2 relative">
+            <div
+              className="font-sans uppercase"
+              style={{ fontSize: "8px", letterSpacing: "0.18em", color: "#6B7D3D" }}
+            >
+              Field note
+            </div>
+            <p className="italic-serif text-[15px] leading-snug" style={{ color: "#1A1A18" }}>
               "Pack like you live there, not like you visit."
             </p>
-            <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
+            <div
+              className="font-sans"
+              style={{ fontSize: "9px", color: "rgba(26,26,24,0.45)" }}
+            >
               — Cura, on packing
             </div>
           </div>
@@ -505,9 +493,9 @@ const Home = () => {
             <Link
               to="/discover"
               className="text-[10px] tracking-[0.18em] uppercase inline-flex items-center gap-1 hover:opacity-80"
-              style={{ color: "#C24E2A" }}
+              style={{ color: "rgba(26,26,24,0.40)" }}
             >
-              All <ArrowRight className="h-3 w-3 -rotate-45" strokeWidth={1.5} />
+              All <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} />
             </Link>
           </div>
           <div className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-5 pb-1">
@@ -583,10 +571,10 @@ const Home = () => {
             </h2>
             <Link
               to="/journal"
-              className="text-[10px] tracking-[0.18em] uppercase hover:opacity-80"
-              style={{ color: "#C24E2A" }}
+              className="text-[10px] tracking-[0.18em] uppercase hover:opacity-80 inline-flex items-center gap-1"
+              style={{ color: "rgba(26,26,24,0.40)" }}
             >
-              Journal
+              Journal <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} />
             </Link>
           </div>
           <ul className="space-y-3">
