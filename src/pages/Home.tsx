@@ -437,37 +437,23 @@ const Home = () => {
         </section>
       )}
 
-      {/* FIELD NOTE — linen surface w/ olive blob accent */}
+      {/* FIELD NOTE — left-border insight card, soft olive wash */}
       <section className="mt-12 px-5">
         <div
           className="relative grid grid-cols-5 gap-0 items-stretch overflow-hidden"
           style={{
-            background: "#EFE9DF",
-            borderRadius: "22px",
-            border: "0.5px solid rgba(26,26,24,0.08)",
+            background: "rgba(107,125,61,0.10)",
+            borderLeft: "3px solid #6B7D3D",
+            borderTopRightRadius: "12px",
+            borderBottomRightRadius: "12px",
+            borderTopLeftRadius: "0px",
+            borderBottomLeftRadius: "0px",
           }}
         >
-          {/* Olive decorative blob drifting from top-right */}
-          <div
-            aria-hidden
-            className="absolute pointer-events-none"
-            style={{
-              top: "-30px",
-              right: "-30px",
-              width: "180px",
-              height: "180px",
-              background: "rgba(107,125,61,0.15)",
-              clipPath: washShapes[2],
-              WebkitClipPath: washShapes[2],
-            }}
-          />
-          <div className="col-span-3 relative h-[200px] p-3">
+          <div className="col-span-2 relative h-[140px] p-3">
             <div
               className="relative h-full w-full overflow-hidden"
-              style={{
-                clipPath: blobShapes[1],
-                WebkitClipPath: blobShapes[1],
-              }}
+              style={{ borderRadius: "12px" }}
             >
               <img
                 src={fieldnote}
@@ -477,12 +463,20 @@ const Home = () => {
               />
             </div>
           </div>
-          <div className="col-span-2 p-4 flex flex-col justify-between relative">
-            <div className="editorial-eyebrow text-muted-foreground">Field note</div>
-            <p className="italic-serif text-[15px] leading-tight">
+          <div className="col-span-3 p-4 flex flex-col justify-center gap-2 relative">
+            <div
+              className="font-sans uppercase"
+              style={{ fontSize: "8px", letterSpacing: "0.18em", color: "#6B7D3D" }}
+            >
+              Field note
+            </div>
+            <p className="italic-serif text-[15px] leading-snug" style={{ color: "#1A1A18" }}>
               "Pack like you live there, not like you visit."
             </p>
-            <div className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground">
+            <div
+              className="font-sans"
+              style={{ fontSize: "9px", color: "rgba(26,26,24,0.45)" }}
+            >
               — Cura, on packing
             </div>
           </div>
