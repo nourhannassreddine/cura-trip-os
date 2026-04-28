@@ -114,35 +114,34 @@ const Profile = () => {
                 fontWeight: 500,
               }}
             >
-              You
+              YOU
             </div>
           </div>
 
           <button
             type="button"
-            aria-label="Add your look"
+            aria-label="Build your look"
             className="mt-4 flex items-center justify-center hover:opacity-90 transition-opacity"
             style={{
-              width: "64px",
-              height: "64px",
+              width: "96px",
+              height: "96px",
               borderRadius: "9999px",
-              backgroundColor: "#EFE9DF",
-              border: "1.5px dashed rgba(245,240,232,0.6)",
+              backgroundColor: "rgba(194,78,42,0.15)",
+              border: "1.5px dashed rgba(194,78,42,0.45)",
             }}
           >
             <span
               className="font-sans uppercase"
               style={{
                 fontSize: "7px",
-                letterSpacing: "0.18em",
-                color: "rgba(26,26,24,0.5)",
+                letterSpacing: "0.08em",
+                color: "rgba(194,78,42,0.7)",
                 fontWeight: 500,
                 textAlign: "center",
                 lineHeight: 1.2,
-                padding: "0 6px",
               }}
             >
-              Add your look
+              BUILD YOUR LOOK
             </span>
           </button>
 
