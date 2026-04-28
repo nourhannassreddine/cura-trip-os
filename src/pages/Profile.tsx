@@ -106,7 +106,6 @@ const Profile = () => {
               cura
             </div>
             <div
-              className="font-sans"
               style={{
                 fontFamily: "Inter, sans-serif",
                 fontSize: "9px",
@@ -116,53 +115,56 @@ const Profile = () => {
                 fontWeight: 500,
               }}
             >
-              YOU
+              {`YOU`}
             </div>
           </div>
 
-          <button
-            type="button"
-            aria-label="Build your look"
-            className="mt-4 flex items-center justify-center hover:opacity-90 transition-opacity"
-            style={{
-              width: "96px",
-              height: "96px",
-              borderRadius: "9999px",
-              backgroundColor: "rgba(194,78,42,0.55)",
-              border: "2px dashed rgba(245,240,232,0.85)",
-            }}
-          >
-            <span
+          <div className="mt-auto">
+            <button
+              type="button"
+              aria-label="Build your look"
+              className="flex items-center justify-center hover:opacity-90 transition-opacity"
               style={{
-                fontFamily: "Inter, sans-serif",
-                fontSize: "7px",
-                letterSpacing: "0.1em",
-                color: "#F5F0E8",
-                textTransform: "uppercase",
-                fontWeight: 500,
-                textAlign: "center",
-                lineHeight: 1.2,
-                padding: "0 12px",
+                width: "72px",
+                height: "72px",
+                borderRadius: "9999px",
+                backgroundColor: "rgba(194,78,42,0.50)",
+                border: "1.5px solid #8C1C13",
+                marginBottom: "10px",
               }}
             >
-              BUILD YOUR LOOK
-            </span>
-          </button>
+              <span
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "7px",
+                  letterSpacing: "0.08em",
+                  color: "#8C1C13",
+                  textTransform: "uppercase",
+                  fontWeight: 500,
+                  textAlign: "center",
+                  lineHeight: 1.4,
+                  padding: "0 10px",
+                }}
+              >
+                BUILD YOUR LOOK
+              </span>
+            </button>
 
-          <h1
-            className="font-serif leading-[0.98] tracking-tight mt-auto"
-            style={{ fontSize: "28px", color: "#F5F0E8" }}
-          >
-            Nourhan
-          </h1>
-          <div
-            className="mt-1.5"
-            style={{
-              fontSize: "11px",
-              color: "rgba(245,240,232,0.6)",
-            }}
-          >
-            Lebanese · Dubai · 4 Trips
+            <h1
+              className="font-serif leading-[0.98] tracking-tight"
+              style={{ fontSize: "28px", color: "#F5F0E8" }}
+            >
+              Nourhan
+            </h1>
+            <div
+              className="mt-1.5"
+              style={{
+                fontSize: "11px",
+                color: "rgba(245,240,232,0.6)",
+              }}
+            >
+              Lebanese · Dubai · 4 Trips
+            </div>
           </div>
         </div>
       </header>
