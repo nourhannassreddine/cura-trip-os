@@ -106,11 +106,13 @@ const Profile = () => {
               cura
             </div>
             <div
-              className="font-sans uppercase"
+              className="font-sans"
               style={{
+                fontFamily: "Inter, sans-serif",
                 fontSize: "9px",
-                letterSpacing: "0.1em",
-                color: "rgba(245,240,232,0.7)",
+                letterSpacing: "0.12em",
+                color: "rgba(245,240,232,0.75)",
+                textTransform: "uppercase",
                 fontWeight: 500,
               }}
             >
@@ -126,19 +128,21 @@ const Profile = () => {
               width: "96px",
               height: "96px",
               borderRadius: "9999px",
-              backgroundColor: "rgba(194,78,42,0.15)",
-              border: "1.5px dashed rgba(194,78,42,0.45)",
+              backgroundColor: "rgba(194,78,42,0.55)",
+              border: "2px dashed rgba(245,240,232,0.85)",
             }}
           >
             <span
-              className="font-sans uppercase"
               style={{
+                fontFamily: "Inter, sans-serif",
                 fontSize: "7px",
-                letterSpacing: "0.08em",
-                color: "rgba(194,78,42,0.7)",
+                letterSpacing: "0.1em",
+                color: "#F5F0E8",
+                textTransform: "uppercase",
                 fontWeight: 500,
                 textAlign: "center",
                 lineHeight: 1.2,
+                padding: "0 12px",
               }}
             >
               BUILD YOUR LOOK
