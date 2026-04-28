@@ -105,51 +105,22 @@ const Profile = () => {
             >
               cura
             </div>
-            <div
+            <Link
+              to="/profile/avatar"
               style={{
                 fontFamily: "Inter, sans-serif",
                 fontSize: "9px",
-                letterSpacing: "0.12em",
-                color: "rgba(245,240,232,0.75)",
+                letterSpacing: "0.1em",
+                color: "rgba(245,240,232,0.70)",
                 textTransform: "uppercase",
                 fontWeight: 500,
               }}
             >
-              {`YOU`}
-            </div>
+              BUILD YOUR LOOK
+            </Link>
           </div>
 
           <div className="mt-auto">
-            <button
-              type="button"
-              aria-label="Build your look"
-              className="flex items-center justify-center hover:opacity-90 transition-opacity"
-              style={{
-                width: "72px",
-                height: "72px",
-                borderRadius: "9999px",
-                backgroundColor: "rgba(194,78,42,0.50)",
-                border: "1.5px solid #8C1C13",
-                marginBottom: "10px",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "7px",
-                  letterSpacing: "0.08em",
-                  color: "#8C1C13",
-                  textTransform: "uppercase",
-                  fontWeight: 500,
-                  textAlign: "center",
-                  lineHeight: 1.4,
-                  padding: "0 10px",
-                }}
-              >
-                BUILD YOUR LOOK
-              </span>
-            </button>
-
             <h1
               className="font-serif leading-[0.98] tracking-tight"
               style={{ fontSize: "28px", color: "#F5F0E8" }}
