@@ -92,17 +92,30 @@ const Profile = () => {
           }}
         />
 
-        <div className="relative h-full px-5 pt-6 pb-6 flex flex-col">
-          <div
-            className="font-sans uppercase"
-            style={{
-              fontSize: "9px",
-              letterSpacing: "0.24em",
-              color: "rgba(245,240,232,0.6)",
-              fontWeight: 500,
-            }}
-          >
-            You
+        <div className="relative h-full flex flex-col" style={{ padding: "16px 20px" }}>
+          <div className="flex items-center justify-between">
+            <div
+              className="font-serif lowercase"
+              style={{
+                fontSize: "24px",
+                lineHeight: 1,
+                color: "#F5F0E8",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              cura
+            </div>
+            <div
+              className="font-sans uppercase"
+              style={{
+                fontSize: "9px",
+                letterSpacing: "0.1em",
+                color: "rgba(245,240,232,0.7)",
+                fontWeight: 500,
+              }}
+            >
+              You
+            </div>
           </div>
 
           <button
@@ -143,41 +156,33 @@ const Profile = () => {
             className="mt-1.5"
             style={{
               fontSize: "11px",
-              color: "rgba(245,240,232,0.55)",
+              color: "rgba(245,240,232,0.6)",
             }}
           >
-            Dubai · 4 trips
+            Lebanese · Dubai · 4 Trips
           </div>
         </div>
       </header>
 
-      {/* SECTION 2 — CURA intro card */}
-      <section
-        style={{
-          backgroundColor: "#EFE9DF",
-          borderLeft: "3px solid #C24E2A",
-          borderTopRightRadius: "12px",
-          borderBottomRightRadius: "12px",
-          padding: "16px 18px",
-          margin: "16px 16px 8px 16px",
-        }}
-      >
+      {/* SECTION 2 — CURA intro (typographic, no surface) */}
+      <section style={{ padding: "28px 20px 24px 20px" }}>
         <div
           style={{
             fontSize: "11px",
             color: "#C24E2A",
-            marginBottom: "8px",
+            marginBottom: "10px",
             lineHeight: 1,
+            display: "block",
           }}
         >
           ✦
         </div>
         <p
-          className="italic-serif"
+          className="font-serif italic"
           style={{
-            fontSize: "14px",
-            lineHeight: 1.6,
-            color: "rgba(26,26,24,0.7)",
+            fontSize: "15px",
+            lineHeight: 1.65,
+            color: "rgba(26,26,24,0.55)",
           }}
         >
           I've been paying attention. This is what I know about how you travel. Tell me where I'm wrong.
@@ -185,8 +190,9 @@ const Profile = () => {
         <div
           style={{
             height: "0.5px",
-            backgroundColor: "rgba(26,26,24,0.1)",
-            marginTop: "12px",
+            backgroundColor: "rgba(26,26,24,0.10)",
+            marginTop: "20px",
+            width: "100%",
           }}
         />
       </section>
