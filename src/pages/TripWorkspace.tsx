@@ -1,308 +1,366 @@
-import { useEffect } from "react";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BottomNav } from "@/components/cura/BottomNav";
-import { trips } from "@/data/cura";
 
 /**
- * Trip Dashboard — the central operating surface for one trip.
+ * Trip Workspace shell — /trip/:id
  *
- * Structure:
- *   1. Ink-black header — destination, dates, country, countdown, readiness bar
- *   2. CURA insight strip — sunflower, full bleed, italic Playfair line
- *   3. Engine grid — 8 engines, 2 columns, hairline-bordered cards
- *   4. "Also in motion" — quiet card pointing at the next trip
- *
- * On first visit per session, redirects to /trip/:id/intro for the
- * CURA reading-the-trip-aloud transition.
+ * Demo content uses Puglia. All values hardcoded per spec.
  */
 
 interface Engine {
-  key: string;
   name: string;
-  status: string;
-  action: string;
-  state: "todo" | "doing" | "done";
+  state: string;
+  dot: string;
+  to?: string;
+  disabled?: boolean;
 }
 
 const engines: Engine[] = [
-  { key: "visa",      name: "Visa",      status: "Visa-free for most EU passports", action: "Confirm passport nationality", state: "todo" },
-  { key: "flights",   name: "Flights",   status: "No flights added yet",           action: "Start with departure date",   state: "todo" },
-  { key: "stays",     name: "Stays",     status: "Accommodation undecided",        action: "Set your base — one place or two?", state: "todo" },
-  { key: "route",     name: "Route",     status: "10 nights, no movement mapped",  action: "Decide: stay or travel south", state: "todo" },
-  { key: "itinerary", name: "Itinerary", status: "Nothing planned yet",            action: "Build your first day",        state: "todo" },
-  { key: "prep",      name: "Prep",      status: "38 days to prepare",             action: "Open the pre-trip timeline",  state: "doing" },
-  { key: "pack",      name: "Pack",      status: "Packing list not started",       action: "Answer 3 questions to start", state: "todo" },
-  { key: "spend",     name: "Spend",     status: "No budget set",                  action: "Set a total trip budget",     state: "todo" },
+  { name: "Visa",      state: "Not started",        dot: "#E36414",                 to: "/trip/puglia/visa" },
+  { name: "Flights",   state: "Not started",        dot: "rgba(26,26,24,0.15)",    to: "/trip/puglia/flights" },
+  { name: "Stays",     state: "Not started",        dot: "rgba(26,26,24,0.15)",    to: "/trip/puglia/stays" },
+  { name: "Route",     state: "Not started",        dot: "rgba(26,26,24,0.15)",    to: "/trip/puglia/route" },
+  { name: "Itinerary", state: "In progress",        dot: "#6B7D3D",                 to: "/trip/puglia/itinerary" },
+  { name: "Prep",      state: "Not started",        dot: "rgba(26,26,24,0.15)",    to: "/trip/puglia/prep" },
+  { name: "Pack",      state: "Not started",        dot: "rgba(26,26,24,0.15)",    to: "/trip/puglia/pack" },
+  { name: "Spend",     state: "Not started",        dot: "rgba(26,26,24,0.15)",    to: "/trip/puglia/spend" },
+  { name: "During",    state: "Unlocks when live",  dot: "rgba(26,26,24,0.10)",    disabled: true },
+  { name: "Journal",   state: "Not started",        dot: "rgba(26,26,24,0.15)",    to: "/trip/puglia/journal" },
 ];
 
-const insightFor = (city: string) =>
-  city === "Puglia"
-    ? "Your itinerary has no evenings planned. Puglia's best hours are after 7pm."
-    : `${city} is taking shape. The next decision is the one that unlocks the rest.`;
-
-const StateDot = ({ state }: { state: Engine["state"] }) => {
-  if (state === "done") {
-    return <span className="inline-block h-2 w-2 rounded-full bg-foreground" />;
-  }
-  if (state === "doing") {
-    return (
-      <span className="relative inline-block h-2 w-2 rounded-full border border-foreground overflow-hidden">
-        <span className="absolute inset-y-0 left-0 w-1/2 bg-foreground" />
+const Tile = ({ e }: { e: Engine }) => {
+  const inner = (
+    <div
+      style={{
+        backgroundColor: "#EFE9DF",
+        borderRadius: "18px",
+        padding: "16px 14px",
+        position: "relative",
+        opacity: e.disabled ? 0.45 : 1,
+        height: "100%",
+      }}
+    >
+      <span
+        style={{
+          position: "absolute",
+          top: "12px",
+          right: "12px",
+          width: "6px",
+          height: "6px",
+          borderRadius: "50%",
+          backgroundColor: e.dot,
+          display: "block",
+        }}
+      />
+      <span
+        style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: "15px",
+          color: "#1A1A18",
+          display: "block",
+          marginBottom: "3px",
+          fontWeight: 400,
+        }}
+      >
+        {e.name}
       </span>
-    );
+      <span
+        style={{
+          fontFamily: "Inter, sans-serif",
+          fontSize: "8px",
+          textTransform: "uppercase",
+          letterSpacing: "0.07em",
+          color: "rgba(26,26,24,0.35)",
+        }}
+      >
+        {e.state}
+      </span>
+    </div>
+  );
+
+  if (e.disabled || !e.to) {
+    return <div>{inner}</div>;
   }
-  return <span className="inline-block h-2 w-2 rounded-full border border-foreground" />;
+  return (
+    <Link to={e.to} style={{ display: "block" }}>
+      {inner}
+    </Link>
+  );
 };
 
 const TripWorkspace = () => {
-  const { id } = useParams();
-  const trip = trips.find((t) => t.id === id) ?? trips[0];
-
-  // First-visit transition gate.
-  const introKey = `cura.tripIntro.${trip.id}`;
-  const seenIntro =
-    typeof window !== "undefined" && sessionStorage.getItem(introKey) === "seen";
-
-  useEffect(() => {
-    // No-op; just ensures the effect runs after mount.
-  }, []);
-
-  if (!seenIntro) {
-    return <Navigate to={`/trip/${trip.id}/intro`} replace />;
-  }
-
-  // The next trip in motion (not this one, not memory).
-  const alsoInMotion = trips.find(
-    (t) => t.id !== trip.id && t.status !== "memory",
-  );
-
-  const headerImg =
-    "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80";
-
-  const itinerary = engines.find((e) => e.key === "itinerary")!;
-  const otherEngines = engines.filter((e) => e.key !== "itinerary");
-
   return (
-    <main className="app-shell pb-24">
-      {/* HEADER — full-bleed editorial image */}
-      <header
-        className="relative overflow-hidden"
-        style={{ minHeight: "260px", color: "hsl(var(--ink-foreground))" }}
-      >
-        <div className="editorial-img absolute inset-0">
-          <img src={headerImg} alt={`${trip.city} — editorial header`} />
-        </div>
-        <div
-          className="absolute inset-0"
+    <main className="app-shell pb-24" style={{ backgroundColor: "#F5F0E8" }}>
+      {/* SECTION 1 — HERO */}
+      <header style={{ position: "relative", height: "220px", overflow: "hidden" }}>
+        <img
+          src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800&q=80"
+          alt="Puglia"
           style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
             background:
-              "linear-gradient(to top, hsl(var(--ink) / 0.7), hsl(var(--ink) / 0.3) 55%, transparent)",
+              "linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.65) 100%)",
           }}
         />
 
-        {/* Top-right: countdown */}
-        <div className="absolute top-6 right-5 text-right">
-          <div
-            className="text-[10px] tracking-[0.18em] uppercase"
-            style={{ color: "hsl(var(--ink-foreground) / 0.7)" }}
+        {/* Top bar */}
+        <div
+          style={{
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "16px 20px",
+          }}
+        >
+          <Link
+            to="/trips"
+            aria-label="Back to trips"
+            style={{
+              color: "#F5F0E8",
+              fontSize: "20px",
+              lineHeight: 1,
+              textDecoration: "none",
+            }}
           >
-            Until departure
-          </div>
-          <div
-            className="font-serif mt-1"
-            style={{ color: "hsl(var(--accent-rust))", fontSize: "22px", lineHeight: 1 }}
+            ←
+          </Link>
+          <span
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "8px",
+              textTransform: "uppercase",
+              letterSpacing: "0.1em",
+              backgroundColor: "#C24E2A",
+              color: "#F5F0E8",
+              borderRadius: "99px",
+              padding: "4px 12px",
+              fontWeight: 500,
+            }}
           >
-            {trip.daysOut > 0 ? `${trip.daysOut} days` : trip.daysOut === 0 ? "today" : "—"}
-          </div>
+            PLANNING
+          </span>
         </div>
 
-        {/* Bottom-left: name + dates + country */}
-        <div className="absolute left-5 right-5 bottom-10">
+        {/* Bottom-left destination */}
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            padding: "0 20px 18px",
+          }}
+        >
           <h1
-            className="font-serif leading-[0.95] tracking-tight"
-            style={{ fontSize: "48px" }}
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: "30px",
+              color: "#F5F0E8",
+              fontWeight: 400,
+              lineHeight: 1.05,
+              margin: 0,
+            }}
           >
-            {trip.city}
+            Puglia
           </h1>
           <div
-            className="text-[12px] tracking-[0.14em] mt-3"
-            style={{ color: "hsl(var(--ink-foreground) / 0.75)" }}
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "11px",
+              color: "rgba(245,240,232,0.65)",
+              letterSpacing: "0.03em",
+              marginTop: "4px",
+            }}
           >
-            {trip.dates}
-          </div>
-          <div
-            className="text-[12px] tracking-[0.14em] mt-1"
-            style={{ color: "hsl(var(--ink-foreground) / 0.55)" }}
-          >
-            {trip.country}
-          </div>
-        </div>
-
-        {/* Readiness — horizon line at very bottom */}
-        <div className="absolute left-0 right-0 bottom-0 px-5 pb-2">
-          <div
-            className="text-[10px] tracking-[0.18em] mb-1.5 text-right"
-            style={{ color: "hsl(var(--ink-foreground) / 0.7)" }}
-          >
-            {trip.readiness}% ready
-          </div>
-          <div
-            className="h-[2px] w-full relative"
-            style={{ backgroundColor: "hsl(var(--ink-foreground) / 0.2)" }}
-          >
-            <div
-              className="absolute left-0 top-0 h-full"
-              style={{
-                width: `${trip.readiness}%`,
-                backgroundColor: "hsl(var(--ink-foreground))",
-              }}
-            />
+            Italy · Jun 12 – Jun 22, 2026
           </div>
         </div>
       </header>
 
-      {/* CURA INSIGHT — sunflower bleed */}
+      {/* SECTION 2 — READINESS */}
       <section
-        className="px-5 py-5"
         style={{
-          backgroundColor: "hsl(var(--accent-sun))",
-          color: "hsl(var(--ink))",
+          backgroundColor: "#EFE9DF",
+          padding: "12px 20px",
+          borderBottom: "0.5px solid rgba(26,26,24,0.08)",
         }}
       >
         <div
-          className="text-[9px] tracking-[0.24em] uppercase"
-          style={{ color: "hsl(var(--ink) / 0.55)" }}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
-          Cura
+          <span
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "9px",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              color: "rgba(26,26,24,0.40)",
+            }}
+          >
+            TRIP READINESS
+          </span>
+          <span
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: "18px",
+              color: "#C24E2A",
+            }}
+          >
+            64%
+          </span>
         </div>
-        <p
-          className="italic-serif mt-1.5"
-          style={{ fontSize: "16px", lineHeight: 1.75 }}
+        <div
+          style={{
+            marginTop: "8px",
+            height: "3px",
+            backgroundColor: "rgba(26,26,24,0.10)",
+            borderRadius: "2px",
+            overflow: "hidden",
+          }}
         >
-          {insightFor(trip.city)}
+          <div
+            style={{
+              width: "64%",
+              height: "100%",
+              backgroundColor: "#C24E2A",
+              borderRadius: "2px",
+            }}
+          />
+        </div>
+      </section>
+
+      {/* SECTION 3 — CURA INSIGHT */}
+      <section
+        style={{
+          backgroundColor: "#F5F0E8",
+          padding: "16px 20px",
+          borderBottom: "0.5px solid rgba(26,26,24,0.08)",
+        }}
+      >
+        <span
+          style={{
+            display: "block",
+            fontFamily: "Inter, sans-serif",
+            fontSize: "11px",
+            color: "#C24E2A",
+            marginBottom: "8px",
+          }}
+        >
+          ✦
+        </span>
+        <p
+          style={{
+            fontFamily: "'Playfair Display', serif",
+            fontStyle: "italic",
+            fontSize: "14px",
+            color: "rgba(26,26,24,0.60)",
+            lineHeight: 1.6,
+            margin: 0,
+          }}
+        >
+          Start with your visa — everything else depends on it being resolved first.
         </p>
       </section>
 
-      {/* ENGINE GRID */}
-      <section className="px-4 pt-6">
-        {/* Itinerary — promoted, full width, ghost image */}
-        <Link
-          to={`/trip/${trip.id}/engine/${itinerary.key}`}
-          className="relative overflow-hidden border border-foreground/15 bg-background flex flex-col justify-between hover:bg-foreground/[0.03] transition-colors mb-[10px]"
-          style={{ height: "120px" }}
+      {/* SECTION 4 — ENGINE GRID */}
+      <section style={{ backgroundColor: "#F5F0E8", padding: "16px" }}>
+        <div
+          style={{
+            fontFamily: "Inter, sans-serif",
+            fontSize: "9px",
+            textTransform: "uppercase",
+            letterSpacing: "0.10em",
+            color: "rgba(26,26,24,0.35)",
+            marginBottom: "12px",
+          }}
         >
-          <img
-            src={headerImg}
-            alt=""
-            aria-hidden
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-            style={{ opacity: 0.12, filter: "blur(2px) saturate(0.85)" }}
-          />
-          <div className="relative p-4 flex flex-col justify-between h-full">
-            <div className="text-[11px] tracking-[0.16em] uppercase font-medium">
-              {itinerary.name}
-            </div>
-            <div
-              className="text-[12px] text-foreground/70"
-              style={{ lineHeight: 1.75 }}
-            >
-              {itinerary.status}
-            </div>
-            <div className="flex items-end justify-between">
-              <div
-                className="text-[10px] leading-tight max-w-[80%]"
-                style={{ color: "hsl(var(--accent-rust))" }}
-              >
-                {itinerary.action}
-              </div>
-              <StateDot state={itinerary.state} />
-            </div>
-          </div>
-        </Link>
-
-        <div className="grid grid-cols-2 gap-[10px]">
-          {otherEngines.map((e) => (
-            <Link
-              key={e.key}
-              to={`/trip/${trip.id}/engine/${e.key}`}
-              className="border border-foreground/15 bg-background p-3 flex flex-col justify-between hover:bg-foreground/[0.03] transition-colors"
-              style={{ minHeight: "100px" }}
-            >
-              <div className="flex items-start justify-between">
-                <div className="text-[11px] tracking-[0.16em] uppercase font-medium">
-                  {e.name}
-                </div>
-              </div>
-              <div
-                className="text-[12px] text-foreground/65 mt-2"
-                style={{ lineHeight: 1.75 }}
-              >
-                {e.status}
-              </div>
-              <div className="flex items-end justify-between mt-2">
-                <div
-                  className="text-[10px] leading-tight max-w-[80%]"
-                  style={{ color: "hsl(var(--accent-rust))" }}
-                >
-                  {e.action}
-                </div>
-                <StateDot state={e.state} />
-              </div>
-            </Link>
+          YOUR ENGINES
+        </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gap: "10px",
+          }}
+        >
+          {engines.map((e) => (
+            <Tile key={e.name} e={e} />
           ))}
         </div>
       </section>
 
-      {/* ALSO IN MOTION */}
-      {alsoInMotion && (
-        <section className="px-5 mt-14">
-          <div className="editorial-eyebrow text-foreground/45 mb-3">
-            Also in motion
-          </div>
-          <Link
-            to={`/trip/${alsoInMotion.id}`}
-            className="border border-foreground/15 flex items-stretch hover:bg-foreground/[0.03] transition-colors overflow-hidden"
-            style={{ height: "90px" }}
+      {/* HAIRLINE */}
+      <div
+        style={{
+          height: "0.5px",
+          backgroundColor: "rgba(26,26,24,0.08)",
+          margin: "8px 0",
+        }}
+      />
+
+      {/* SECTION 5 — JOURNAL STRIP */}
+      <section
+        style={{
+          backgroundColor: "#F5F0E8",
+          padding: "16px 20px 32px 20px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div>
+          <div
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "9px",
+              textTransform: "uppercase",
+              letterSpacing: "0.10em",
+              color: "rgba(26,26,24,0.35)",
+            }}
           >
-            <div className="editorial-img w-[40%] shrink-0">
-              <img
-                src="https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=600&q=80"
-                alt={`${alsoInMotion.city}`}
-              />
-            </div>
-            <div className="flex-1 px-4 py-3 flex items-center justify-between min-w-0">
-              <div className="min-w-0">
-                <div className="font-serif text-[20px] leading-none truncate">
-                  {alsoInMotion.city}
-                </div>
-                <div className="editorial-eyebrow text-foreground/55 mt-2">
-                  {alsoInMotion.dates}
-                </div>
-              </div>
-              <div className="text-right shrink-0 ml-3">
-                <span
-                  className="inline-flex items-center px-2 py-0.5 text-[9px] tracking-[0.18em] uppercase"
-                  style={{
-                    backgroundColor:
-                      alsoInMotion.status === "dreaming"
-                        ? "hsl(var(--accent-sky))"
-                        : "hsl(var(--accent-ochre))",
-                    color:
-                      alsoInMotion.status === "dreaming"
-                        ? "hsl(var(--foreground))"
-                        : "white",
-                  }}
-                >
-                  {alsoInMotion.status}
-                </span>
-                <div className="text-[10px] text-foreground/55 mt-1.5">
-                  {alsoInMotion.readiness}% ready
-                </div>
-              </div>
-            </div>
-          </Link>
-        </section>
-      )}
+            JOURNAL
+          </div>
+          <div
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontStyle: "italic",
+              fontSize: "15px",
+              color: "rgba(26,26,24,0.55)",
+              marginTop: "4px",
+            }}
+          >
+            Puglia, unfiltered.
+          </div>
+        </div>
+        <Link
+          to="/trip/puglia/journal"
+          style={{
+            fontFamily: "Inter, sans-serif",
+            fontSize: "10px",
+            color: "#C24E2A",
+            letterSpacing: "0.05em",
+            textDecoration: "none",
+          }}
+        >
+          Start writing →
+        </Link>
+      </section>
 
       <BottomNav />
     </main>
