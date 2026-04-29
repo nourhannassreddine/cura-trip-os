@@ -94,7 +94,7 @@ const TripWorkspace = () => {
       {/* SECTION 1 — HERO */}
       <header style={{ position: "relative", height: "220px", overflow: "hidden" }}>
         <img
-          src="https://images.unsplash.com/photo-1534445538923-ab0f57a02eb5?w=800&q=80"
+          src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80"
           alt="Puglia"
           style={{
             position: "absolute",
