@@ -94,7 +94,7 @@ const TripWorkspace = () => {
       {/* SECTION 1 — HERO */}
       <header style={{ position: "relative", height: "220px", overflow: "hidden" }}>
         <img
-          src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800&q=80"
+          src="https://images.unsplash.com/photo-1534445538923-ab0f57a02eb5?w=800&q=80"
           alt="Puglia"
           style={{
             position: "absolute",
@@ -136,21 +136,47 @@ const TripWorkspace = () => {
           >
             ←
           </Link>
-          <span
-            style={{
-              fontFamily: "Inter, sans-serif",
-              fontSize: "8px",
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              backgroundColor: "#C24E2A",
-              color: "#F5F0E8",
-              borderRadius: "99px",
-              padding: "4px 12px",
-              fontWeight: 500,
-            }}
-          >
-            PLANNING
-          </span>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+            <span
+              style={{
+                fontFamily: "Inter, sans-serif",
+                fontSize: "8px",
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+                backgroundColor: "#C24E2A",
+                color: "#F5F0E8",
+                borderRadius: "99px",
+                padding: "4px 12px",
+                fontWeight: 500,
+              }}
+            >
+              PLANNING
+            </span>
+            <div
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "28px",
+                color: "#F5F0E8",
+                fontWeight: 400,
+                lineHeight: 1,
+                marginTop: "6px",
+              }}
+            >
+              38
+            </div>
+            <div
+              style={{
+                fontFamily: "Inter, sans-serif",
+                fontSize: "8px",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                color: "rgba(245,240,232,0.65)",
+                marginTop: "2px",
+              }}
+            >
+              days to go
+            </div>
+          </div>
         </div>
 
         {/* Bottom-left destination */}
