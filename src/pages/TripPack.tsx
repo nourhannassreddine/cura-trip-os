@@ -279,7 +279,19 @@ const TripPack = () => {
       }}
     >
       {/* SECTION 1 — HEADER */}
-      <header style={{ position: "relative", height: "160px", overflow: "hidden", backgroundColor: "#6B7D3D" }}>
+      <header style={{ position: "relative", height: "220px", overflow: "hidden", backgroundColor: "#6B7D3D" }}>
+        <img
+          src="https://res.cloudinary.com/dvfzz0min/image/upload/v1777528338/Suitcase_aqo8k4.png"
+          alt=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center center",
+          }}
+        />
         <div
           style={{
             position: "absolute",
