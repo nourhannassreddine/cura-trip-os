@@ -79,7 +79,7 @@ const TripVisa = () => {
       <header
         style={{
           position: "relative",
-          height: "130px",
+          height: "220px",
           overflow: "hidden",
         }}
       >
