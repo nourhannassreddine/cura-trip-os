@@ -74,7 +74,7 @@ const sectionLabel: React.CSSProperties = {
 
 const TripVisa = () => {
   return (
-    <main style={{ backgroundColor: "#F5F0E8", minHeight: "100vh" }}>
+    <main style={{ backgroundColor: "#F5F0E8", minHeight: "100vh", maxWidth: "390px", margin: "0 auto" }}>
       {/* SECTION 1 — HEADER */}
       <header
         style={{
