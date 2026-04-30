@@ -80,15 +80,26 @@ const TripVisa = () => {
         style={{
           position: "relative",
           height: "130px",
-          backgroundColor: "#6B7D3D",
           overflow: "hidden",
         }}
       >
+        <img
+          src="https://res.cloudinary.com/dvfzz0min/image/upload/v1777525552/Stamp_a7rpkq.png"
+          alt=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "center top",
+          }}
+        />
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background: "linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.70) 100%)",
+            background: "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.72) 100%)",
           }}
         />
         <div
