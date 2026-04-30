@@ -11,6 +11,7 @@ import Dream from "./pages/Dream";
 import Compare from "./pages/Compare";
 import Trips from "./pages/Trips";
 import TripWorkspace from "./pages/TripWorkspace";
+import TripVisa from "./pages/TripVisa";
 import TripIntro from "./pages/TripIntro";
 import TripEngine from "./pages/TripEngine";
 import ItineraryView from "./pages/ItineraryView";
@@ -59,6 +60,7 @@ const App = () => (
           <Route path="/trips" element={<Trips />} />
           <Route path="/trip/new" element={<NewTrip />} />
           <Route path="/trip/import" element={<TripImport />} />
+          <Route path="/trip/puglia/visa" element={<TripVisa />} />
           <Route path="/trip/:id" element={<TripWorkspace />} />
           <Route path="/trip/:id/intro" element={<TripIntro />} />
           <Route path="/trip/:id/engine/:engine" element={<TripEngine />} />
