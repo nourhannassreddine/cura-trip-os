@@ -545,84 +545,6 @@ const TripVisa = () => {
         </div>
       </section>
 
-      {/* SECTION 6 — COSTS */}
-      <section
-        style={{
-          padding: "14px 16px",
-          borderBottom: "0.5px solid rgba(26,26,24,0.08)",
-        }}
-      >
-        <span style={sectionLabel}>COSTS</span>
-        <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
-          {costs.map((c, i) => {
-            const isLast = i === costs.length - 1;
-            return (
-              <li
-                key={c.label}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "7px 0",
-                  borderBottom: isLast ? "none" : "0.5px solid rgba(26,26,24,0.07)",
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "11px",
-                    color: "rgba(26,26,24,0.65)",
-                  }}
-                >
-                  {c.label}
-                </span>
-                <span
-                  style={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontSize: "13px",
-                    color: "#1A1A18",
-                  }}
-                >
-                  {c.amount}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-        <div
-          style={{
-            backgroundColor: "#EFE9DF",
-            borderRadius: "12px",
-            padding: "10px 12px",
-            marginTop: "8px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "Inter, sans-serif",
-              fontSize: "8px",
-              textTransform: "uppercase",
-              color: "rgba(26,26,24,0.45)",
-              letterSpacing: "0.08em",
-            }}
-          >
-            TOTAL ESTIMATED
-          </span>
-          <span
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: "20px",
-              color: "#C24E2A",
-            }}
-          >
-            ~€185
-          </span>
-        </div>
-      </section>
-
       {/* SECTION 6.5 — APPOINTMENT BOOKING */}
       <section
         style={{
@@ -905,6 +827,84 @@ const TripVisa = () => {
           <p style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: "12px", color: "rgba(26,26,24,0.65)", lineHeight: 1.5, margin: 0 }}>
             AXA Schengen and Europ Assistance are both accepted and issue certificates instantly. Do not buy insurance before your appointment is confirmed — dates must match exactly.
           </p>
+        </div>
+      </section>
+
+      {/* SECTION 6 — COSTS */}
+      <section
+        style={{
+          padding: "14px 16px",
+          borderBottom: "0.5px solid rgba(26,26,24,0.08)",
+        }}
+      >
+        <span style={sectionLabel}>COSTS</span>
+        <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+          {costs.map((c, i) => {
+            const isLast = i === costs.length - 1;
+            return (
+              <li
+                key={c.label}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "7px 0",
+                  borderBottom: isLast ? "none" : "0.5px solid rgba(26,26,24,0.07)",
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "Inter, sans-serif",
+                    fontSize: "11px",
+                    color: "rgba(26,26,24,0.65)",
+                  }}
+                >
+                  {c.label}
+                </span>
+                <span
+                  style={{
+                    fontFamily: "'Playfair Display', serif",
+                    fontSize: "13px",
+                    color: "#1A1A18",
+                  }}
+                >
+                  {c.amount}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+        <div
+          style={{
+            backgroundColor: "#EFE9DF",
+            borderRadius: "12px",
+            padding: "10px 12px",
+            marginTop: "8px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "8px",
+              textTransform: "uppercase",
+              color: "rgba(26,26,24,0.45)",
+              letterSpacing: "0.08em",
+            }}
+          >
+            TOTAL ESTIMATED
+          </span>
+          <span
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: "20px",
+              color: "#C24E2A",
+            }}
+          >
+            ~€185
+          </span>
         </div>
       </section>
 
