@@ -623,7 +623,291 @@ const TripVisa = () => {
         </div>
       </section>
 
-      {/* SECTION 7 — RELEVANT LINKS */}
+      {/* SECTION 6.5 — APPOINTMENT BOOKING */}
+      <section
+        style={{
+          padding: "14px 16px",
+          borderBottom: "0.5px solid rgba(26,26,24,0.08)",
+        }}
+      >
+        <span style={sectionLabel}>APPOINTMENT BOOKING</span>
+
+        {/* Row 1 */}
+        <div
+          style={{
+            backgroundColor: "#EFE9DF",
+            borderRadius: "14px",
+            padding: "10px 12px",
+            marginBottom: "8px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          <div>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", color: "#8C1C13", lineHeight: 1.2 }}>
+              Not booked
+            </div>
+            <div style={{ fontFamily: "Inter, sans-serif", fontSize: "7px", textTransform: "uppercase", letterSpacing: "0.08em", color: "rgba(26,26,24,0.40)", marginTop: "3px" }}>
+              VFS appointment · Dubai
+            </div>
+          </div>
+          <a
+            href="https://visa.vfsglobal.com"
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "8px",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              color: "#F5F0E8",
+              backgroundColor: "#C24E2A",
+              borderRadius: "20px",
+              padding: "6px 14px",
+              border: "none",
+              textDecoration: "none",
+              flex: "0 0 auto",
+            }}
+          >
+            Book now →
+          </a>
+        </div>
+
+        {/* Row 2 */}
+        <div
+          style={{
+            backgroundColor: "#EFE9DF",
+            borderRadius: "14px",
+            padding: "10px 12px",
+            marginBottom: "8px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          <div>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", color: "#1A1A18", lineHeight: 1.2 }}>
+              Required
+            </div>
+            <div style={{ fontFamily: "Inter, sans-serif", fontSize: "7px", textTransform: "uppercase", letterSpacing: "0.08em", color: "rgba(26,26,24,0.40)", marginTop: "3px" }}>
+              Biometrics · separate appointment
+            </div>
+          </div>
+          <span
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "7px",
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+              backgroundColor: "rgba(26,26,24,0.07)",
+              color: "rgba(26,26,24,0.40)",
+              borderRadius: "99px",
+              padding: "3px 8px",
+              flex: "0 0 auto",
+            }}
+          >
+            After visa appt
+          </span>
+        </div>
+
+        {/* Row 3 */}
+        <div
+          style={{
+            backgroundColor: "#EFE9DF",
+            borderRadius: "14px",
+            padding: "10px 12px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          <div>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", color: "#1A1A18", lineHeight: 1.2 }}>
+              Confirmation
+            </div>
+            <div style={{ fontFamily: "Inter, sans-serif", fontSize: "7px", textTransform: "uppercase", letterSpacing: "0.08em", color: "rgba(26,26,24,0.40)", marginTop: "3px" }}>
+              Upload appointment letter
+            </div>
+          </div>
+          <button
+            type="button"
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "7px",
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+              color: "#C24E2A",
+              background: "none",
+              border: "none",
+              padding: 0,
+              cursor: "pointer",
+              flex: "0 0 auto",
+            }}
+          >
+            Upload →
+          </button>
+        </div>
+
+        {/* CURA note */}
+        <div
+          style={{
+            backgroundColor: "#EFE9DF",
+            borderLeft: "3px solid #C24E2A",
+            borderTopRightRadius: "14px",
+            borderBottomRightRadius: "14px",
+            padding: "10px 12px",
+            marginTop: "8px",
+          }}
+        >
+          <span style={{ display: "block", fontFamily: "Inter, sans-serif", fontSize: "9px", color: "#C24E2A", marginBottom: "5px" }}>
+            ✦ CURA
+          </span>
+          <p style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: "12px", color: "rgba(26,26,24,0.65)", lineHeight: 1.5, margin: 0 }}>
+            VFS Dubai slots for Italy fill within hours of release. Check every morning at 9am — that is when new slots typically open.
+          </p>
+        </div>
+      </section>
+
+      {/* SECTION 6.6 — TRAVEL INSURANCE */}
+      <section
+        style={{
+          padding: "14px 16px",
+          borderBottom: "0.5px solid rgba(26,26,24,0.08)",
+        }}
+      >
+        <span style={sectionLabel}>TRAVEL INSURANCE</span>
+
+        {/* Row 1 — Coverage requirement (2-col grid inside card) */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gap: "8px",
+            marginBottom: "8px",
+          }}
+        >
+          <div style={{ backgroundColor: "#EFE9DF", borderRadius: "14px", padding: "10px 12px" }}>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", color: "#1A1A18", lineHeight: 1.2 }}>
+              €30,000
+            </div>
+            <div style={{ fontFamily: "Inter, sans-serif", fontSize: "7px", textTransform: "uppercase", letterSpacing: "0.08em", color: "rgba(26,26,24,0.40)", marginTop: "3px" }}>
+              Min. coverage
+            </div>
+          </div>
+          <div style={{ backgroundColor: "#EFE9DF", borderRadius: "14px", padding: "10px 12px" }}>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", color: "#8C1C13", lineHeight: 1.2 }}>
+              Required
+            </div>
+            <div style={{ fontFamily: "Inter, sans-serif", fontSize: "7px", textTransform: "uppercase", letterSpacing: "0.08em", color: "rgba(26,26,24,0.40)", marginTop: "3px" }}>
+              For Schengen visa
+            </div>
+          </div>
+        </div>
+
+        {/* Row 2 — Status */}
+        <div
+          style={{
+            backgroundColor: "#EFE9DF",
+            borderRadius: "14px",
+            padding: "10px 12px",
+            marginBottom: "8px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          <div>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", color: "#8C1C13", lineHeight: 1.2 }}>
+              Not purchased
+            </div>
+            <div style={{ fontFamily: "Inter, sans-serif", fontSize: "7px", textTransform: "uppercase", letterSpacing: "0.08em", color: "rgba(26,26,24,0.40)", marginTop: "3px" }}>
+              Insurance status
+            </div>
+          </div>
+          <button
+            type="button"
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "8px",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              color: "#F5F0E8",
+              backgroundColor: "#C24E2A",
+              borderRadius: "20px",
+              padding: "6px 14px",
+              border: "none",
+              cursor: "pointer",
+              flex: "0 0 auto",
+            }}
+          >
+            Get insured →
+          </button>
+        </div>
+
+        {/* Row 3 — Upload certificate */}
+        <div
+          style={{
+            backgroundColor: "#EFE9DF",
+            borderRadius: "14px",
+            padding: "10px 12px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          <div>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", color: "#1A1A18", lineHeight: 1.2 }}>
+              Certificate
+            </div>
+            <div style={{ fontFamily: "Inter, sans-serif", fontSize: "7px", textTransform: "uppercase", letterSpacing: "0.08em", color: "rgba(26,26,24,0.40)", marginTop: "3px" }}>
+              Upload insurance certificate
+            </div>
+          </div>
+          <button
+            type="button"
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "7px",
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+              color: "#C24E2A",
+              background: "none",
+              border: "none",
+              padding: 0,
+              cursor: "pointer",
+              flex: "0 0 auto",
+            }}
+          >
+            Upload →
+          </button>
+        </div>
+
+        {/* CURA note */}
+        <div
+          style={{
+            backgroundColor: "#EFE9DF",
+            borderLeft: "3px solid #C24E2A",
+            borderTopRightRadius: "14px",
+            borderBottomRightRadius: "14px",
+            padding: "10px 12px",
+            marginTop: "8px",
+          }}
+        >
+          <span style={{ display: "block", fontFamily: "Inter, sans-serif", fontSize: "9px", color: "#C24E2A", marginBottom: "5px" }}>
+            ✦ CURA
+          </span>
+          <p style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontSize: "12px", color: "rgba(26,26,24,0.65)", lineHeight: 1.5, margin: 0 }}>
+            AXA Schengen and Europ Assistance are both accepted and issue certificates instantly. Do not buy insurance before your appointment is confirmed — dates must match exactly.
+          </p>
+        </div>
+      </section>
+
       <section style={{ padding: "14px 16px 32px 16px" }}>
         <span style={sectionLabel}>RELEVANT LINKS</span>
         <div
