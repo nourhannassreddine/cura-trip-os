@@ -15,6 +15,7 @@ import TripVisa from "./pages/TripVisa";
 import TripPack from "./pages/TripPack";
 import TripPrep from "./pages/TripPrep";
 import TripSpend from "./pages/TripSpend";
+import TripSpendWork from "./pages/TripSpendWork";
 import TripIntro from "./pages/TripIntro";
 import TripEngine from "./pages/TripEngine";
 import ItineraryView from "./pages/ItineraryView";
