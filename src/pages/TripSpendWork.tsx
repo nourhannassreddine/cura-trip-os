@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const TripSpend = () => {
+const TripSpendWork = () => {
   return (
     <div style={{ maxWidth: "390px", margin: "0 auto", backgroundColor: "#F5F0E8", minHeight: "100vh" }}>
       {/* SECTION 1 — HEADER */}
@@ -35,13 +35,13 @@ const TripSpend = () => {
                 fontSize: "7px",
                 textTransform: "uppercase",
                 letterSpacing: "0.1em",
-                backgroundColor: "#6B7D3D",
+                backgroundColor: "#4FB6C8",
                 color: "#F5F0E8",
                 borderRadius: "99px",
                 padding: "3px 10px",
               }}
             >
-              SPEND ENGINE
+              WORK MODE
             </span>
           </div>
           <div style={{ padding: "0 16px 14px" }}>
@@ -63,32 +63,33 @@ const TripSpend = () => {
         </div>
       </header>
 
-      {/* SECTION 2 — WORK TRIP TOGGLE */}
+      {/* SECTION 2 — WORK TOGGLE (ON STATE) */}
       <section style={{ backgroundColor: "#F5F0E8", padding: "14px 16px", borderBottom: "0.5px solid rgba(26,26,24,0.08)" }}>
         <Link
-          to="/trip/puglia/spend/work"
+          to="/trip/puglia/spend"
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            backgroundColor: "#EFE9DF",
+            backgroundColor: "rgba(79,182,200,0.10)",
+            border: "1px solid rgba(79,182,200,0.30)",
             borderRadius: "12px",
             padding: "10px 14px",
             textDecoration: "none",
           }}
         >
           <div>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "12px", color: "#1A1A18" }}>Personal trip</div>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "12px", color: "#1A1A18" }}>Work trip</div>
             <div
               style={{
                 fontFamily: "Inter, sans-serif",
                 fontSize: "7px",
                 textTransform: "uppercase",
-                color: "rgba(26,26,24,0.40)",
+                color: "#4FB6C8",
                 marginTop: "2px",
               }}
             >
-              Toggle for work expense mode
+              Expense mode active
             </div>
           </div>
           <div
@@ -97,7 +98,7 @@ const TripSpend = () => {
               width: "32px",
               height: "18px",
               borderRadius: "99px",
-              backgroundColor: "rgba(26,26,24,0.15)",
+              backgroundColor: "#4FB6C8",
             }}
           >
             <div
@@ -108,36 +109,24 @@ const TripSpend = () => {
                 borderRadius: "99px",
                 backgroundColor: "#F5F0E8",
                 top: "2px",
-                left: "2px",
+                right: "2px",
               }}
             />
           </div>
         </Link>
       </section>
 
-      {/* SECTION 3 — CURA BUDGET ESTIMATE */}
+      {/* SECTION 3 — CURA WORK MODE INSIGHT */}
       <section style={{ backgroundColor: "#F5F0E8", padding: "14px 16px", borderBottom: "0.5px solid rgba(26,26,24,0.08)" }}>
         <div
           style={{
-            fontFamily: "Inter, sans-serif",
-            fontSize: "8px",
-            textTransform: "uppercase",
-            letterSpacing: "0.10em",
-            color: "rgba(26,26,24,0.35)",
-            marginBottom: "10px",
-          }}
-        >
-          CURA BUDGET ESTIMATE
-        </div>
-        <div
-          style={{
             backgroundColor: "#EFE9DF",
-            borderLeft: "3px solid #F2C94C",
+            borderLeft: "3px solid #4FB6C8",
             borderRadius: "0 14px 14px 0",
             padding: "12px 14px",
           }}
         >
-          <span style={{ fontFamily: "Inter, sans-serif", fontSize: "9px", color: "#F2C94C", display: "block", marginBottom: "5px" }}>
+          <span style={{ fontFamily: "Inter, sans-serif", fontSize: "9px", color: "#4FB6C8", display: "block", marginBottom: "5px" }}>
             ✦ CURA
           </span>
           <p
@@ -147,71 +136,15 @@ const TripSpend = () => {
               fontSize: "12px",
               color: "rgba(26,26,24,0.65)",
               lineHeight: 1.5,
-              marginBottom: "10px",
-              margin: "0 0 10px 0",
+              margin: 0,
             }}
           >
-            A 10-night mid-luxury Puglia trip for 2 typically runs €4,200–€5,800. Here's what to expect before you spend anything.
+            Work mode is on. Tag each expense as billable or personal as you go. Your expense summary updates in real time — export as PDF when you're ready to submit.
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}>
-            {[
-              ["€800", "Flights"],
-              ["€1,800", "Stays"],
-              ["€600", "Food & dining"],
-              ["€400", "Activities"],
-              ["€250", "Transport"],
-              ["€150", "Beauty prep"],
-            ].map(([v, k]) => (
-              <div
-                key={k}
-                style={{
-                  backgroundColor: "rgba(245,240,232,0.80)",
-                  borderRadius: "10px",
-                  padding: "8px 10px",
-                }}
-              >
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "13px", color: "#1A1A18" }}>{v}</div>
-                <div
-                  style={{
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "7px",
-                    textTransform: "uppercase",
-                    color: "rgba(26,26,24,0.40)",
-                    marginTop: "2px",
-                  }}
-                >
-                  {k}
-                </div>
-              </div>
-            ))}
-            <div
-              style={{
-                gridColumn: "1 / -1",
-                backgroundColor: "#F2C94C",
-                borderRadius: "10px",
-                padding: "10px 12px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "8px",
-                  textTransform: "uppercase",
-                  color: "rgba(26,26,24,0.55)",
-                }}
-              >
-                TOTAL ESTIMATED
-              </span>
-              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "18px", color: "#1A1A18" }}>~€4,500</span>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* SECTION 4 — BUDGET OVERVIEW */}
+      {/* SECTION 4 — BUDGET OVERVIEW (WORK MODE) */}
       <section style={{ backgroundColor: "#F5F0E8", borderBottom: "0.5px solid rgba(26,26,24,0.08)" }}>
         <div style={{ padding: "20px 16px 16px", textAlign: "center" }}>
           <div
@@ -224,7 +157,7 @@ const TripSpend = () => {
               marginBottom: "6px",
             }}
           >
-            REMAINING BUDGET
+            TOTAL SPEND
           </div>
           <div
             style={{
@@ -235,7 +168,7 @@ const TripSpend = () => {
               marginBottom: "4px",
             }}
           >
-            €3,760
+            €1,240
           </div>
         </div>
         <div
@@ -249,8 +182,8 @@ const TripSpend = () => {
           }}
         >
           {[
-            { v: "€5,000", l: "TOTAL", c: "#1A1A18" },
-            { v: "€1,240", l: "SPENT", c: "#C24E2A" },
+            { v: "€680", l: "BILLABLE", c: "#4FB6C8" },
+            { v: "€560", l: "PERSONAL", c: "#C24E2A" },
             { v: "Day 3", l: "OF 10", c: "#1A1A18" },
           ].map((s, i) => (
             <div key={s.l} style={{ display: "flex", alignItems: "stretch", gap: "20px" }}>
@@ -273,9 +206,30 @@ const TripSpend = () => {
           ))}
         </div>
         <div style={{ margin: "0 16px 16px" }}>
-          <div style={{ height: "6px", backgroundColor: "rgba(26,26,24,0.10)", borderRadius: "3px", overflow: "hidden" }}>
-            <div style={{ width: "24.8%", height: "100%", backgroundColor: "#C24E2A", borderRadius: "3px" }} />
+          <div style={{ height: "6px", backgroundColor: "rgba(26,26,24,0.10)", borderRadius: "3px", display: "flex", overflow: "hidden" }}>
+            <div style={{ width: "54.8%", height: "100%", backgroundColor: "#4FB6C8", borderRadius: "3px 0 0 3px" }} />
+            <div style={{ width: "45.2%", height: "100%", backgroundColor: "#C24E2A", borderRadius: "0 3px 3px 0" }} />
           </div>
+        </div>
+        <div style={{ display: "flex", gap: "12px", margin: "0 16px 12px" }}>
+          {[
+            { dot: "#4FB6C8", label: "Billable" },
+            { dot: "#C24E2A", label: "Personal" },
+          ].map((l) => (
+            <div key={l.label} style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+              <div style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: l.dot }} />
+              <span
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "7px",
+                  textTransform: "uppercase",
+                  color: "rgba(26,26,24,0.40)",
+                }}
+              >
+                {l.label}
+              </span>
+            </div>
+          ))}
         </div>
         <div style={{ padding: "0 16px 14px" }}>
           <div
@@ -291,12 +245,12 @@ const TripSpend = () => {
             BY CATEGORY
           </div>
           {[
-            { name: "Flights", spent: "€800", budget: "€800", spentColor: "#1A1A18", pct: 100, fill: "#6B7D3D" },
-            { name: "Stays", spent: "€0", budget: "€1,800", spentColor: "#1A1A18", pct: 0, fill: "#C24E2A", alert: "Not booked — highest impact task", alertColor: "#BA181B" },
-            { name: "Food & dining", spent: "€280", budget: "€600", spentColor: "#1A1A18", pct: 46, fill: "#C24E2A" },
-            { name: "Activities", spent: "€160", budget: "€400", spentColor: "#1A1A18", pct: 40, fill: "#C24E2A" },
-            { name: "Shopping", spent: "€0", budget: "€300", spentColor: "#1A1A18", pct: 0, fill: "#C24E2A" },
-            { name: "Beauty prep", spent: "€185", budget: "€150", spentColor: "#BA181B", pct: 100, fill: "#BA181B", alert: "Over budget by €35", alertColor: "#BA181B" },
+            { name: "Flights", spent: "€800", budget: "€800", spentColor: "#1A1A18", pct: 100, fill: "#6B7D3D", billPct: 100, split: "€800 billable · €0 personal" },
+            { name: "Stays", spent: "€0", budget: "€1,800", spentColor: "#1A1A18", pct: 0, fill: "#C24E2A", billPct: 0, alert: "Not booked — highest impact task", alertColor: "#BA181B" },
+            { name: "Food & dining", spent: "€280", budget: "€600", spentColor: "#1A1A18", pct: 46, fill: "#C24E2A", billPct: 23, split: "€140 billable · €140 personal" },
+            { name: "Activities", spent: "€160", budget: "€400", spentColor: "#1A1A18", pct: 40, fill: "#C24E2A", billPct: 0, split: "€0 billable · €160 personal" },
+            { name: "Shopping", spent: "€0", budget: "€300", spentColor: "#1A1A18", pct: 0, fill: "#C24E2A", billPct: 0, split: "€0 billable · €0 personal" },
+            { name: "Beauty prep", spent: "€185", budget: "€150", spentColor: "#BA181B", pct: 100, fill: "#BA181B", billPct: 0, alert: "Over budget by €35", alertColor: "#BA181B", split: "€0 billable · €185 personal" },
           ].map((c, i, arr) => (
             <div
               key={c.name}
@@ -312,8 +266,9 @@ const TripSpend = () => {
                   <span style={{ fontFamily: "Inter, sans-serif", fontSize: "10px", color: "rgba(26,26,24,0.40)" }}> / {c.budget}</span>
                 </span>
               </div>
-              <div style={{ height: "3px", backgroundColor: "rgba(26,26,24,0.10)", borderRadius: "2px", overflow: "hidden" }}>
-                <div style={{ height: "3px", width: `${c.pct}%`, backgroundColor: c.fill, borderRadius: "2px" }} />
+              <div style={{ position: "relative", height: "3px", backgroundColor: "rgba(26,26,24,0.10)", borderRadius: "2px", overflow: "hidden" }}>
+                <div style={{ position: "absolute", inset: 0, width: `${c.pct}%`, backgroundColor: c.fill, borderRadius: "2px" }} />
+                <div style={{ position: "absolute", left: 0, top: 0, height: "2px", width: `${c.billPct}%`, backgroundColor: "#4FB6C8" }} />
               </div>
               {c.alert && (
                 <div
@@ -329,12 +284,25 @@ const TripSpend = () => {
                   {c.alert}
                 </div>
               )}
+              {c.split && (
+                <div
+                  style={{
+                    fontFamily: "Inter, sans-serif",
+                    fontSize: "7px",
+                    textTransform: "uppercase",
+                    color: "rgba(26,26,24,0.40)",
+                    marginTop: "3px",
+                  }}
+                >
+                  {c.split}
+                </div>
+              )}
             </div>
           ))}
         </div>
       </section>
 
-      {/* SECTION 5 — DAILY BURN RATE */}
+      {/* SECTION 5 — DAILY BURN RATE (WORK MODE) */}
       <section style={{ backgroundColor: "#F5F0E8", padding: "14px 16px", borderBottom: "0.5px solid rgba(26,26,24,0.08)" }}>
         <div
           style={{
@@ -348,27 +316,19 @@ const TripSpend = () => {
         >
           DAILY BURN RATE
         </div>
-        <div
-          style={{
-            display: "flex",
-            gap: "8px",
-            overflowX: "auto",
-            paddingBottom: "4px",
-            scrollbarWidth: "none",
-          }}
-        >
+        <div style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "4px", scrollbarWidth: "none" }}>
           {[
-            { day: "Day 2", name: "Beach club", amount: "€340", amountColor: "#BA181B", status: "Over by €90", statusColor: "#BA181B", bg: "rgba(186,24,27,0.08)", border: "1px solid rgba(186,24,27,0.20)", opacity: 1 },
-            { day: "Day 1", name: "Arrival", amount: "€180", amountColor: "#6B7D3D", status: "Under budget", statusColor: "#6B7D3D", bg: "rgba(107,125,61,0.08)", border: "1px solid rgba(107,125,61,0.20)", opacity: 1 },
-            { day: "Day 3", name: "Alberobello", amount: "€220", amountColor: "#C24E2A", status: "On track", statusColor: "#C24E2A", bg: "#EFE9DF", border: "none", opacity: 1 },
-            { day: "Day 4", name: "Ostuni", amount: "—", amountColor: "rgba(26,26,24,0.40)", status: "Upcoming", statusColor: "rgba(26,26,24,0.35)", bg: "#EFE9DF", border: "none", opacity: 0.4 },
+            { day: "Day 1", name: "Arrival", amount: "€180", amountColor: "#6B7D3D", status: "Under budget", statusColor: "#6B7D3D", bg: "rgba(107,125,61,0.08)", border: "1px solid rgba(107,125,61,0.20)", opacity: 1, split: "€180 billable · €0 personal" },
+            { day: "Day 2", name: "Beach club", amount: "€340", amountColor: "#BA181B", status: "Over by €90", statusColor: "#BA181B", bg: "rgba(186,24,27,0.08)", border: "1px solid rgba(186,24,27,0.20)", opacity: 1, split: "€100 billable · €240 personal" },
+            { day: "Day 3", name: "Alberobello", amount: "€220", amountColor: "#C24E2A", status: "On track", statusColor: "#C24E2A", bg: "#EFE9DF", border: "none", opacity: 1, split: "€160 billable · €60 personal" },
+            { day: "Day 4", name: "Ostuni", amount: "—", amountColor: "rgba(26,26,24,0.40)", status: "Upcoming", statusColor: "rgba(26,26,24,0.35)", bg: "#EFE9DF", border: "none", opacity: 0.4, split: "" },
           ].map((d) => (
             <div
               key={d.day}
               style={{
                 borderRadius: "14px",
                 padding: "12px",
-                minWidth: "88px",
+                minWidth: "108px",
                 flexShrink: 0,
                 backgroundColor: d.bg,
                 border: d.border,
@@ -403,6 +363,20 @@ const TripSpend = () => {
               >
                 {d.status}
               </div>
+              {d.split && (
+                <div
+                  style={{
+                    fontFamily: "Inter, sans-serif",
+                    fontSize: "7px",
+                    textTransform: "uppercase",
+                    color: "rgba(26,26,24,0.40)",
+                    marginTop: "4px",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  {d.split}
+                </div>
+              )}
             </div>
           ))}
           <div
@@ -457,7 +431,7 @@ const TripSpend = () => {
         </div>
       </section>
 
-      {/* SECTION 6 — GROUP SPLITTING */}
+      {/* SECTION 6 — RECEIPT VAULT (PROMINENT) */}
       <section style={{ backgroundColor: "#F5F0E8", padding: "14px 16px", borderBottom: "0.5px solid rgba(26,26,24,0.08)" }}>
         <div
           style={{
@@ -466,82 +440,219 @@ const TripSpend = () => {
             textTransform: "uppercase",
             letterSpacing: "0.10em",
             color: "rgba(26,26,24,0.35)",
-            marginBottom: "6px",
+            marginBottom: "10px",
           }}
         >
-          GROUP SPLITTING · 2 TRAVELLERS
+          RECEIPT VAULT · TAG AS YOU GO
+        </div>
+        <div
+          style={{
+            backgroundColor: "#EFE9DF",
+            borderLeft: "3px solid #4FB6C8",
+            borderRadius: "0 12px 12px 0",
+            padding: "10px 12px",
+            marginBottom: "10px",
+          }}
+        >
+          <span style={{ fontFamily: "Inter, sans-serif", fontSize: "9px", color: "#4FB6C8", display: "block", marginBottom: "4px" }}>
+            ✦ CURA
+          </span>
+          <p
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontStyle: "italic",
+              fontSize: "12px",
+              color: "rgba(26,26,24,0.65)",
+              lineHeight: 1.5,
+              margin: 0,
+            }}
+          >
+            Upload receipts as you spend and tag them. Your employer summary builds automatically.
+          </p>
         </div>
         {[
-          { initials: "NR", name: "Nourhan", sub: "Paid €920 total", balance: "+€160", balColor: "#6B7D3D", balLabel: "Owed to you", avBg: "rgba(194,78,42,0.15)", avColor: "#C24E2A" },
-          { initials: "TR", name: "Travel companion", sub: "Paid €320 total", balance: "-€160", balColor: "#BA181B", balLabel: "Owes you", avBg: "rgba(107,125,61,0.15)", avColor: "#6B7D3D" },
-        ].map((m, i, arr) => (
+          { iconBg: "rgba(79,182,200,0.12)", name: "Emirates booking", sub: "Flights · Apr 12", amount: "€800", billable: true },
+          { iconBg: "rgba(194,78,42,0.10)", name: "Boat tour deposit", sub: "Activities · Apr 20", amount: "€80", billable: false },
+          { iconBg: "rgba(194,78,42,0.10)", name: "Beach club dinner", sub: "Food & dining · Jun 13", amount: "€120", billable: false },
+        ].map((r) => (
           <div
-            key={m.initials}
+            key={r.name}
             style={{
               display: "flex",
               alignItems: "center",
               gap: "10px",
-              padding: "8px 0",
-              borderBottom: i === arr.length - 1 ? "none" : "0.5px solid rgba(26,26,24,0.07)",
+              padding: "9px 0",
+              borderBottom: "0.5px solid rgba(26,26,24,0.07)",
             }}
           >
-            <div
+            <div style={{ width: "28px", height: "28px", borderRadius: "8px", backgroundColor: r.iconBg, flexShrink: 0 }} />
+            <div style={{ flex: 1 }}>
+              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "13px", color: "#1A1A18" }}>{r.name}</div>
+              <div
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "7px",
+                  textTransform: "uppercase",
+                  color: "rgba(26,26,24,0.40)",
+                  marginTop: "2px",
+                }}
+              >
+                {r.sub}
+              </div>
+            </div>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "13px", color: "#1A1A18" }}>{r.amount}</div>
+            <span
               style={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "50%",
-                backgroundColor: m.avBg,
-                color: m.avColor,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
                 fontFamily: "Inter, sans-serif",
-                fontSize: "9px",
+                fontSize: "7px",
                 textTransform: "uppercase",
-                letterSpacing: "0.05em",
-                flexShrink: 0,
+                padding: "3px 8px",
+                borderRadius: "99px",
+                backgroundColor: r.billable ? "rgba(79,182,200,0.12)" : "rgba(26,26,24,0.07)",
+                color: r.billable ? "#4FB6C8" : "rgba(26,26,24,0.40)",
+                border: r.billable ? "1px solid rgba(79,182,200,0.30)" : "none",
+                whiteSpace: "nowrap",
               }}
             >
-              {m.initials}
-            </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "13px", color: "#1A1A18" }}>{m.name}</div>
-              <div
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "7px",
-                  textTransform: "uppercase",
-                  color: "rgba(26,26,24,0.40)",
-                  marginTop: "2px",
-                }}
-              >
-                {m.sub}
-              </div>
-            </div>
-            <div style={{ textAlign: "right" }}>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "14px", color: m.balColor }}>{m.balance}</div>
-              <div
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "7px",
-                  textTransform: "uppercase",
-                  color: "rgba(26,26,24,0.40)",
-                  marginTop: "2px",
-                }}
-              >
-                {m.balLabel}
-              </div>
-            </div>
+              {r.billable ? "Billable" : "Personal"}
+            </span>
           </div>
         ))}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            padding: "9px 0",
+          }}
+        >
+          <div
+            style={{
+              width: "28px",
+              height: "28px",
+              borderRadius: "8px",
+              backgroundColor: "rgba(26,26,24,0.06)",
+              border: "1px dashed rgba(26,26,24,0.18)",
+              flexShrink: 0,
+            }}
+          />
+          <span
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "8px",
+              textTransform: "uppercase",
+              color: "rgba(26,26,24,0.35)",
+            }}
+          >
+            + Upload receipt
+          </span>
+        </div>
+      </section>
+
+      {/* SECTION 7 — PER DIEM TRACKER */}
+      <section style={{ backgroundColor: "#F5F0E8", padding: "14px 16px", borderBottom: "0.5px solid rgba(26,26,24,0.08)" }}>
+        <div
+          style={{
+            fontFamily: "Inter, sans-serif",
+            fontSize: "8px",
+            textTransform: "uppercase",
+            letterSpacing: "0.10em",
+            color: "rgba(26,26,24,0.35)",
+            marginBottom: "10px",
+          }}
+        >
+          PER DIEM TRACKER
+        </div>
+        <div style={{ backgroundColor: "#EFE9DF", borderRadius: "14px", padding: "14px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px" }}>
+            <div>
+              <div style={{ fontFamily: "Inter, sans-serif", fontSize: "8px", textTransform: "uppercase", color: "rgba(26,26,24,0.40)" }}>
+                DAILY ALLOWANCE
+              </div>
+              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "20px", color: "#1A1A18", marginTop: "3px" }}>€150 / day</div>
+            </div>
+            <div>
+              <div style={{ fontFamily: "Inter, sans-serif", fontSize: "8px", textTransform: "uppercase", color: "rgba(26,26,24,0.40)", textAlign: "right" }}>
+                DAYS ELAPSED
+              </div>
+              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "20px", color: "#1A1A18", marginTop: "3px", textAlign: "right" }}>3 of 10</div>
+            </div>
+          </div>
+          <div style={{ borderTop: "0.5px solid rgba(26,26,24,0.08)", margin: "10px 0" }} />
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>
+              <div style={{ fontFamily: "Inter, sans-serif", fontSize: "7px", textTransform: "uppercase", color: "rgba(26,26,24,0.40)" }}>
+                TOTAL ALLOWANCE
+              </div>
+              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "15px", color: "#1A1A18" }}>€450</div>
+            </div>
+            <div>
+              <div style={{ fontFamily: "Inter, sans-serif", fontSize: "7px", textTransform: "uppercase", color: "rgba(26,26,24,0.40)", textAlign: "right" }}>
+                ACTUAL SPEND
+              </div>
+              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "15px", color: "#6B7D3D", textAlign: "right" }}>€420</div>
+            </div>
+          </div>
+          <div style={{ marginTop: "10px" }}>
+            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "9px", color: "#4FB6C8" }}>✦</span>{" "}
+            <span
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontStyle: "italic",
+                fontSize: "12px",
+                color: "rgba(26,26,24,0.65)",
+              }}
+            >
+              You're €30 under your per diem. Well managed.
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 8 — EXPENSE SUMMARY */}
+      <section style={{ backgroundColor: "#F5F0E8", padding: "14px 16px", borderBottom: "0.5px solid rgba(26,26,24,0.08)" }}>
+        <div
+          style={{
+            fontFamily: "Inter, sans-serif",
+            fontSize: "8px",
+            textTransform: "uppercase",
+            letterSpacing: "0.10em",
+            color: "rgba(26,26,24,0.35)",
+            marginBottom: "10px",
+          }}
+        >
+          EXPENSE SUMMARY
+        </div>
+        <div style={{ backgroundColor: "#EFE9DF", borderRadius: "14px", padding: "14px" }}>
+          {[
+            { l: "Total trip spend", v: "€1,240", c: "#1A1A18" },
+            { l: "Total billable", v: "€680", c: "#4FB6C8" },
+            { l: "Total personal", v: "€560", c: "#C24E2A" },
+            { l: "Receipts uploaded", v: "3 of 8", c: "#1A1A18" },
+          ].map((r, i, arr) => (
+            <div
+              key={r.l}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "7px 0",
+                borderBottom: i === arr.length - 1 ? "none" : "0.5px solid rgba(26,26,24,0.07)",
+              }}
+            >
+              <span style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", color: "rgba(26,26,24,0.65)" }}>{r.l}</span>
+              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "14px", color: r.c }}>{r.v}</span>
+            </div>
+          ))}
+        </div>
         <button
           style={{
             width: "100%",
-            backgroundColor: "#6B7D3D",
+            backgroundColor: "#4FB6C8",
             color: "#F5F0E8",
             border: "none",
             borderRadius: "20px",
-            padding: "10px",
+            padding: "12px",
             fontFamily: "Inter, sans-serif",
             fontSize: "8px",
             textTransform: "uppercase",
@@ -550,24 +661,11 @@ const TripSpend = () => {
             cursor: "pointer",
           }}
         >
-          Settle up →
+          Export expense report as PDF →
         </button>
-        <div
-          style={{
-            fontFamily: "Inter, sans-serif",
-            fontSize: "8px",
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-            color: "rgba(26,26,24,0.35)",
-            textAlign: "center",
-            marginTop: "8px",
-          }}
-        >
-          + Add travel companion
-        </div>
       </section>
 
-      {/* SECTION 7 — HIDDEN COSTS */}
+      {/* SECTION 9 — HIDDEN COSTS */}
       <section style={{ backgroundColor: "#F5F0E8", padding: "14px 16px", borderBottom: "0.5px solid rgba(26,26,24,0.08)" }}>
         <div
           style={{
@@ -646,7 +744,7 @@ const TripSpend = () => {
         </div>
       </section>
 
-      {/* SECTION 8 — REFUND TRACKER */}
+      {/* SECTION 10 — REFUND TRACKER */}
       <section style={{ backgroundColor: "#F5F0E8", padding: "14px 16px", borderBottom: "0.5px solid rgba(26,26,24,0.08)" }}>
         <div
           style={{
@@ -719,7 +817,7 @@ const TripSpend = () => {
         ))}
       </section>
 
-      {/* SECTION 9 — CURRENCY INTELLIGENCE */}
+      {/* SECTION 11 — CURRENCY INTELLIGENCE */}
       <section style={{ backgroundColor: "#F5F0E8", padding: "14px 16px", borderBottom: "0.5px solid rgba(26,26,24,0.08)" }}>
         <div
           style={{
@@ -782,8 +880,8 @@ const TripSpend = () => {
         </div>
       </section>
 
-      {/* SECTION 10 — TIPPING INTELLIGENCE */}
-      <section style={{ backgroundColor: "#F5F0E8", padding: "14px 16px", borderBottom: "0.5px solid rgba(26,26,24,0.08)" }}>
+      {/* SECTION 12 — TIPPING INTELLIGENCE */}
+      <section style={{ backgroundColor: "#F5F0E8", padding: "14px 16px 32px 16px" }}>
         <div
           style={{
             fontFamily: "Inter, sans-serif",
@@ -832,163 +930,33 @@ const TripSpend = () => {
             </div>
           </div>
         ))}
-      </section>
-
-      {/* SECTION 11 — UPGRADE SUGGESTER */}
-      <section style={{ backgroundColor: "#F5F0E8", padding: "14px 16px", borderBottom: "0.5px solid rgba(26,26,24,0.08)" }}>
         <div
           style={{
-            fontFamily: "Inter, sans-serif",
-            fontSize: "8px",
-            textTransform: "uppercase",
-            letterSpacing: "0.10em",
-            color: "rgba(26,26,24,0.35)",
-            marginBottom: "10px",
+            backgroundColor: "rgba(79,182,200,0.08)",
+            borderLeft: "3px solid #4FB6C8",
+            borderRadius: "0 12px 12px 0",
+            padding: "8px 12px",
+            marginTop: "8px",
           }}
         >
-          CURA · UPGRADE SUGGESTER
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          {[
-            {
-              spark: "✦ You're under budget on transport",
-              text: "You've saved €80 on getting around. That's one dinner at Ciccio Sultano — the best table in the region. Worth the drive.",
-              btn: "Explore this →",
-            },
-            {
-              spark: "✦ Last night upgrade available",
-              text: "You're €200 under total budget. Consider upgrading your final night to a masseria with a pool. The right ending.",
-              btn: "See options →",
-            },
-          ].map((c) => (
-            <div key={c.spark} style={{ backgroundColor: "#EFE9DF", borderRadius: "14px", padding: "12px 14px" }}>
-              <span style={{ fontFamily: "Inter, sans-serif", fontSize: "9px", color: "#6B7D3D", display: "block", marginBottom: "5px" }}>
-                {c.spark}
-              </span>
-              <p
-                style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontStyle: "italic",
-                  fontSize: "12px",
-                  color: "rgba(26,26,24,0.65)",
-                  lineHeight: 1.5,
-                  margin: 0,
-                }}
-              >
-                {c.text}
-              </p>
-              <Link
-                to="/trip/puglia"
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "7px",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
-                  color: "#6B7D3D",
-                  border: "1px solid rgba(107,125,61,0.35)",
-                  borderRadius: "20px",
-                  padding: "4px 12px",
-                  display: "inline-block",
-                  marginTop: "8px",
-                  textDecoration: "none",
-                }}
-              >
-                {c.btn}
-              </Link>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* SECTION 12 — RECEIPT VAULT */}
-      <section style={{ backgroundColor: "#F5F0E8", padding: "14px 16px 32px 16px" }}>
-        <div
-          style={{
-            fontFamily: "Inter, sans-serif",
-            fontSize: "8px",
-            textTransform: "uppercase",
-            letterSpacing: "0.10em",
-            color: "rgba(26,26,24,0.35)",
-            marginBottom: "6px",
-          }}
-        >
-          RECEIPT VAULT
-        </div>
-        {[
-          { iconBg: "rgba(107,125,61,0.12)", iconBorder: "none", name: "Emirates booking", nameStyle: "serif", sub: "Flights · Apr 12 · €800", pillText: "Saved", pillBg: "rgba(107,125,61,0.12)", pillColor: "#6B7D3D" },
-          { iconBg: "rgba(194,78,42,0.10)", iconBorder: "none", name: "Boat tour deposit", nameStyle: "serif", sub: "Activities · Apr 20 · €80", pillText: "Deposit", pillBg: "rgba(194,78,42,0.10)", pillColor: "#C24E2A" },
-          { iconBg: "rgba(26,26,24,0.06)", iconBorder: "1px dashed rgba(26,26,24,0.18)", name: "+ Upload receipt", nameStyle: "upload", sub: "", pillText: "", pillBg: "", pillColor: "" },
-        ].map((r, i) => (
-          <div
-            key={i}
+          <span style={{ fontFamily: "Inter, sans-serif", fontSize: "9px", color: "#4FB6C8", display: "block", marginBottom: "3px" }}>
+            ✦ CURA
+          </span>
+          <p
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-              padding: "8px 0",
-              borderBottom: i === 2 ? "none" : "0.5px solid rgba(26,26,24,0.07)",
+              fontFamily: "'Playfair Display', serif",
+              fontStyle: "italic",
+              fontSize: "12px",
+              color: "rgba(26,26,24,0.65)",
+              margin: 0,
             }}
           >
-            <div
-              style={{
-                width: "28px",
-                height: "28px",
-                borderRadius: "8px",
-                backgroundColor: r.iconBg,
-                border: r.iconBorder,
-                flexShrink: 0,
-              }}
-            />
-            <div style={{ flex: 1 }}>
-              {r.nameStyle === "serif" ? (
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "13px", color: "#1A1A18" }}>{r.name}</div>
-              ) : (
-                <div
-                  style={{
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "8px",
-                    textTransform: "uppercase",
-                    color: "rgba(26,26,24,0.35)",
-                  }}
-                >
-                  {r.name}
-                </div>
-              )}
-              {r.sub && (
-                <div
-                  style={{
-                    fontFamily: "Inter, sans-serif",
-                    fontSize: "7px",
-                    textTransform: "uppercase",
-                    color: "rgba(26,26,24,0.40)",
-                    marginTop: "2px",
-                  }}
-                >
-                  {r.sub}
-                </div>
-              )}
-            </div>
-            {r.pillText && (
-              <span
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "7px",
-                  textTransform: "uppercase",
-                  padding: "2px 7px",
-                  borderRadius: "99px",
-                  whiteSpace: "nowrap",
-                  backgroundColor: r.pillBg,
-                  color: r.pillColor,
-                }}
-              >
-                {r.pillText}
-              </span>
-            )}
-          </div>
-        ))}
+            Check your company policy before submitting tipping as a billable expense — policies vary.
+          </p>
+        </div>
       </section>
     </div>
   );
 };
 
-export default TripSpend;
+export default TripSpendWork;
