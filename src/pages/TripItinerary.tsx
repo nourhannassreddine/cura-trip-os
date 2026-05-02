@@ -25,7 +25,7 @@ const TripItinerary = () => {
       {/* SECTION 1 — HEADER */}
       <div style={{ position: "relative", height: "160px", width: "100%", overflow: "hidden" }}>
         <img
-          src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800&q=80"
+          src="https://images.unsplash.com/photo-1534445538923-ab0f57a02eb5?w=800&q=80"
           alt="Puglia"
           style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center center", display: "block" }}
         />
@@ -122,11 +122,11 @@ const DaysTab = () => {
         {/* MORNING */}
         <SegmentLabel>MORNING</SegmentLabel>
         <PlaceCard
-          image="https://images.unsplash.com/photo-1555993539-1732b0258235?w=400&q=80"
+          image="https://images.unsplash.com/photo-1601042879364-f3947d3f9c16?w=400&q=80"
           time="9:00 AM"
           duration="Est. 2 hrs"
           name="Trulli di Alberobello"
-          verdict='"Worth every tourist in the room. Go before 9am — it\u2019s yours alone."'
+          verdict='"Worth every tourist in the room. Go before 9am — it is yours alone."'
           tags={[
             { label: "Actually worth it", bg: "rgba(107,125,61,0.12)", color: OLIVE },
             { label: "Better at dawn", bg: "rgba(242,201,76,0.12)", color: "rgba(26,26,24,0.60)" },
@@ -369,7 +369,7 @@ const RestaurantCard = ({ image, typePill, name, dish, intel, leftMeta, actionLa
 const PlacesTab = () => {
   const filters = ["All", "Eat", "See", "Stay", "Beach"];
   const places = [
-    { name: "Trulli di Alberobello", img: "https://images.unsplash.com/photo-1555993539-1732b0258235?w=200&q=80", cat: "SEE · Day 2", v: '"Go before 9am."', dot: OLIVE },
+    { name: "Trulli di Alberobello", img: "https://images.unsplash.com/photo-1601042879364-f3947d3f9c16?w=400&q=80", cat: "SEE · Day 2", v: '"Go before 9am."', dot: OLIVE },
     { name: "Osteria del Tempo Perso", img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&q=80", cat: "EAT · Day 2 · Lunch", v: '"Order the orecchiette."', dot: OCHRE },
     { name: "Polignano a Mare", img: "https://images.unsplash.com/photo-1534078362425-387ae9668c17?w=200&q=80", cat: "SEE · Day 2 · Sunset", v: '"Sunset only."', dot: OLIVE },
     { name: "Il Bastione", img: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=200&q=80", cat: "EAT · Day 2 · Dinner", v: '"Reserved ✓"', dot: OLIVE },
@@ -504,7 +504,7 @@ const MoodTab = () => {
       <div style={{ padding: "14px" }}>
         <div style={{ fontFamily: inter, fontSize: "8px", textTransform: "uppercase", color: "rgba(26,26,24,0.35)", marginBottom: "10px" }}>GENERATED PLAN · PACKED & ADVENTUROUS</div>
         {[
-          { img: "https://images.unsplash.com/photo-1555993539-1732b0258235?w=400&q=80", time: "9:00 AM · Trulli di Alberobello", v: '"Worth every tourist. Go before 9am."', transit: "18 min drive" },
+          { img: "https://images.unsplash.com/photo-1601042879364-f3947d3f9c16?w=400&q=80", time: "9:00 AM · Trulli di Alberobello", v: '"Worth every tourist. Go before 9am."', transit: "18 min drive" },
           { img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&q=80", time: "1:00 PM · Osteria del Tempo Perso", v: '"Order the orecchiette. Ask for terrace."', transit: "12 min walk" },
           { img: "https://images.unsplash.com/photo-1529651737248-dad5e287768e?w=400&q=80", time: "3:00 PM · Locorotondo", v: '"Slower and more beautiful."', transit: null },
         ].map((p, i) => (
@@ -532,7 +532,7 @@ const MoodTab = () => {
       <div style={{ padding: "0 14px 14px" }}>
         <div style={{ fontFamily: inter, fontSize: "8px", textTransform: "uppercase", color: "rgba(26,26,24,0.35)", marginBottom: "8px" }}>NOT FEELING SOMETHING? SWAP IT OUT.</div>
         <div style={{ backgroundColor: PAPER, borderRadius: "12px", padding: "10px 12px", display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
-          <div style={{ width: "36px", height: "44px", borderRadius: "8px", backgroundImage: "url(https://images.unsplash.com/photo-1555993539-1732b0258235?w=200&q=80)", backgroundSize: "cover", backgroundPosition: "center", flexShrink: 0 }} />
+          <div style={{ width: "36px", height: "44px", borderRadius: "8px", backgroundImage: "url(https://images.unsplash.com/photo-1601042879364-f3947d3f9c16?w=400&q=80)", backgroundSize: "cover", backgroundPosition: "center", flexShrink: 0 }} />
           <div style={{ flex: 1 }}>
             <div style={{ fontFamily: playfair, fontSize: "12px", color: INK }}>Trulli di Alberobello</div>
             <div style={{ fontFamily: inter, fontSize: "7px", textTransform: "uppercase", color: "rgba(26,26,24,0.40)", marginTop: "2px" }}>Currently on Day 2 · Morning</div>
