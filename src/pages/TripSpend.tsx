@@ -65,14 +65,16 @@ const TripSpend = () => {
 
       {/* SECTION 2 — WORK TRIP TOGGLE */}
       <section style={{ backgroundColor: "#F5F0E8", padding: "14px 16px", borderBottom: "0.5px solid rgba(26,26,24,0.08)" }}>
-        <div
+        <Link
+          to="/trip/puglia/spend/work"
           style={{
-            backgroundColor: "#EFE9DF",
-            borderRadius: "12px",
-            padding: "10px 14px",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            backgroundColor: "#EFE9DF",
+            borderRadius: "12px",
+            padding: "10px 14px",
+            textDecoration: "none",
           }}
         >
           <div>
@@ -110,7 +112,7 @@ const TripSpend = () => {
               }}
             />
           </div>
-        </div>
+        </Link>
       </section>
 
       {/* SECTION 3 — CURA BUDGET ESTIMATE */}
