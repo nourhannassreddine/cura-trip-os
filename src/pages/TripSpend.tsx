@@ -4,7 +4,19 @@ const TripSpend = () => {
   return (
     <div style={{ maxWidth: "390px", margin: "0 auto", backgroundColor: "#F5F0E8", minHeight: "100vh" }}>
       {/* SECTION 1 — HEADER */}
-      <header style={{ position: "relative", height: "160px", overflow: "hidden", backgroundColor: "#1A1A18" }}>
+      <header style={{ position: "relative", height: "160px", overflow: "hidden" }}>
+        <img
+          src="https://res.cloudinary.com/dvfzz0min/image/upload/v1777700993/wallet_blghfj.png"
+          alt=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "160px",
+            objectFit: "cover",
+            objectPosition: "center center",
+          }}
+        />
         <div
           style={{
             position: "absolute",
