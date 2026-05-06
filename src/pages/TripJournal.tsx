@@ -80,12 +80,7 @@ const TripJournal = () => {
         overflow: "hidden",
       }}
     >
-      <div style={{ position: "relative", height: "110px" }}>
-        <img
-          src={opts.image}
-          alt=""
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-        />
+      <div style={{ width: "100%", height: "110px", backgroundImage: `url('${opts.image}')`, backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
         <div
           style={{
             position: "absolute",
