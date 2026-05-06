@@ -1286,7 +1286,7 @@ const DateChangeOverlay = ({
                     {opt.depart} → {opt.return}
                   </div>
                   {isBetter && <Pill bg={OLIVE} color={IVORY}>Better</Pill>}
-                  {isCurrent && <Pill bg={INK} color={IVORY}>Current</Pill>}
+                  {isCurrent && <Pill bg={OCHRE} color={IVORY}>Current</Pill>}
                 </div>
                 <div style={{ display: "flex", gap: "16px", fontSize: "10px", color: "rgba(26,26,24,0.7)", letterSpacing: "0.04em" }}>
                   <span>
