@@ -18,6 +18,7 @@ import TripSpend from "./pages/TripSpend";
 import TripSpendWork from "./pages/TripSpendWork";
 import TripItinerary from "./pages/TripItinerary";
 import TripJournal from "./pages/TripJournal";
+import TripDuring from "./pages/TripDuring";
 import TripIntro from "./pages/TripIntro";
 import TripEngine from "./pages/TripEngine";
 import ItineraryView from "./pages/ItineraryView";
