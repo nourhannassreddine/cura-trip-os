@@ -284,6 +284,7 @@ const TripFlights = () => {
               </div>
 
               <button
+                onClick={() => setEditingDates(true)}
                 style={{
                   marginTop: "18px",
                   background: IVORY,
@@ -299,7 +300,7 @@ const TripFlights = () => {
                   ...inter,
                 }}
               >
-                Edit search →
+                Edit dates →
               </button>
             </div>
           </div>
