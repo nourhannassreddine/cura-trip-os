@@ -59,13 +59,13 @@ const TripDuring = () => {
             { v: "€140", k: "Spent today" },
             { v: "On track", k: "Status" },
           ].map((s, i, arr) => (
-            <>
-              <div key={s.k} style={{ textAlign: "center", flex: 1 }}>
+            <div key={s.k} style={{ display: "contents" }}>
+              <div style={{ textAlign: "center", flex: 1 }}>
                 <div style={{ fontFamily: playfair, fontSize: "16px", color: IVORY }}>{s.v}</div>
                 <div style={{ fontFamily: inter, fontSize: "7px", textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(245,240,232,0.50)", marginTop: "1px" }}>{s.k}</div>
               </div>
               {i < arr.length - 1 && <div style={{ width: "1px", height: "28px", background: "rgba(245,240,232,0.15)" }} />}
-            </>
+            </div>
           ))}
         </div>
       </div>
