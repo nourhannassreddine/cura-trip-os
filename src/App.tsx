@@ -18,6 +18,7 @@ import TripSpend from "./pages/TripSpend";
 import TripSpendWork from "./pages/TripSpendWork";
 import TripItinerary from "./pages/TripItinerary";
 import TripJournal from "./pages/TripJournal";
+import TripDuring from "./pages/TripDuring";
 import TripIntro from "./pages/TripIntro";
 import TripEngine from "./pages/TripEngine";
 import ItineraryView from "./pages/ItineraryView";
@@ -73,6 +74,7 @@ const App = () => (
           <Route path="/trip/puglia/spend/work" element={<TripSpendWork />} />
           <Route path="/trip/puglia/itinerary" element={<TripItinerary />} />
           <Route path="/trip/puglia/journal" element={<TripJournal />} />
+          <Route path="/trip/puglia/during" element={<TripDuring />} />
           <Route path="/trip/:id" element={<TripWorkspace />} />
           <Route path="/trip/:id/intro" element={<TripIntro />} />
           <Route path="/trip/:id/engine/:engine" element={<TripEngine />} />
