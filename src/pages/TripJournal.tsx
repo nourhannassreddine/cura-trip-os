@@ -185,7 +185,7 @@ const TripJournal = () => {
         >
           {opts.location}
         </div>
-      </div>
+      </EntryImage>
       <div style={{ padding: "10px 12px" }}>
         <div
           style={{
