@@ -77,9 +77,78 @@ const Dot = ({ open }: { open: boolean }) => (
   />
 );
 
+type DateOption = {
+  depart: string;
+  return: string;
+  nights: number;
+  price: number;
+  score: number;
+  fatigue: "Low" | "Med" | "High";
+  badge?: string;
+  note: string;
+  delta: number; // vs current
+};
+
+const dateOptions: DateOption[] = [
+  {
+    depart: "Wed Jun 10",
+    return: "Sat Jun 20",
+    nights: 10,
+    price: 1840,
+    score: 91,
+    fatigue: "Low",
+    badge: "Better",
+    note: "Mid-week depart, lighter Bari arrivals. Saves €120.",
+    delta: -120,
+  },
+  {
+    depart: "Thu Jun 11",
+    return: "Sun Jun 21",
+    nights: 10,
+    price: 1910,
+    score: 88,
+    fatigue: "Low",
+    note: "One day earlier. Same rhythm, slightly cheaper.",
+    delta: -50,
+  },
+  {
+    depart: "Fri Jun 12",
+    return: "Mon Jun 22",
+    nights: 10,
+    price: 1960,
+    score: 84,
+    fatigue: "Med",
+    badge: "Current",
+    note: "Your current dates. Friday departures price up.",
+    delta: 0,
+  },
+  {
+    depart: "Sat Jun 13",
+    return: "Tue Jun 23",
+    nights: 10,
+    price: 2080,
+    score: 76,
+    fatigue: "High",
+    note: "Weekend out. Crowded BRI arrival, +€120.",
+    delta: 120,
+  },
+  {
+    depart: "Sun Jun 14",
+    return: "Wed Jun 24",
+    nights: 10,
+    price: 1880,
+    score: 82,
+    fatigue: "Med",
+    note: "Quiet Sunday flight, but pushes Day 1 plans.",
+    delta: -80,
+  },
+];
+
 const TripFlights = () => {
   const [tab, setTab] = useState<Tab>("SEARCH");
   const [booked, setBooked] = useState(false);
+  const [editingDates, setEditingDates] = useState(false);
+  const [selectedDates, setSelectedDates] = useState<number>(2);
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "SEARCH", label: "Search" },
