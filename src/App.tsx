@@ -20,6 +20,7 @@ import TripItinerary from "./pages/TripItinerary";
 import TripJournal from "./pages/TripJournal";
 import TripDuring from "./pages/TripDuring";
 import TripRoute from "./pages/TripRoute";
+import TripFlights from "./pages/TripFlights";
 import TripIntro from "./pages/TripIntro";
 import TripEngine from "./pages/TripEngine";
 import ItineraryView from "./pages/ItineraryView";
@@ -77,6 +78,7 @@ const App = () => (
           <Route path="/trip/puglia/journal" element={<TripJournal />} />
           <Route path="/trip/puglia/during" element={<TripDuring />} />
           <Route path="/trip/puglia/route" element={<TripRoute />} />
+          <Route path="/trip/puglia/flights" element={<TripFlights />} />
           <Route path="/trip/:id" element={<TripWorkspace />} />
           <Route path="/trip/:id/intro" element={<TripIntro />} />
           <Route path="/trip/:id/engine/:engine" element={<TripEngine />} />
