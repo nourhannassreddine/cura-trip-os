@@ -77,9 +77,78 @@ const Dot = ({ open }: { open: boolean }) => (
   />
 );
 
+type DateOption = {
+  depart: string;
+  return: string;
+  nights: number;
+  price: number;
+  score: number;
+  fatigue: "Low" | "Med" | "High";
+  badge?: string;
+  note: string;
+  delta: number; // vs current
+};
+
+const dateOptions: DateOption[] = [
+  {
+    depart: "Wed Jun 10",
+    return: "Sat Jun 20",
+    nights: 10,
+    price: 1840,
+    score: 91,
+    fatigue: "Low",
+    badge: "Better",
+    note: "Mid-week depart, lighter Bari arrivals. Saves €120.",
+    delta: -120,
+  },
+  {
+    depart: "Thu Jun 11",
+    return: "Sun Jun 21",
+    nights: 10,
+    price: 1910,
+    score: 88,
+    fatigue: "Low",
+    note: "One day earlier. Same rhythm, slightly cheaper.",
+    delta: -50,
+  },
+  {
+    depart: "Fri Jun 12",
+    return: "Mon Jun 22",
+    nights: 10,
+    price: 1960,
+    score: 84,
+    fatigue: "Med",
+    badge: "Current",
+    note: "Your current dates. Friday departures price up.",
+    delta: 0,
+  },
+  {
+    depart: "Sat Jun 13",
+    return: "Tue Jun 23",
+    nights: 10,
+    price: 2080,
+    score: 76,
+    fatigue: "High",
+    note: "Weekend out. Crowded BRI arrival, +€120.",
+    delta: 120,
+  },
+  {
+    depart: "Sun Jun 14",
+    return: "Wed Jun 24",
+    nights: 10,
+    price: 1880,
+    score: 82,
+    fatigue: "Med",
+    note: "Quiet Sunday flight, but pushes Day 1 plans.",
+    delta: -80,
+  },
+];
+
 const TripFlights = () => {
   const [tab, setTab] = useState<Tab>("SEARCH");
   const [booked, setBooked] = useState(false);
+  const [editingDates, setEditingDates] = useState(false);
+  const [selectedDates, setSelectedDates] = useState<number>(2);
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "SEARCH", label: "Search" },
@@ -215,6 +284,7 @@ const TripFlights = () => {
               </div>
 
               <button
+                onClick={() => setEditingDates(true)}
                 style={{
                   marginTop: "18px",
                   background: IVORY,
@@ -230,7 +300,7 @@ const TripFlights = () => {
                   ...inter,
                 }}
               >
-                Edit search →
+                Edit dates →
               </button>
             </div>
           </div>
@@ -288,6 +358,15 @@ const TripFlights = () => {
         {tab === "BOOKING" && <BookingTab />}
 
         <div style={{ height: "60px" }} />
+
+        {editingDates && (
+          <DateChangeOverlay
+            options={dateOptions}
+            selected={selectedDates}
+            onSelect={setSelectedDates}
+            onClose={() => setEditingDates(false)}
+          />
+        )}
       </div>
     </div>
   );
@@ -1101,5 +1180,191 @@ const DocRow = ({ title, status, ok, warn, last }: { title: string; status: stri
     <Dot open={!!ok && !warn} />
   </div>
 );
+
+/* ---------------- DATE CHANGE OVERLAY ---------------- */
+const DateChangeOverlay = ({
+  options,
+  selected,
+  onSelect,
+  onClose,
+}: {
+  options: DateOption[];
+  selected: number;
+  onSelect: (i: number) => void;
+  onClose: () => void;
+}) => {
+  const current = options[selected];
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(26,26,24,0.55)",
+        zIndex: 50,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "flex-end",
+      }}
+      onClick={onClose}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: "100%",
+          maxWidth: "390px",
+          maxHeight: "92vh",
+          background: IVORY,
+          borderRadius: "20px 20px 0 0",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {/* Header */}
+        <div style={{ padding: "20px 22px 18px", background: RED, color: IVORY }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <SectionLabel color="rgba(245,240,232,0.7)">Change dates</SectionLabel>
+            <button
+              onClick={onClose}
+              style={{
+                background: "rgba(245,240,232,0.15)",
+                border: "none",
+                color: IVORY,
+                width: "28px",
+                height: "28px",
+                borderRadius: "99px",
+                cursor: "pointer",
+                fontSize: "14px",
+              }}
+            >
+              ✕
+            </button>
+          </div>
+          <h2
+            style={{
+              ...playfair,
+              fontStyle: "italic",
+              fontSize: "24px",
+              lineHeight: 1.15,
+              margin: "6px 0 0",
+              fontWeight: 500,
+            }}
+          >
+            Shift a day or two — I'll re-score it.
+          </h2>
+          <div style={{ ...inter, fontSize: "11px", opacity: 0.85, marginTop: "10px" }}>
+            10 nights · DXB → BRI · Around Jun 12–22
+          </div>
+        </div>
+
+        {/* Options */}
+        <div style={{ overflowY: "auto", padding: "16px 14px 12px" }}>
+          {options.map((opt, i) => {
+            const active = i === selected;
+            const isCurrent = opt.badge === "Current";
+            const isBetter = opt.badge === "Better";
+            return (
+              <button
+                key={i}
+                onClick={() => onSelect(i)}
+                style={{
+                  display: "block",
+                  width: "100%",
+                  textAlign: "left",
+                  background: active ? "#FFFFFF" : LINEN,
+                  border: active ? `2px solid ${RED}` : "2px solid transparent",
+                  borderRadius: "14px",
+                  padding: "14px 16px",
+                  marginBottom: "10px",
+                  cursor: "pointer",
+                  ...inter,
+                  color: INK,
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                  <div style={{ ...playfair, fontSize: "15px", fontWeight: 600 }}>
+                    {opt.depart} → {opt.return}
+                  </div>
+                  {isBetter && <Pill bg={OLIVE} color={IVORY}>Better</Pill>}
+                  {isCurrent && <Pill bg={INK} color={IVORY}>Current</Pill>}
+                </div>
+                <div style={{ display: "flex", gap: "16px", fontSize: "10px", color: "rgba(26,26,24,0.7)", letterSpacing: "0.04em" }}>
+                  <span>
+                    Score{" "}
+                    <strong style={{ color: opt.score >= 88 ? OLIVE : opt.score >= 80 ? OCHRE : MAHOGANY, fontSize: "13px" }}>
+                      {opt.score}
+                    </strong>
+                  </span>
+                  <span>Fatigue <strong style={{ color: INK }}>{opt.fatigue}</strong></span>
+                  <span>
+                    €{opt.price}
+                    {opt.delta !== 0 && (
+                      <span style={{ color: opt.delta < 0 ? OLIVE : MAHOGANY, marginLeft: "4px" }}>
+                        ({opt.delta > 0 ? "+" : ""}{opt.delta})
+                      </span>
+                    )}
+                  </span>
+                </div>
+                <div style={{ fontSize: "11px", marginTop: "8px", color: "rgba(26,26,24,0.75)", lineHeight: 1.4 }}>
+                  {opt.note}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Footer */}
+        <div style={{ padding: "14px 18px 22px", borderTop: `1px solid ${LINEN}`, background: IVORY }}>
+          <div style={{ fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(26,26,24,0.6)", marginBottom: "8px" }}>
+            Selected
+          </div>
+          <div style={{ ...playfair, fontSize: "16px", fontWeight: 600, marginBottom: "12px" }}>
+            {current.depart} → {current.return} · Score {current.score}
+          </div>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <button
+              onClick={onClose}
+              style={{
+                flex: 1,
+                background: "transparent",
+                border: `1px solid ${INK}`,
+                color: INK,
+                padding: "12px",
+                borderRadius: "10px",
+                fontSize: "11px",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                fontWeight: 600,
+                cursor: "pointer",
+                ...inter,
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={onClose}
+              style={{
+                flex: 2,
+                background: RED,
+                border: "none",
+                color: IVORY,
+                padding: "12px",
+                borderRadius: "10px",
+                fontSize: "11px",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                fontWeight: 600,
+                cursor: "pointer",
+                ...inter,
+              }}
+            >
+              Apply new dates →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default TripFlights;
