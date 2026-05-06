@@ -1,5 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect, type CSSProperties, type ReactNode } from "react";
 import { Link } from "react-router-dom";
+
+const EntryImage = ({ src, children }: { src: string; children?: ReactNode }) => {
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    setLoaded(false);
+    const img = new Image();
+    img.src = src;
+    if (img.complete && img.naturalWidth > 0) {
+      setLoaded(true);
+      return;
+    }
+    const onLoad = () => setLoaded(true);
+    img.addEventListener("load", onLoad);
+    img.addEventListener("error", onLoad);
+    return () => {
+      img.removeEventListener("load", onLoad);
+      img.removeEventListener("error", onLoad);
+    };
+  }, [src]);
+
+  const wrapStyle: CSSProperties = {
+    width: "100%",
+    height: "110px",
+    position: "relative",
+    overflow: "hidden",
+    backgroundColor: "#E5DDD0",
+    backgroundImage: loaded ? `url('${src}')` : undefined,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  };
+
+  return (
+    <div style={wrapStyle}>
+      {!loaded && (
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(90deg, #E5DDD0 0%, #EFE9DF 50%, #E5DDD0 100%)",
+            backgroundSize: "200% 100%",
+            animation: "curaShimmer 1.4s ease-in-out infinite",
+          }}
+        />
+      )}
+      <style>{`@keyframes curaShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }`}</style>
+      {children}
+    </div>
+  );
+};
 
 type Tab = "ENTRIES" | "RECAP" | "ARCHIVE";
 
