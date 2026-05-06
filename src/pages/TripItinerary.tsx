@@ -24,11 +24,7 @@ const TripItinerary = () => {
     <div style={{ maxWidth: "390px", margin: "0 auto", backgroundColor: IVORY, minHeight: "100vh", fontFamily: inter, color: INK }}>
       {/* SECTION 1 — HEADER */}
       <div style={{ position: "relative", height: "160px", width: "100%", overflow: "hidden" }}>
-        <img
-          src="https://images.unsplash.com/photo-1534445538923-ab0f57a02eb5?w=800&q=80"
-          alt="Puglia"
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center center", display: "block" }}
-        />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "url('https://images.unsplash.com/photo-1534445538923-ab0f57a02eb5?w=800&q=80')", backgroundSize: "cover", backgroundPosition: "center center" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.75) 100%)" }} />
         {/* Top bar */}
         <div style={{ position: "absolute", top: "12px", left: "14px", right: "14px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
