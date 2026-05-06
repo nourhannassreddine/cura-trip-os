@@ -21,6 +21,7 @@ import TripJournal from "./pages/TripJournal";
 import TripDuring from "./pages/TripDuring";
 import TripRoute from "./pages/TripRoute";
 import TripFlights from "./pages/TripFlights";
+import TripStays from "./pages/TripStays";
 import TripIntro from "./pages/TripIntro";
 import TripEngine from "./pages/TripEngine";
 import ItineraryView from "./pages/ItineraryView";
