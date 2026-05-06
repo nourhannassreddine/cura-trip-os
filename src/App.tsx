@@ -80,6 +80,7 @@ const App = () => (
           <Route path="/trip/puglia/during" element={<TripDuring />} />
           <Route path="/trip/puglia/route" element={<TripRoute />} />
           <Route path="/trip/puglia/flights" element={<TripFlights />} />
+          <Route path="/trip/puglia/stays" element={<TripStays />} />
           <Route path="/trip/:id" element={<TripWorkspace />} />
           <Route path="/trip/:id/intro" element={<TripIntro />} />
           <Route path="/trip/:id/engine/:engine" element={<TripEngine />} />
