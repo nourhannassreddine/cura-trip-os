@@ -358,6 +358,15 @@ const TripFlights = () => {
         {tab === "BOOKING" && <BookingTab />}
 
         <div style={{ height: "60px" }} />
+
+        {editingDates && (
+          <DateChangeOverlay
+            options={dateOptions}
+            selected={selectedDates}
+            onSelect={setSelectedDates}
+            onClose={() => setEditingDates(false)}
+          />
+        )}
       </div>
     </div>
   );
