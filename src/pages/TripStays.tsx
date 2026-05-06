@@ -823,7 +823,7 @@ const BookedTab = () => {
           <div style={{ ...playfair, fontStyle: "italic", fontSize: "16px", lineHeight: 1.35, marginBottom: "14px" }}>
             For €40 more total, you can upgrade to the upper floor unit — private terrace with sea views. Your last nights in Puglia. Worth considering.
           </div>
-          <Link to="/trip/puglia" style={{ display: "block", padding: "12px", background: INK, color: IVORY, textAlign: "center", borderRadius: "10px", ...inter, fontSize: "11px", letterSpacing: "0.14em", textTransform: "uppercase", fontWeight: 600, textDecoration: "none" }}>
+          <Link to="/trip/puglia" style={{ display: "block", padding: "12px", background: "#C24E2A", color: "#F5F0E8", textAlign: "center", borderRadius: "10px", ...inter, fontSize: "11px", letterSpacing: "0.14em", textTransform: "uppercase", fontWeight: 600, textDecoration: "none" }}>
             Request upgrade →
           </Link>
         </div>
