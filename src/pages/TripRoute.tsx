@@ -63,10 +63,10 @@ const DotRoute = ({ color, labels }: { color: string; labels: string[] }) => (
   <div>
     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
       {labels.map((_, i) => (
-        <>
-          <div key={`d${i}`} style={{ width: "10px", height: "10px", borderRadius: "50%", background: color, border: `2px solid ${IVORY}`, flexShrink: 0 }} />
-          {i < labels.length - 1 && <div key={`l${i}`} style={{ flex: 1, height: "2px", background: color, borderRadius: "1px" }} />}
-        </>
+        <div key={i} style={{ display: "contents" }}>
+          <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: color, border: `2px solid ${IVORY}`, flexShrink: 0 }} />
+          {i < labels.length - 1 && <div style={{ flex: 1, height: "2px", background: color, borderRadius: "1px" }} />}
+        </div>
       ))}
     </div>
     <div style={{ display: "flex", justifyContent: "space-between", marginTop: "6px" }}>
